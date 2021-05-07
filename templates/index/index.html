@@ -1,0 +1,24 @@
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <div>메인페이지</div>
+        {% if check %}
+            <div>
+                <h1>로그아웃</h1>
+                <form action="{% url 'account:logoutKakao' %}" method="GET">
+                    <input type="submit" value="logout">
+                </form>
+            </div>
+        {% else %}
+            <div>
+                <h1>로그인</h1>
+                <form action="{% url 'account:login' %}" method="GET">
+                    <input type="submit" value="login">
+                </form>
+            </div>
+        {% endif %}
+    </body>
+</html>
