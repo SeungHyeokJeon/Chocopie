@@ -4,21 +4,21 @@ import json
 
 # Create your views here.
 def login(request):
-    return render(request, 'account/login.html')
+    return render(request, 'accounts/login.html')
 
 def logout(request):
-    return render(request, 'account/logout.html')
+    return render(request, 'accounts/logout.html')
 
 def loginKakao(request):
     restApiKey = 'cc4da3338c1087e45c43b48a355072be'
-    redirectUrl = 'http://127.0.0.1:8000/account/loginRedirectKakao'
+    redirectUrl = 'http://127.0.0.1:8000/accounts/loginRedirectKakao'
     url = f'https://kauth.kakao.com/oauth/authorize?client_id={restApiKey}&redirect_uri={redirectUrl}&response_type=code'
     return redirect(url)
 
 def loginRedirectKakao(request):
     qs = request.GET['code']
     restApiKey = 'cc4da3338c1087e45c43b48a355072be'
-    redirectUrl = 'http://127.0.0.1:8000/account/loginRedirectKakao'
+    redirectUrl = 'http://127.0.0.1:8000/accounts/loginRedirectKakao'
     url = f'https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={restApiKey}&redirect_uri={redirectUrl}&code={qs}'
     res = requests.post(url)
     result=res.json()
