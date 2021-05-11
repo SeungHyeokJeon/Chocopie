@@ -28,6 +28,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 # Application definition
 
@@ -36,12 +43,22 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
     # apps
     'accounts.apps.AccountsConfig',
     'index.apps.IndexConfig',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+	
+  	# selecting google and naver
+    'allauth.socialaccount.providers.google',
+  	'allauth.socialaccount.providers.naver',
+    'allauth.socialaccount.providers.kakao',
 ]
 
 MIDDLEWARE = [
@@ -135,3 +152,8 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+SITE_ID = 1
+
+LOGIN_REDIRECT_URL = '/index'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/index'
+ACCOUNT_LOGOUT_ON_GET = True

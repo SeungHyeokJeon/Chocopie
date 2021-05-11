@@ -1,0 +1,37 @@
+{% load static %}
+{% load socialaccount %}
+{% providers_media_js %}
+<style>
+ul{
+    list-style: none;
+}
+
+</style>
+<html>
+    <head>
+        <meta charset="utf-8">
+    </head>    
+    <body>
+    <ul>
+    <!-- receiving from django-allauth -->
+        <li>
+            <a href="{% provider_login_url "naver" %}" >
+                <img src="{% static 'images/naver_login/naver.png' %}">
+            </a>
+        </li>   
+
+        <li>
+            <a href="{% url 'accounts:loginKakao' %}">
+                <img src="{% static 'images/kakao_login/ko/kakao.png' %}">
+            </a>
+        </li>
+
+        <li>
+            <a href="{% provider_login_url "google" %}" >
+                <img src="{% static 'images/google_login/google.png' %}">
+            </a>
+        </li>
+    </ul>
+    </body>
+</div>
+</html>

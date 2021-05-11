@@ -1,11 +1,104 @@
+
+{% load i18n %}
+{% load account socialaccount %}
+{% block content %}
 {% load static %}
-<html>
-    <head>
-        <meta charset="utf-8">
-    </head>
-    <body>
-        <a href="{% url 'accounts:loginKakao' %}">
-            <img src="{% static 'images/kakao_login/ko/kakao_login_medium_wide.png' %}">
-        </a>
-    </body>
-</html>
+<style>
+body{
+    margin: 0;
+}
+h1{
+    text-align: center;
+}
+.socialaccount_ballot{
+    width:100%;
+    height:100%;
+    background: white;
+    position:relative;
+    padding: 0;
+    text-align: center;
+}
+.login_sesseion{
+    padding: 0;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 50;
+}
+.socialaccount_providers{
+    padding: 0;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 0;
+}
+input{
+    background-color: white;
+    height: 45;
+    width: 300;
+}
+li{
+    text-align:center;
+    height: 45;
+    width: 300;
+    padding: 5;
+}
+.socialloginimage{
+    width:100%;
+    height:100%;
+}
+.login_button{
+  outline: 0;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 15px;
+  color: white;
+  background-color: #ff971e;
+}
+.logo{
+    padding: 40;
+}
+.or{
+    padding: 50;
+}
+</style>
+
+{% get_providers as socialaccount_providers %}
+
+{% if socialaccount_providers %}
+
+<div class="socialaccount_ballot">
+    <img class ="logo" src="{% static 'images/logo.png' %}">
+    <h1 style="margin-top: 30; margin-bottom: 0;">로그인</h1>
+    <ul class="login_sesseion">
+        <li>
+            <input type="email" id="loginId" name="loginId" placeholder="ID" >
+        </li>
+        <li>
+            <input type="password" id="loginPw" name="password" placeholder="Password" >
+        </li>
+        <li>
+            <button class="login_button" type="submit" class="btn_login"  disabled>로그인</button>
+        </li>
+    </ul>
+    <span style="color: thistle;" class="or">
+
+    </span>
+  <ul class="socialaccount_providers">
+    {% include "accounts/provider_list.html" with process="login" %}
+  </ul>
+</div>
+
+{% include "socialaccount/snippets/login_extra.html" %}
+
+{% endif %}
+
+
+{% endblock %}

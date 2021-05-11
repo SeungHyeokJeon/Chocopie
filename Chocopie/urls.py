@@ -18,6 +18,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('accounts/', include('accounts.urls')),
+    path('count/', include('allauth.urls')), # 로깅 추가
     path('index/', include('index.urls')),
     path('admin/', admin.site.urls),
 ]
