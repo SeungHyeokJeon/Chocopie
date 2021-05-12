@@ -59,6 +59,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
   	'allauth.socialaccount.providers.naver',
     'allauth.socialaccount.providers.kakao',
+
+    # bpptstrap
+    #'bootstrap5'
 ]
 
 MIDDLEWARE = [

@@ -1,19 +1,28 @@
 
+<meta name="viewport" content="target-densitydpi=device-dpi, user-scalable=0, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, width=device-width" />
 {% load i18n %}
 {% load account socialaccount %}
 {% block content %}
 {% load static %}
 <style>
+:root{
+	--body-background-color: #f5f6f7;
+	--font-color: #4e4e4e;
+    --border-gray-color : #dadada;
+}
 body{
     margin: 0;
+    background-color: #f5f6f7;
 }
 h1{
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: 500;
     text-align: center;
 }
 .socialaccount_ballot{
     width:100%;
     height:100%;
-    background: white;
+    background-color: #f5f6f7;
     position:relative;
     padding: 0;
     text-align: center;
@@ -25,7 +34,7 @@ h1{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-top: 50;
+    margin-top: 30;
 }
 .socialaccount_providers{
     padding: 0;
@@ -34,63 +43,70 @@ h1{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin: 0;
+    margin: 5;
 }
-input{
-    background-color: white;
-    height: 45;
-    width: 300;
+.socialaccount_ballot input{
+    padding-left: 5px;
+	width:300px;
+	margin-top: 5px;
+	font-size: 14px;
+	height:40px;
+    border: solid 1px var(--border-gray-color);
+	background: white;
+}
+.socialaccount_providers img{
+    width:300px;
+    height:45px;
 }
 li{
     text-align:center;
-    height: 45;
-    width: 300;
-    padding: 5;
+    margin: 5px;
 }
 .socialloginimage{
     width:100%;
     height:100%;
 }
 .login_button{
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 300;
   outline: 0;
-  width: 100%;
+  width: 300px;
+  height:40px;
   border: 0;
-  margin: 0 0 15px;
-  padding: 15px;
   box-sizing: border-box;
-  font-size: 15px;
+  font-size: 18px;
   color: white;
   background-color: #ff971e;
 }
 .logo{
-    padding: 40;
+    padding: 30; 
 }
-.or{
-    padding: 50;
-}
+
 </style>
 
 {% get_providers as socialaccount_providers %}
 
 {% if socialaccount_providers %}
-
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
 <div class="socialaccount_ballot">
     <img class ="logo" src="{% static 'images/logo.png' %}">
-    <h1 style="margin-top: 30; margin-bottom: 0;">로그인</h1>
+    <h1 style="margin-top: 0; margin-bottom: 0;">로그인</h1>
     <ul class="login_sesseion">
         <li>
-            <input type="email" id="loginId" name="loginId" placeholder="ID" >
+            <input type="email" id="loginId" name="loginId" placeholder="아이디" >
         </li>
         <li>
-            <input type="password" id="loginPw" name="password" placeholder="Password" >
+            <input type="password" id="loginPw" name="password" placeholder="비밀번호" >
         </li>
         <li>
             <button class="login_button" type="submit" class="btn_login"  disabled>로그인</button>
         </li>
-    </ul>
-    <span style="color: thistle;" class="or">
+        <li style="padding-top: 5px; width: 300px; border-bottom: solid 2px var(--border-gray-color);">
 
-    </span>
+        </li>
+    </ul>
+    
   <ul class="socialaccount_providers">
     {% include "accounts/provider_list.html" with process="login" %}
   </ul>
