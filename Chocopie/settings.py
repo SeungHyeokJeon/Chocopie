@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mainpage',
 
     # apps
     'accounts.apps.AccountsConfig',
@@ -160,3 +161,5 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = '/index'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/index'
 ACCOUNT_LOGOUT_ON_GET = True
+
+AUTH_USER_MODEL = 'auth.User'

@@ -1,120 +1,144 @@
-
-<meta name="viewport" content="target-densitydpi=device-dpi, user-scalable=0, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, width=device-width" />
-{% load i18n %}
+{% load static %}
 {% load account socialaccount %}
 {% block content %}
-{% load static %}
-<style>
-:root{
-	--body-background-color: #f5f6f7;
-	--font-color: #4e4e4e;
-    --border-gray-color : #dadada;
-}
-body{
-    margin: 0;
-    background-color: #f5f6f7;
-}
-h1{
-    font-family: "Noto Sans KR", sans-serif;
-    font-weight: 500;
-    text-align: center;
-}
-.socialaccount_ballot{
-    width:100%;
-    height:100%;
-    background-color: #f5f6f7;
-    position:relative;
-    padding: 0;
-    text-align: center;
-}
-.login_sesseion{
-    padding: 0;
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin-top: 30;
-}
-.socialaccount_providers{
-    padding: 0;
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin: 5;
-}
-.socialaccount_ballot input{
-    padding-left: 5px;
-	width:300px;
-	margin-top: 5px;
-	font-size: 14px;
-	height:40px;
-    border: solid 1px var(--border-gray-color);
-	background: white;
-}
-.socialaccount_providers img{
-    width:300px;
-    height:45px;
-}
-li{
-    text-align:center;
-    margin: 5px;
-}
-.socialloginimage{
-    width:100%;
-    height:100%;
-}
-.login_button{
-  font-family: "Noto Sans KR", sans-serif;
-  font-weight: 300;
-  outline: 0;
-  width: 300px;
-  height:40px;
-  border: 0;
-  box-sizing: border-box;
-  font-size: 18px;
-  color: white;
-  background-color: #ff971e;
-}
-.logo{
-    padding: 30; 
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
-</style>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-{% get_providers as socialaccount_providers %}
+<title>Magnet - Minimal Portfolio Template</title>
 
-{% if socialaccount_providers %}
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
-<div class="socialaccount_ballot">
-    <img class ="logo" src="{% static 'images/logo.png' %}">
-    <h1 style="margin-top: 0; margin-bottom: 0;">로그인</h1>
-    <ul class="login_sesseion">
-        <li>
-            <input type="email" id="loginId" name="loginId" placeholder="아이디" >
-        </li>
-        <li>
-            <input type="password" id="loginPw" name="password" placeholder="비밀번호" >
-        </li>
-        <li>
-            <button class="login_button" type="submit" class="btn_login"  disabled>로그인</button>
-        </li>
-        <li style="padding-top: 5px; width: 300px; border-bottom: solid 2px var(--border-gray-color);">
+<link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+<link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}">
 
-        </li>
-    </ul>
-    
-  <ul class="socialaccount_providers">
-    {% include "accounts/provider_list.html" with process="login" %}
-  </ul>
+<!-- Main css -->
+<link rel="stylesheet" href="{% static "css/style.css" %}">
+<link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
+
+</head>
+<body>
+<!-- PRE LOADER -->
+
+<div class="preloader">
+     <div class="sk-spinner sk-spinner-wordpress">
+          <span class="sk-inner-circle"></span>
+     </div>
 </div>
 
-{% include "socialaccount/snippets/login_extra.html" %}
+<!-- Navigation section  -->
 
-{% endif %}
+<div class="navbar navbar-default navbar-static-top" role="navigation">
+     <div class="container">
+
+          <div class="navbar-header">
+               <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon icon-bar"></span>
+                    <span class="icon icon-bar"></span>
+                    <span class="icon icon-bar"></span>
+               </button>
+               
+          </div>
+          <div class="collapse navbar-collapse">
+               <ul class="nav navbar-nav navbar-right">
+                    <li><a href="index.html">Projects</a></li>
+                    <li><a href="about.html">Our Studio</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="{% url 'accounts:login' %}">Login</a> </li>
+               </ul>
+          </div>
+
+  </div>
+</div>
 
 
-{% endblock %}
+<!-- Contact Section -->
+{% get_providers as socialaccount_providers %}
+{% if socialaccount_providers %}
+<section id="contact">
+     <div class="container">
+          <div class="row">
+
+               <div class="col-md-offset-1 col-md-10 col-sm-12">
+                    <div class="section-title">
+                         <a href="{% url 'mainpage:mainpage' %}"><img src="{% static 'images/logo.png' %}"></a>
+                         <br>
+                         <h2>로그인</h2>
+                         <br>
+                         {% include "accounts/provider_list.html" with process="login" %}
+                    </div>
+                    {% include "socialaccount/snippets/login_extra.html" %}
+                    {% endif %}
+                    {% endblock %}
+                    <!-- <form action="#" method="post">
+                         <!-- <div class="col-md-6 col-sm-6">
+                              <input type="text" class="form-control" placeholder="Name">
+                         </div>
+                         <div class="col-md-6 col-sm-6">
+                              <input type="email" class="form-control" placeholder="Email">
+                         </div>
+                         
+                         <div class="col-md-3 col-sm-4">
+                              <input type="submit" class="form-control" value="Send Message">
+                         </div>
+                    </form> -->
+               </div>
+
+          </div>
+     </div>
+</section>
+
+<!-- Footer Section -->
+
+<footer>
+     <div class="container">
+          <div class="row">
+
+               <div class="col-md-3 col-sm-3">
+                    <img class="logo" src="{% static 'images/logo.png' %}">
+               </div>
+
+               <div class="col-md-4 col-sm-4">
+                    <p>124 Market Street, Suite 3570 San Francisco, CA 3042 United States</p>
+               </div>
+
+               <div class="col-md-offset-1 col-md-4 col-sm-offset-1 col-sm-3">
+                    <p><a href="mailto:youremail@gmail.com">hello@yourstudio.co</a></p>
+                    <p>(+01) 2048937 / 02 203403</p>
+               </div>
+
+               <div class="clearfix col-md-12 col-sm-12">
+               </div>
+
+               <div class="col-md-6 col-sm-6">
+                    <div class="footer-copyright">
+                         <p>© 2016 Magnet Studio | All Rights Reserved.</p>
+                    </div>
+               </div>
+
+               <div class="col-md-6 col-sm-6">
+                    <ul class="social-icon">
+                         <li><a href="#" class="fa fa-facebook"></a></li>
+                         <li><a href="#" class="fa fa-twitter"></a></li>
+                         <li><a href="#" class="fa fa-linkedin"></a></li>
+                    </ul>
+               </div>
+               
+          </div>
+     </div>
+</footer>
+
+
+<!-- SCRIPTS -->
+
+<script src="{% static "js/jquery.js" %}"></script>
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+<script src="{% static "js/custom.js" %}"></script>
+
+</body>
+</html>
