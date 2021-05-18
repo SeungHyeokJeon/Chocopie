@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 import requests
 import json
-import os
 
 # Create your views here.
 def login(request):
