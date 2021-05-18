@@ -76,6 +76,7 @@ class Stores(models.Model):
     name = models.CharField(max_length=64)
     address = models.CharField(max_length=50, blank=True, null=True)
     phone = models.CharField(max_length=16, blank=True, null=True)
+    mainimage = models.CharField(max_length=64, blank=True, null=True)
     sales = models.TextField(blank=True, null=True)
     date_joined = models.DateTimeField(blank=True, null=True)
 
