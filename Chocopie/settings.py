@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     # apps
     'accounts.apps.AccountsConfig',
     'index.apps.IndexConfig',
+    'board.apps.BoardConfig',
 
     'allauth',
     'allauth.account',

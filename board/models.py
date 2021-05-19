@@ -66,50 +66,50 @@ class Users(models.Model):
     date_joined = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'users'
 
-# class Stores(models.Model):
-#     id = models.BigAutoField(primary_key=True)
-#     owner = models.ForeignKey('Users', models.CASCADE)
-#     category = models.CharField(max_length=11, blank=True, null=True)
-#     name = models.CharField(max_length=64)
-#     address = models.CharField(max_length=50, blank=True, null=True)
-#     phone = models.CharField(max_length=16, blank=True, null=True)
-#     mainimage = models.CharField(max_length=64, blank=True, null=True)
-#     sales = models.TextField(blank=True, null=True)
-#     date_joined = models.DateTimeField(blank=True, null=True)
+class Stores(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    owner = models.ForeignKey('Users', models.CASCADE)
+    category = models.CharField(max_length=11, blank=True, null=True)
+    name = models.CharField(max_length=64)
+    address = models.CharField(max_length=50, blank=True, null=True)
+    phone = models.CharField(max_length=16, blank=True, null=True)
+    mainimage = models.CharField(max_length=64, blank=True, null=True)
+    sales = models.TextField(blank=True, null=True)
+    date_joined = models.DateTimeField(blank=True, null=True)
 
-#     class Meta:
-#         managed = False
-#         db_table = 'stores'
+    class Meta:
+        managed = True
+        db_table = 'stores'
 
-# class Boards(models.Model):
-#     id = models.BigAutoField(primary_key=True)
-#     store = models.ForeignKey('Stores', models.CASCADE)
-#     writer = models.ForeignKey('Users', models.DO_NOTHING)
-#     writer_name = models.CharField(max_length=10)
-#     title = models.CharField(max_length=50)
-#     content = models.TextField(blank=True, null=True)
-#     date_posted = models.DateTimeField(blank=True, null=True)
-#     date_updated = models.DateTimeField(blank=True, null=True)
-#     is_noticed = models.IntegerField(blank=True, null=True)
+class Boards(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    store = models.ForeignKey('Stores', models.CASCADE)
+    writer = models.ForeignKey('Users', models.DO_NOTHING)
+    writer_name = models.CharField(max_length=10)
+    title = models.CharField(max_length=50)
+    content = models.TextField(blank=True, null=True)
+    date_posted = models.DateTimeField(blank=True, null=True)
+    date_updated = models.DateTimeField(blank=True, null=True)
+    is_noticed = models.IntegerField(blank=True, null=True)
 
-#     class Meta:
-#         managed = False
-#         db_table = 'boards'
+    class Meta:
+        managed = True
+        db_table = 'boards'
 
-# class Comments(models.Model):
-#     id = models.BigAutoField(primary_key=True)
-#     board = models.ForeignKey('Boards', models.CASCADE)
-#     writer = models.ForeignKey('Users', models.DO_NOTHING)
-#     writer_name = models.CharField(max_length=10)
-#     title = models.CharField(max_length=50)
-#     content = models.TextField(blank=True, null=True)
-#     date_posted = models.DateTimeField(blank=True, null=True)
-#     date_updated = models.DateTimeField(blank=True, null=True)
-#     is_noticed = models.IntegerField(blank=True, null=True)
+class Comments(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    board = models.ForeignKey('Boards', models.CASCADE)
+    writer = models.ForeignKey('Users', models.DO_NOTHING)
+    writer_name = models.CharField(max_length=10)
+    title = models.CharField(max_length=50)
+    content = models.TextField(blank=True, null=True)
+    date_posted = models.DateTimeField(blank=True, null=True)
+    date_updated = models.DateTimeField(blank=True, null=True)
+    is_noticed = models.IntegerField(blank=True, null=True)
 
-#     class Meta:
-#         managed = False
-#         db_table = 'comments'
+    class Meta:
+        managed = True
+        db_table = 'comments'

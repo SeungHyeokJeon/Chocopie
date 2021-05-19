@@ -1,0 +1,67 @@
+{% load static %}
+{% csrf_token %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+    
+    <style>
+        .infinite-item{ 
+            height:500px; 
+            background-color: antiquewhite;
+            margin-bottom: 5px;
+        }
+    </style>
+
+    <body>
+        {% if post_list %}
+        <div id="post_list" class="infinite-container">
+            {% for list in post_list %}
+                <div class="infinite-item">{{list}}</div>
+            {% endfor %}
+        </div>
+        <!-- {% if data.has_next %}
+            <p class="pagination">
+                <a class="infinite-more-link" href="?page={{data.next_page_number}}">더보기</a>
+            </p>
+        {% endif %} -->
+
+        {% endif %}
+        <input id="page" type="hidden" value="2">
+    </body>
+
+    <script>
+        var token = $('input[name="csrfmiddlewaretoken"]').prop('value');
+        var page = $("#page").val();
+
+        $(window).scroll(function(){
+            var scrollHeight = $(window).scrollTop() + $(window).outerHeight();
+            var documentHeight = $(document).height();
+
+            if(scrollHeight==documentHeight && page!=="{{totalPage}}") {
+                page = $("#page").val();
+                callMorePostAjax(page);
+                $("#page").val(parseInt(page)+1);
+            }
+        });
+        
+
+        function callMorePostAjax(page) {
+            $.ajax({
+                type:'POST',
+                url: "{% url 'board:test_ajax' %}",
+                data: {
+                    'page': page,
+                    'csrfmiddlewaretoken': token
+                },
+                success: addMorePostAjax,
+                dataType: 'html'
+            });
+        }
+
+        function addMorePostAjax(data, textStatus, jqXHR) {
+            $('#post_list').append(data);
+        }
+    </script>
+</html>
