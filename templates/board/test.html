@@ -18,7 +18,7 @@
         {% if post_list %}
         <div id="post_list" class="infinite-container">
             {% for list in post_list %}
-                <div class="infinite-item">{{list}}</div>
+                <div class="infinite-item">{{list.name}}</div>
             {% endfor %}
         </div>
         <!-- {% if data.has_next %}
@@ -28,6 +28,7 @@
         {% endif %} -->
 
         {% endif %}
+        <!-- 기본적으로 다음 페이지 지정해주기 위함 아마 수정해야 될거같긴함 -->
         <input id="page" type="hidden" value="2">
     </body>
 
@@ -36,7 +37,9 @@
         var page = $("#page").val();
 
         $(window).scroll(function(){
+            // 현재 하단 스크롤 위치
             var scrollHeight = $(window).scrollTop() + $(window).outerHeight();
+            // 페이지 전체 높이
             var documentHeight = $(document).height();
 
             if(scrollHeight==documentHeight && page!=="{{totalPage}}") {
@@ -46,7 +49,7 @@
             }
         });
         
-
+        // 다른 페이지에서 다음 페이지 정보를 로드해서 갖고옴
         function callMorePostAjax(page) {
             $.ajax({
                 type:'POST',
@@ -59,7 +62,7 @@
                 dataType: 'html'
             });
         }
-
+        // 다음 페이지 게시글을 아래에 추가
         function addMorePostAjax(data, textStatus, jqXHR) {
             $('#post_list').append(data);
         }
