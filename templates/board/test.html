@@ -28,13 +28,18 @@
         {% endif %} -->
 
         {% endif %}
-        <!-- 기본적으로 다음 페이지 지정해주기 위함 아마 수정해야 될거같긴함 -->
+        <!-- 기본적으로 다음 페이지 지정해주기 위함 -->
         <input id="page" type="hidden" value="2">
     </body>
 
     <script>
         var token = $('input[name="csrfmiddlewaretoken"]').prop('value');
-        var page = $("#page").val();
+
+        //만약 현재 페이지를 파라미터로 가져와서 값이 있으면
+        var paramPage = getParameterByName('page');
+        //파라미터로 가져온 페이지+1하고 없으면 2로 지정
+        var page = paramPage===''?$("#page").val():parseInt(paramPage)+1;
+        $("#page").val(parseInt(page)); // 가져온 페이지로 input 값 대체
 
         $(window).scroll(function(){
             // 현재 하단 스크롤 위치
@@ -66,5 +71,13 @@
         function addMorePostAjax(data, textStatus, jqXHR) {
             $('#post_list').append(data);
         }
+        // page 파라미터 가져오기
+        function getParameterByName(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                    results = regex.exec(location.search);
+            return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+
     </script>
 </html>
