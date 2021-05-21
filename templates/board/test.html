@@ -15,10 +15,11 @@
     </style>
 
     <body>
+        
         {% if post_list %}
         <div id="post_list" class="infinite-container">
             {% for list in post_list %}
-                <div class="infinite-item">{{list.name}}</div>
+                <div class="infinite-item">{{list.title}}</div>
             {% endfor %}
         </div>
         <!-- {% if data.has_next %}
@@ -46,8 +47,9 @@
             var scrollHeight = $(window).scrollTop() + $(window).outerHeight();
             // 페이지 전체 높이
             var documentHeight = $(document).height();
+            console.log(scrollHeight, documentHeight);
 
-            if(scrollHeight==documentHeight && page!=="{{totalPage}}") {
+            if(scrollHeight>=documentHeight && page!=="{{totalPage}}") {
                 page = $("#page").val();
                 callMorePostAjax(page);
                 $("#page").val(parseInt(page)+1);
