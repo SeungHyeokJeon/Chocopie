@@ -1,12 +1,12 @@
 import math
 
 from django.shortcuts import render
-from board.models import Stores
+from board.models import Boards
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 def test(request):
-    data = Stores.objects.all() # db 전체 값 가져오기
+    data = Boards.objects.all().order_by('id') # db 전체 값 가져오기
     
     listLength = 5  # 한번에 불러올 게시글 개수
     totalPage = math.ceil(len(data)/listLength) # 전체 페이지 계산
@@ -26,7 +26,7 @@ def test(request):
 
 # 추가될 요소 접근
 def test_ajax(request):
-    data = Stores.objects.all()
+    data = Boards.objects.all().order_by('id')
 
     listLength = 5
     totalPage = math.ceil(len(data)/listLength)
