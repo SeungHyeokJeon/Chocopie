@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from accounts.models import AuthUser, Userinfo
+
+from accounts.models import Userinfo
+from django.contrib.auth.models import User # auth_user
+
 from datetime import datetime
 
 # Create your views here.
 def login(request):
     authId = request.session.get('_auth_user_id')
-    dataList = AuthUser.objects.filter(id=authId)
+    dataList = User.objects.filter(id=authId)
     context = {'userData':dataList}
     return render(request, 'accounts/login.html',context)
 
@@ -26,7 +29,7 @@ def register(request):
     email = request.POST.get('email')
 
     # 회원가입할 객체 생성하고 등록
-    userInstance = Userinfo(id=AuthUser.objects.get(id=authid), provider=provider, name=name, email=email, date_joined=datetime.now())
+    userInstance = Userinfo(id=User.objects.get(id=authid), provider=provider, name=name, email=email, date_joined=datetime.now())
     userInstance.save()
 
     return redirect(reverse('mainpage:mainpage'))
