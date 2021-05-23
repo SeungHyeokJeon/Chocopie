@@ -8,14 +8,12 @@ from allauth.account.models import EmailAddress
 # Create your views here.
 def mainpage(request):
     authId = request.session.get('_auth_user_id')
-    zxc = EmailAddress.objects.filter(user_id=authId)
-    print(zxc[0].id)
     
     if authId!='' and authId!=None: # 로그인된 계정이 존재하면
         # 로그인계정의 회원정보가 등록되어있는지 판단
         existId = Userinfo.objects.filter(id=int(authId))
         #existId = Userinfo.objects.all()
-        if len(existId)==0:
+        if existId.exists():
             # 등록이 안되어 있으면 넘겨줄 값들을 하나씩 불러옴
             # 넘겨주는 값: auth_user.id, provider, name
             getSocialAccount = SocialAccount.objects.filter(user_id=authId)
