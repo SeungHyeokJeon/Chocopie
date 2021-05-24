@@ -28,3 +28,6 @@ def mainpage(request):
             return render(request, 'accounts/additionalRegister.html',context)
 
     return render(request, 'mainpage/main.html')
+
+def storepage(request):
+    return render(request, 'mainpage/store.html')
