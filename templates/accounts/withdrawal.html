@@ -1,0 +1,31 @@
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+    <body>
+        <div><h1>회원탈퇴</h1></div>
+            <div>
+                <!--accounts쪽에 view 추가해서 업로드하기-->
+                <form action="{% url 'accounts:withdrawalProcess' %}" method="POST">
+                    <p>회원탈퇴를 원하실경우 '<strong>동의합니다</strong>'를 입력하세요.</p>
+                    <input type="text" id="input_agree">
+                    
+                    <button type="submit" id="btn" disabled="true" >탈퇴하기</button>
+                </form>
+            </div>
+
+    </body>
+
+    <script>
+        $(function(){
+            $("#input_agree").on('input',function(){
+                if($("#input_agree").val()=='동의합니다')
+                    $("#btn").attr("disabled",false);
+                else
+                    $("#btn").attr("disabled",true);
+            })
+        })
+    </script>
+</html>

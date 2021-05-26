@@ -19,7 +19,8 @@ from django.urls import path, include
 urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('mainpage/', include('mainpage.urls')),
-    path('count/', include('allauth.urls')), # 로깅 추가
+    path('allauth/', include('allauth.urls')),
+    path('board/',include('board.urls')),
     path('index/', include('index.urls')),
     path('admin/', admin.site.urls),
 ]

@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     # apps
     'accounts.apps.AccountsConfig',
     'index.apps.IndexConfig',
+    'board.apps.BoardConfig',
 
     'allauth',
     'allauth.account',
@@ -69,7 +70,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -158,8 +159,8 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SITE_ID = 1
 
-LOGIN_REDIRECT_URL = '/index'
-ACCOUNT_LOGOUT_REDIRECT_URL = '/index'
+LOGIN_REDIRECT_URL = '/mainpage'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/mainpage'
 ACCOUNT_LOGOUT_ON_GET = True
 
 AUTH_USER_MODEL = 'auth.User'

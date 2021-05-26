@@ -1,0 +1,85 @@
+{% load static %}
+{% csrf_token %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+    
+    <style>
+        .infinite-item{ 
+            height:500px; 
+            background-color: antiquewhite;
+            margin-bottom: 5px;
+        }
+    </style>
+
+    <body>
+        
+        {% if post_list %}
+        <div id="post_list" class="infinite-container">
+            {% for list in post_list %}
+                <div class="infinite-item">{{list.title}}</div>
+            {% endfor %}
+        </div>
+        <!-- {% if data.has_next %}
+            <p class="pagination">
+                <a class="infinite-more-link" href="?page={{data.next_page_number}}">더보기</a>
+            </p>
+        {% endif %} -->
+
+        {% endif %}
+        <!-- 기본적으로 다음 페이지 지정해주기 위함 -->
+        <input id="page" type="hidden" value="2">
+    </body>
+
+    <script>
+        var token = $('input[name="csrfmiddlewaretoken"]').prop('value');
+
+        //만약 현재 페이지를 파라미터로 가져와서 값이 있으면
+        var paramPage = getParameterByName('page');
+        //파라미터로 가져온 페이지+1하고 없으면 2로 지정
+        var page = paramPage===''?$("#page").val():parseInt(paramPage)+1;
+        $("#page").val(parseInt(page)); // 가져온 페이지로 input 값 대체
+
+        $(window).scroll(function(){
+            // 현재 하단 스크롤 위치
+            var scrollHeight = $(window).scrollTop() + $(window).outerHeight();
+            // 페이지 전체 높이
+            var documentHeight = $(document).height();
+            console.log(scrollHeight, documentHeight);
+
+            if(scrollHeight>=documentHeight && page!=="{{totalPage}}") {
+                page = $("#page").val();
+                callMorePostAjax(page);
+                $("#page").val(parseInt(page)+1);
+            }
+        });
+        
+        // 다른 페이지에서 다음 페이지 정보를 로드해서 갖고옴
+        function callMorePostAjax(page) {
+            $.ajax({
+                type:'POST',
+                url: "{% url 'board:test_ajax' %}",
+                data: {
+                    'page': page,
+                    'csrfmiddlewaretoken': token
+                },
+                success: addMorePostAjax,
+                dataType: 'html'
+            });
+        }
+        // 다음 페이지 게시글을 아래에 추가
+        function addMorePostAjax(data, textStatus, jqXHR) {
+            $('#post_list').append(data);
+        }
+        // page 파라미터 가져오기
+        function getParameterByName(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                    results = regex.exec(location.search);
+            return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+
+    </script>
+</html>

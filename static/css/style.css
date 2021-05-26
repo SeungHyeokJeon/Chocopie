@@ -716,3 +716,19 @@ footer .footer-copyright {
 }
 
 
+
+/*---------------------------------------
+   info             
+-----------------------------------------*/
+.a{
+  list-style: none;
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: 30px;
+  font-weight: 700;
+
+}
+.a >p {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: 23px;
+  font-weight: 500;
+}
