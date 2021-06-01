@@ -40,6 +40,7 @@ class Boards(models.Model):
 class Comments(models.Model):
     id = models.BigAutoField(primary_key=True)
     board = models.ForeignKey(Boards, models.CASCADE)
+    parent = models.ForeignKey('self', models.CASCADE, null=True)
     writer = models.ForeignKey(Userinfo, models.DO_NOTHING)
     writer_name = models.CharField(max_length=256)
     content = models.TextField(blank=True, null=True)
