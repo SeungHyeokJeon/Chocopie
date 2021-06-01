@@ -4,18 +4,6 @@ from django.contrib.auth.models import User
 from allauth.socialaccount.models import SocialAccount, SocialApp, SocialToken
 
 # Create your models here.
-class User(User):
-    pass
-class EmailAddress(EmailAddress):
-    pass
-class SocialAccount(SocialAccount):
-    pass
-class SocialApp(SocialApp):
-    pass
-class SocialToken(SocialToken):
-    pass
-
-
 class Userinfo(models.Model):
     id = models.OneToOneField(User, models.CASCADE, db_column='id', primary_key=True)
     provider = models.CharField(max_length=30, blank=True, null=True)
