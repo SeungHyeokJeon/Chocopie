@@ -21,19 +21,6 @@ def loginKakao(request):
     redirectUrl = 'http://127.0.0.1:8000/allauth/kakao/login/callback/'
     return redirect(f'https://kauth.kakao.com/oauth/authorize?client_id={restApiKey}&redirect_uri={redirectUrl}&response_type=code')
 
-def register(request):
-    # 필요한 정보 받아오기
-    authid = int(request.POST.get('authid'))
-    provider = request.POST.get('provider')
-    name = request.POST.get('name')
-    email = request.POST.get('email')
-
-    # 회원가입할 객체 생성하고 등록
-    userInstance = Userinfo(id=User.objects.get(id=authid), provider=provider, name=name, email=email, date_joined=datetime.now())
-    userInstance.save()
-
-    return redirect(reverse('mainpage:mainpage'))
-
 def withdrawal(request):
     return render(request, 'accounts/withdrawal.html')
 

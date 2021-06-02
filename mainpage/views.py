@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from datetime import datetime
 
 from django.utils import timezone
 from django.shortcuts import render
@@ -31,8 +32,9 @@ def mainpage(request):
             else: # provider가 google이나 naver면 name으로 가져옴
                 name = socialAccountInfo.extra_data['name']
 
-            context={'authid':authId, 'provider':provider,'name':name}
-            return render(request, 'accounts/additionalRegister.html',context)
+            # 회원가입할 객체 생성하고 등록
+            userInstance = Userinfo(id=User.objects.get(id=authId), provider=provider, name=name, date_joined=datetime.now())
+            userInstance.save()
 
     # 받은 parameter의 종류가 POST인 경우만 데이터를 넘겨줌
     if request.method == 'POST': 
