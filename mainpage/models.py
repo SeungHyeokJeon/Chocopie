@@ -13,5 +13,5 @@ class traditional_market(models.Model):
     phone_number = models.TextField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'traditional_market'
