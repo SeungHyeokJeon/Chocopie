@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE HTML>
 <!--
 	Future Imperfect by HTML5 UP
@@ -10,7 +11,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		
-		<link rel="stylesheet" href="css/store_inform.css" />
+		<link rel="stylesheet" href="../../static/css/store_inform.css" />
 
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 		<meta name="description" content="">
@@ -18,11 +19,10 @@
 		<meta name="author" content="">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/font-awesome.min.css">
+		<link rel="stylesheet" href="../../static/css/bootstrap.min.css">
+		<link rel="stylesheet" href="../../static/css/font-awesome.min.css">
 		
-		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="../../static/css/style.css">
 		<link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
 
 
@@ -41,7 +41,7 @@
 						   <span class="icon icon-bar"></span>
 						   <span class="icon icon-bar"></span>
 					  </button>
-					  <a href="main.html" class="navbar-brand"><img class="logo" src="images/logo.png"></a>
+					  <a href="{% url 'mainpage:mainpage' %}" class="navbar-brand"><img class="logo" src="{% static 'images/logo.png' %}"></a>
 				 </div>
 				 <div class="collapse navbar-collapse">
 					  <ul class="nav navbar-nav navbar-right">
@@ -72,11 +72,11 @@
 								</div>
 								<div class="meta">
 									<time class="published" datetime="2015-11-01">November 1, 2015</time>
-									<a href="#" class="author"><span class="name">싸장님</span><img src="images/avatar.jpg" alt="" /></a>
+									<a href="#" class="author"><span class="name">싸장님</span><img src="../../static/images/avatar.jpg" alt="" /></a>
 								</div>
 							</header>
 
-							<a href="#" class="image featured"><img src="images/apple.jpg" alt="" /></a>
+							<a href="#" class="image featured"><img src="../../static/images/apple.jpg" alt="" /></a>
 							<p>이 부분이 게시물 내용이 들어갈 자린데 어떻게 해야 글씨가 커지려나 글자 크기 이거 맞나 사과 apple 아이폰 아이패드 애플펜슬</p>
 					
 							<footer>
@@ -101,7 +101,7 @@
 
 						<!-- Intro -->
 							<section id="intro">
-								<a href="#" class="logo"><img src="images/logo.jpg" alt="" /></a>
+								<a href="#" class="logo"><img src="../../static/images/logo.jpg" alt="" /></a>
 								<header>
 									<h2>가게 이름</h2>
 								</header>
@@ -134,7 +134,7 @@
 		 <div class="row">
 
 			  <div class="col-md-3 col-sm-3">
-				   <img class="logo" src="images/logo.png">
+				   <img class="logo" src="../../static/images/logo.png">
 			  </div>
 
 			  <div class="col-md-4 col-sm-4">

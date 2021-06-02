@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import json
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +27,8 @@ SECRET_KEY = secrets['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['114.70.93.84:8000', 'localhost', '114.70.93.84']
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -153,13 +155,18 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+# IMAGE UPLOAD PATH
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-SITE_ID = 1
+SITE_ID = 7
 
 LOGIN_REDIRECT_URL = '/mainpage'
+LOGOUT_REDIRECT_URL = '/mainpage'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/mainpage'
 ACCOUNT_LOGOUT_ON_GET = True
 

@@ -4,5 +4,11 @@ from . import views
 app_name = 'mainpage'
 urlpatterns = [
     path('', views.mainpage, name='mainpage'),
-    path('store/', views.storepage, name='storepage'),
+    path('map/', views.map, name='map'),
+    path('storepage/<str:item>', views.storepage, name='storepage'),
+    path('storeinfo/',views.storeInfo, name='storeInfo'),
+    path('store/',views.store, name='store'),
+    path('makestore/',views.makestore, name='makestore'),
+    path('mypage/',views.mypage, name='mypage'),
+    path('dbupload/', views.dbupload, name='dbupload'),
 ]

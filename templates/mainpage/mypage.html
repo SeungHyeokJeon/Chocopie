@@ -25,28 +25,32 @@
 
 	
 	<body>
-		<div class="navbar navbar-default navbar-static-top" role="navigation">
-			<div class="container">
-	   
-				 <div class="navbar-header">
-					  <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-						   <span class="icon icon-bar"></span>
-						   <span class="icon icon-bar"></span>
-						   <span class="icon icon-bar"></span>
-					  </button>
-					  <a href="{% url 'mainpage:mainpage' %}" class="navbar-brand"><img class="logo" src="{% static 'images/logo.png' %}"></a>
-				 </div>
-				 <div class="collapse navbar-collapse">
-					  <ul class="nav navbar-nav navbar-right">
-						   <li class="active"><a href="index.html">Projects</a></li>
-						   <li><a href="about.html">Our Studio</a></li>
-						   <li><a href="blog.html">Blog</a></li>
-						   <li><a href="{% url 'accounts:login' %}">Login</a> </li>
-					  </ul>
-				 </div>
-	   
-		 </div>
-	   </div>
+	<!-- Navigation section  -->
+	<div class="navbar navbar-default navbar-static-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon icon-bar"></span>
+					<span class="icon icon-bar"></span>
+					<span class="icon icon-bar"></span>
+				</button>
+				<a href="{% url 'mainpage:mainpage' %}" class="navbar-brand"><img class="logo" src="{% static 'images/logo.png' %}"></a>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<!-- <li class="active"><a href="index.html">Projects</a></li> -->
+					{% if user.is_authenticated %}
+					{{user.username}} 님이 로그인중
+					<li><a href="#" class="fa fa-shopping-cart"></a></li>
+					<li><a href="{% url 'mainpage:mypage' %}" class="fa fa-user"></a></li>
+					<li><a href="{% url 'accounts:logout' %}">Logout</a> </li>
+					{% else %}
+					<li><a href="{% url 'accounts:login' %}">Login</a> </li>
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+	</div>
 
 		<!-- Wrapper -->
 			<div id="wrapper">
