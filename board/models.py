@@ -4,16 +4,19 @@ from allauth.account.models import EmailAddress
 from django.contrib.auth.models import User
 from allauth.socialaccount.models import SocialAccount, SocialApp, SocialToken
 from accounts.models import Userinfo
+from mainpage.models import traditional_market
 
 # Create your models here.
 # Stores Models은 임시로 여기다 배치함
 class Stores(models.Model):
     owner = models.ForeignKey(Userinfo, models.CASCADE)
+    market = models.ForeignKey(traditional_market, models.DO_NOTHING, null=True)
     category = models.CharField(max_length=11, blank=True, null=True)
     name = models.CharField(max_length=256)
     address = models.CharField(max_length=1024, blank=True, null=True)
     phone = models.CharField(max_length=16, blank=True, null=True)
     mainimage = models.ImageField(upload_to='images/',blank=True, null=True)
+    introduce = models.CharField(max_length=256, blank=True, null=True)
     sales = models.TextField(blank=True, null=True)
     date_joined = models.DateTimeField(blank=True, null=True)
 
