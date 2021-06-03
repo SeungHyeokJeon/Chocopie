@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from accounts.models import Userinfo
-from board.models import Stores
+from board.models import Stores, Boards
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from allauth.account.models import EmailAddress
@@ -92,6 +92,7 @@ def storepage_ajax(request):
 
     data = Stores.objects.filter(category=item, market_id=marketNum).order_by('id')
 
+
     listLength = 5
     totalPage = math.ceil(len(data)/listLength)
 
@@ -148,6 +149,51 @@ def map(request):
     context = {'traditional_markets':traditional_markets}
     return render(request, 'mainpage/map.html', context)
 
+def storeInfo(request, id):
+    store = Stores.objects.get(id=id)
+    board = Boards.objects.filter(store=id).order_by('id')
+
+    listLength = 5  # 한번에 불러올 게시글 개수
+    totalPage = math.ceil(len(board)/listLength) # 전체 페이지 계산
+
+    paginator = Paginator(board,listLength) # 게시글 나누기
+    page = request.GET.get('page') # page 파라미터 있으면 갖고오기
+    
+    try:
+        board_list=paginator.page(page) # 현재 페이지 지정
+    except PageNotAnInteger:
+        board_list=paginator.page(1)
+    except EmptyPage:
+        board_list=paginator.page(paginator.num_pages)
+    
+    context = {
+        'store': store,
+        'board': board_list,
+        'totalPage':totalPage
+    }
+    return render(request, 'mainpage/store_info.html', context)
+
+def storeInfo_ajax(request, id):
+    board = Boards.objects.filter(store=id).order_by('id')
+
+    listLength = 5  # 한번에 불러올 게시글 개수
+    totalPage = math.ceil(len(board)/listLength) # 전체 페이지 계산
+
+    paginator = Paginator(board,listLength) # 게시글 나누기
+    page = request.POST.get('page') # page 파라미터 있으면 갖고오기
+    
+    try:
+        board_list=paginator.page(page) # 현재 페이지 지정
+    except PageNotAnInteger:
+        board_list=paginator.page(1)
+    except EmptyPage:
+        board_list=paginator.page(paginator.num_pages)
+    
+    context = {
+        'board': board_list,
+        'totalPage':totalPage
+    }
+    return render(request, 'mainpage/board_ajax.html', context)
 
 def mypage(request):
     return render(request, 'mainpage/main.html')
