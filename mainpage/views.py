@@ -119,14 +119,7 @@ def makestore(request):
     context = {'traditional_markets':traditional_markets}
     return render(request, 'mainpage/makestore.html', context)
 
-def map(request):
-    traditional_markets = traditional_market.objects.filter(
-
-    ).values('id', 'name', 'road_address', 'latitude', 'longitude')
-    context = {'traditional_markets':traditional_markets}
-    return render(request, 'mainpage/map.html', context)
-
-def storeInfo(request):
+def saveStore(request):
     if(request.method == 'POST'):
         stores = Stores()
         stores.owner = Userinfo.objects.get(id=int(request.POST['owner']))
@@ -142,10 +135,19 @@ def storeInfo(request):
         # 데이터베이스에 저장
         stores.save()
         print(stores.id)
-        return render(request, 'mainpage/main.html')
+        return redirect(reverse('mainpage:storepage', kwargs={'item': stores.category}))
         # return redirect('/detail/' + str(stores.id))
     else:
-        return render(request, 'mainpage/store_info.html')
+        return redirect(reverse('mainpage:mainpage'))
+    
+
+def map(request):
+    traditional_markets = traditional_market.objects.filter(
+
+    ).values('id', 'name', 'road_address', 'latitude', 'longitude')
+    context = {'traditional_markets':traditional_markets}
+    return render(request, 'mainpage/map.html', context)
+
 
 def mypage(request):
     return render(request, 'mainpage/main.html')
