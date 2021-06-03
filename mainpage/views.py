@@ -104,15 +104,17 @@ def storeInfo(request):
     else:
         return render(request, 'mainpage/main.html')
 
-def detailStore(request, storeid):
-    return render(request, 'mainpage/store_info.html')
-    #stores.owner = Stores.objects.get(id=int(storeid))
+def detailStore(request, store_id):
+    store = Stores.objects.get(id=int(store_id))
+    owner = Userinfo.objects.get(id=int(store.owner_id))
+    data = { 
+        'store' : store,
+        'owner' : owner
+    }
+    return render(request, 'mainpage/store_info.html', data)
     
 def mypage(request):
     return render(request, 'mainpage/mypage.html')
-
-def store(request):
-    return render(request, 'mainpage/store_info.html')
 
 def dbupload(request):
     BASE_DIR = Path(__file__).resolve().parent.parent
