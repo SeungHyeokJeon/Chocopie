@@ -1,9 +1,11 @@
 import json
 from pathlib import Path
 from datetime import datetime
+import math
 
 from django.utils import timezone
 from django.shortcuts import render
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from accounts.models import Userinfo
 from board.models import Stores
@@ -60,12 +62,55 @@ def storepage(request):
     return render(request, 'mainpage/store.html')
 
 def storepage(request, item):
-    stores = Stores.objects.filter()
-    data = {
-        'stores' : stores,
+    marketNum = request.session['marketNum'] # 시장번호
+
+    data = Stores.objects.filter(category=item, market_id=marketNum).order_by('id')
+
+    listLength = 5  # 한번에 불러올 게시글 개수
+    totalPage = math.ceil(len(data)/listLength) # 전체 페이지 계산
+
+    paginator = Paginator(data,listLength) # 게시글 나누기
+    page = request.GET.get('page') # page 파라미터 있으면 갖고오기
+    
+    try:
+        store_list=paginator.page(page) # 현재 페이지 지정
+    except PageNotAnInteger:
+        store_list=paginator.page(1)
+    except EmptyPage:
+        store_list=paginator.page(paginator.num_pages)
+
+    context = {
+        'stores' : store_list,
+        'totalPage':totalPage,
         'item' : item
     }
-    return render(request, 'mainpage/store.html', data)
+    return render(request, 'mainpage/store.html', context)
+
+def storepage_ajax(request):
+    item = request.POST.get('item')
+    marketNum = request.session['marketNum'] # 시장번호
+
+    data = Stores.objects.filter(category=item, market_id=marketNum).order_by('id')
+
+    listLength = 5
+    totalPage = math.ceil(len(data)/listLength)
+
+    paginator = Paginator(data,listLength)
+    page = request.POST.get('page')
+    
+    try:
+        store_list = paginator.page(page)
+    except PageNotAnInteger:
+        store_list = paginator.page(1)
+    except EmptyPage:
+        store_list = paginator.page(paginator.num_pages)
+
+    context = {
+        'stores' : store_list,
+        'totalPage':totalPage,
+        'item' : item
+    }
+    return render(request, 'mainpage/store_list_ajax.html', context)
 
 def makestore(request):
     traditional_markets = traditional_market.objects.filter(
