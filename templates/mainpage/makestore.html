@@ -87,14 +87,25 @@
                           </select>
                          </div>
                          <div class="col-md-6 col-sm-6">
+                              <label for="marketNum">시장</label>
+                              <input class="form-control" type="text" name="marketNum" id="marketNum" value={{selectMarketName}} readonly>
+                         </div>
+                         <div class="col-md-6 col-sm-6">
+                              <label for="input-image">업로드</label>
+                              <input class="form-control" type="file" name="imgs" id="input-image">
+                         </div>
+                         <div class="col-md-6 col-sm-6">
                               <label for="address">주소</label> 
                               <input onclick="showAdress();" class="form-control" type="text" id="address" name="address" placeholder="주소를 입력하려면 클릭해주세요" readonly>
                               <input class="form-control" type="text" id="addressSub" name="addressSub" placeholder="상세주소">
                               <!-- <button class="btn" id="btn" onclick="showAdress(); " style="background-color: #14AD03;">주소찾기</button> -->
                          </div>
-                         <div class="col-md-6 col-sm-6">
-                              <label for="ex_file">업로드</label>
-                              <input class="form-control" type="file" name="imgs" id="ex_file">
+                         <div class="col-md-6 col-sm-6" style="text-align: center;">
+                              <img style="height: 155px; object-fit: fill;" id="preview-image" src="{% static 'images/example.png' %}">
+                         </div>
+                         <div class="col-md-12">
+                              <label for="introduce">가게 소개글</label>
+                              <textarea class="form-control" name="introduce" id="introduce" style="resize: none;"></textarea>
                          </div>
                          <div class="col-md-11">
                               <button style="margin-left: auto;" class="btn" id="btn" onclick="" >취소</button>
@@ -135,6 +146,26 @@ function showAdress(){
           }
     }).open();
 }
+function readImage(input) {
+    // 인풋 태그에 파일이 있는 경우
+    if(input.files && input.files[0]) {
+        // 이미지 파일인지 검사 (생략)
+        // FileReader 인스턴스 생성
+        const reader = new FileReader()
+        // 이미지가 로드가 된 경우
+        reader.onload = e => {
+            const previewImage = document.getElementById("preview-image")
+            previewImage.src = e.target.result
+        }
+        // reader가 이미지 읽도록 하기
+        reader.readAsDataURL(input.files[0])
+    }
+}
+// input file에 change 이벤트 부여
+const inputImage = document.getElementById("input-image")
+inputImage.addEventListener("change", e => {
+    readImage(e.target)
+})
 </script>
 </body>
 </html>

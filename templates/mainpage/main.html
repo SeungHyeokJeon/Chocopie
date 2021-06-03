@@ -20,7 +20,7 @@
 <!-- Main css -->
 <link rel="stylesheet" href="{% static "css/style.css" %}">
 <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 
@@ -84,8 +84,11 @@
 
 <section id="portfolio">
      <div class="container">
+          {% if selectMarketName %}
+               <a href="{% url 'mainpage:makestore' %}">가게 만들기</a>
+          {% endif %}
           <div class="row">
-
+               
                <div class="col-md-4 col-sm-6">
                     <a href="{% url 'mainpage:storepage' item='농산물' %}" >
                     <div class="portfolio-thumb">

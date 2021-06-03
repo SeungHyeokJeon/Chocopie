@@ -66,11 +66,15 @@ def storepage(request, item):
     return render(request, 'mainpage/store.html', data)
 
 def makestore(request):
-    traditional_markets = traditional_market.objects.filter(
-
-    ).values('id', 'name', 'road_address', 'latitude', 'longitude')
-    context = {'traditional_markets':traditional_markets}
-    return render(request, 'mainpage/makestore.html', context)
+    marketNum = request.session['marketNum']
+    selectMarketName = request.session['selectMarketName'] 
+    selectMarketAddress =  request.session['selectMarketAddress']
+    data = { 
+        'marketNum' : marketNum,
+        'selectMarketName' : selectMarketName, 
+        'selectMarketAddress' : selectMarketAddress
+    }
+    return render(request, 'mainpage/makestore.html', data)
 
 def map(request):
     traditional_markets = traditional_market.objects.filter(
@@ -83,10 +87,12 @@ def storeInfo(request):
     if(request.method == 'POST'):
         stores = Stores()
         stores.owner = Userinfo.objects.get(id=int(request.POST['owner']))
+        stores.market = Userinfo.objects.get(id=int(request.POST['marketNum']))
+
         stores.name = request.POST['name']
         stores.category = request.POST['category']
         stores.address = request.POST['address'] + '(' + request.POST['addressSub'] + ')'
-        
+        stores.introduce = request.POST['introduce']
         #post.user = request.user
         stores.mainimage = request.FILES['imgs']
             
@@ -94,17 +100,19 @@ def storeInfo(request):
         stores.date_joined = timezone.datetime.now()
         # 데이터베이스에 저장
         stores.save()
-        print(stores.id)
-        return render(request, 'mainpage/main.html')
-        # return redirect('/detail/' + str(stores.id))
+        return redirect('/detail/' + str(stores.id))
     else:
-        return render(request, 'mainpage/store_info.html')
+        return render(request, 'mainpage/main.html')
 
+def detailStore(request, storeid):
+    return render(request, 'mainpage/store_info.html')
+    #stores.owner = Stores.objects.get(id=int(storeid))
+    
 def mypage(request):
-    return render(request, 'mainpage/main.html')
+    return render(request, 'mainpage/mypage.html')
 
 def store(request):
-    return render(request, 'mainpage/single.html')
+    return render(request, 'mainpage/store_info.html')
 
 def dbupload(request):
     BASE_DIR = Path(__file__).resolve().parent.parent
