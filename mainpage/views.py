@@ -167,7 +167,7 @@ def detailStore(request, store_id):
     totalPage = math.ceil(len(board)/listLength) # 전체 페이지 계산
 
     paginator = Paginator(board,listLength) # 게시글 나누기
-    page = request.GET.get('page') # page 파라미터 있으면 갖고오기
+    page = request.POST.get('page') # page 파라미터 있으면 갖고오기
     
     try:
         board_list=paginator.page(page) # 현재 페이지 지정
