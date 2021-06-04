@@ -10,6 +10,7 @@ urlpatterns = [
     path('detail/<int:store_id>',views.detailStore, name='detailStore'),
     path('detail/<str:id>/ajax',views.detailStore_ajax, name='detailStore_ajax'),
     path('makestore/',views.makestore, name='makestore'),
+    path('savestore/',views.saveStore, name='saveStore'),
     path('mypage/',views.mypage, name='mypage'),
     #path('store/',views.store, name='store'),
     #path('dbupload/', views.dbupload, name='dbupload'),
