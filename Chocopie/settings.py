@@ -64,8 +64,8 @@ INSTALLED_APPS = [
   	'allauth.socialaccount.providers.naver',
     'allauth.socialaccount.providers.kakao',
 
-    # bpptstrap
-    #'bootstrap5'
+    # summernote
+    'django_summernote',
 ]
 
 MIDDLEWARE = [
@@ -157,7 +157,7 @@ STATICFILES_DIRS = [
 
 # IMAGE UPLOAD PATH
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -171,3 +171,6 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/mainpage'
 ACCOUNT_LOGOUT_ON_GET = True
 
 AUTH_USER_MODEL = 'auth.User'
+
+# summernote load allow
+X_FRAME_OPTIONS = 'SAMEORIGIN'

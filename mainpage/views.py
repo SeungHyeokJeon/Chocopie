@@ -3,8 +3,9 @@ from pathlib import Path
 from datetime import datetime
 import math
 
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils import timezone
-from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from accounts.models import Userinfo
@@ -13,6 +14,8 @@ from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from allauth.account.models import EmailAddress
 from mainpage.models import traditional_market
+
+from mainpage.forms import BoardsForm
 
 
 # Create your views here.
@@ -168,6 +171,7 @@ def detailStore(request, store_id):
 
     paginator = Paginator(board,listLength) # 게시글 나누기
     page = request.POST.get('page') # page 파라미터 있으면 갖고오기
+    print('page:',page,'/',totalPage)
     
     try:
         board_list=paginator.page(page) # 현재 페이지 지정
@@ -192,6 +196,7 @@ def detailStore_ajax(request, id):
 
     paginator = Paginator(board,listLength) # 게시글 나누기
     page = request.POST.get('page') # page 파라미터 있으면 갖고오기
+    print('ajax page:',page)
     
     try:
         board_list=paginator.page(page) # 현재 페이지 지정
@@ -230,3 +235,32 @@ def dbupload(request):
             phone_number = i['전화번호'] if "전화번호" in i else 'None',
         ).save()
     return render(request, 'accounts/dbupload.html')
+
+def post_write(request, store_id):
+    authId = request.session.get('_auth_user_id')
+    userinfo = Userinfo.objects.get(id=authId)
+    store = Stores.objects.get(id=int(store_id))
+
+    if request.method == "POST":
+        form = BoardsForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = Boards()
+            post.store=store
+            post.writer=userinfo
+            post.writer_name=userinfo.name
+            post.title = request.POST.get('title')
+            post.content = request.POST.get('content')
+            post.thumbnail = request.POST.get('thumbnail')
+            post.views=0
+            post.date_posted=timezone.datetime.now()
+            post.save()
+            return redirect(reverse('mainpage:detailStore', kwargs={'store_id':store_id}))
+
+    else:
+        form = BoardsForm()
+
+    context = {
+        'store':store,
+        'form':form
+    }
+    return render(request,'mainpage/post_write.html', context)

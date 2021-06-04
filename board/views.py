@@ -1,8 +1,12 @@
 import math
 
 from django.shortcuts import render
-from board.models import Boards
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from board.models import Boards, Stores
+
+
+
 
 # Create your views here.
 def test(request):
@@ -43,3 +47,4 @@ def test_ajax(request):
 
     context = {'post_list':post_list, 'totalPage':totalPage}
     return render(request, 'board/test_ajax.html', context)
+

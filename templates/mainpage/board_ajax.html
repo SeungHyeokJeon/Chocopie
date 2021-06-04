@@ -16,7 +16,7 @@
             </header>
 
             <a href="#" class="image featured"><img src="../../static/images/apple.jpg" alt="" /></a>
-            <p>{{postlist.content}}</p>
+            {{postlist.content | striptags}}
 
             <footer>
                   <ul class="actions">
