@@ -1,0 +1,36 @@
+{% if board %}
+
+      {% for postlist in board %}
+<!-- Post -->
+      <div class="post infinite-container">
+
+            <!-- 게시글 제목 -->
+            <header>
+                  <div class="title">
+                        <h2><a href="#">{{postlist.title}}</a></h2>
+                  </div>
+                  <div class="meta">
+                        <time class="published" datetime="{{postlist.date_posted}}">{{postlist.date_posted}}</time>
+                        <a href="#" class="author"><span class="name">{{postlist.writer_name}}</span></a>
+                  </div>
+            </header>
+
+            <a href="#" class="image featured"><img src="../../static/images/apple.jpg" alt="" /></a>
+            <p>{{postlist.content}}</p>
+
+            <footer>
+                  <ul class="actions">
+                        <li><a href="single.html" class="button big">글 상세보기</a></li>
+                  </ul>
+                  <ul class="stats">
+                        <li></li>
+                        <!-- <li><a href="#" class="icon fa-heart">28</a></li> -->
+                        <li><a href="#" class="icon fa-comment">{{postlist.views}}</a></li>
+                  </ul>
+            </footer>
+
+      </div>
+      {% endfor %}
+
+
+{% endif %}

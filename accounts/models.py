@@ -9,7 +9,7 @@ class Userinfo(models.Model):
     provider = models.CharField(max_length=30, blank=True, null=True)
     name = models.CharField(db_column='NAME', max_length=256, blank=True, null=True)  # Field name made lowercase.
     gender = models.IntegerField(blank=True, null=True)
-    age = models.IntegerField(blank=True, null=True)
+    birthday = models.DateField(blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
     email = models.CharField(max_length=256, blank=True, null=True)
     address = models.CharField(max_length=1024, blank=True, null=True)

@@ -8,6 +8,5 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('withdrawal/', views.withdrawal, name='withdrawal'),
     path('loginKakao/', views.loginKakao, name='loginKakao'),
-    path('register/',views.register, name='register'),
     path('withdrawal/process/', views.withdrawalProcess, name='withdrawalProcess'),
 ]

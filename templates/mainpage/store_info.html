@@ -24,7 +24,10 @@
 		
 		<link rel="stylesheet" href="../../static/css/style.css">
 		<link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 	</head>
+
 	<body>
 
 <!-- Navigation section  -->
@@ -62,23 +65,26 @@
 			<div id="wrapper">
 
 				<!-- Main -->
-				<div id="about">
-
+				<div id="postlist">
+					{% if board %}
+						<input id="page" type="hidden" value="2">
+						{% for postlist in board %}
 					<!-- Post -->
-						<article class="post">
+						<div class="post infinite-container">
+
 							<!-- 게시글 제목 -->
 							<header>
 								<div class="title">
-									<h2><a href="#">게시글 이름</a></h2>
+									<h2><a href="#">{{postlist.title}}</a></h2>
 								</div>
 								<div class="meta">
-									<time class="published" datetime="2015-11-01">{{ owner.data_joined }}</time>
-									<a href="#" class="author"><span class="name">{{ owner.name }}</span><img src="../../static/images/avatar.jpg" alt="" /></a>
+									<time class="published" datetime="{{postlist.date_posted}}">{{postlist.date_posted}}</time>
+									<a href="#" class="author"><span class="name">{{postlist.writer_name}}</span></a>
 								</div>
 							</header>
-							<!--ㅁㅁstore가 아니라 board에서 이미지 가져와야됨 !!! ㅁㅁ -->
-							<a href="#" class="image featured"><img src="{{store.mainimage.url}}" alt="" /></a> 
-							<p>이 부분이 게시물 내용이 들어갈 자린데 어떻게 해야 글씨가 커지려나 글자 크기 이거 맞나 사과 apple 아이폰 아이패드 애플펜슬</p>
+
+							<a href="#" class="image featured"><img src="../../static/images/apple.jpg" alt="" /></a>
+							<p>{{postlist.content}}</p>
 					
 							<footer>
 								<ul class="actions">
@@ -86,12 +92,20 @@
 								</ul>
 								<ul class="stats">
 									<li></li>
-									<li><a href="#" class="icon fa-heart">28</a></li>
-									<li><a href="#" class="icon fa-comment">128</a></li>
+									<!-- <li><a href="#" class="icon fa-heart">28</a></li> -->
+									<li><a href="#" class="icon fa-comment">{{postlist.views}}</a></li>
 								</ul>
 							</footer>
 
-						</article>
+						</div>
+						{% endfor %}
+
+					{% else %}
+						<div class="post">
+							<a class="image featured">게시글이 존재하지 않습니다.</a>
+						</div>
+
+					{% endif %}
 
 				</div>
 
@@ -99,10 +113,8 @@
 				<div id="about">
 				<!-- Sidebar -->
 					<section id="sidebar">
-
 						<!-- Intro -->
 							<section id="intro">
-								<a href="#" class="logo"><img src="{{store.mainimage.url}}" alt="" /></a>
 								<header>
 									<h2>{{store.name}}</h2>
 								</header>
@@ -113,7 +125,7 @@
 							</section>
 
 							<section>
-								<p>{{store.phone}}</p>
+								<p>Tel. {{store.phone}}</p>
 								<p>{{store.address}}</p>
 							</section>
 
@@ -128,46 +140,98 @@
 				</div>
 		</div>
 			
-<!-- Footer Section -->
+	<!-- Footer Section -->
 
-<footer>
-	<div class="container">
-		 <div class="row">
+	<footer>
+		<div class="container">
+			<div class="row">
 
-			  <div class="col-md-3 col-sm-3">
-				   <img class="logo" src="../../static/images/logo.png">
-			  </div>
+				<div class="col-md-3 col-sm-3">
+					<img class="logo" src="../../static/images/logo.png">
+				</div>
 
-			  <div class="col-md-4 col-sm-4">
-				   <p>124 Market Street, Suite 3570 San Francisco, CA 3042 United States</p>
-			  </div>
+				<div class="col-md-4 col-sm-4">
+					<p>124 Market Street, Suite 3570 San Francisco, CA 3042 United States</p>
+				</div>
 
-			  <div class="col-md-offset-1 col-md-4 col-sm-offset-1 col-sm-3">
-				   <p><a href="mailto:youremail@gmail.com">hello@yourstudio.co</a></p>
-				   <p>(+01) 2048937 / 02 203403</p>
-			  </div>
+				<div class="col-md-offset-1 col-md-4 col-sm-offset-1 col-sm-3">
+					<p><a href="mailto:youremail@gmail.com">hello@yourstudio.co</a></p>
+					<p>(+01) 2048937 / 02 203403</p>
+				</div>
 
-			  <div class="clearfix col-md-12 col-sm-12">
-				   <hr>
-			  </div>
+				<div class="clearfix col-md-12 col-sm-12">
+					<hr>
+				</div>
 
-			  <div class="col-md-6 col-sm-6">
-				   <div class="footer-copyright">
-						<p>© 2016 Magnet Studio | All Rights Reserved.</p>
-				   </div>
-			  </div>
+				<div class="col-md-6 col-sm-6">
+					<div class="footer-copyright">
+							<p>© 2016 Magnet Studio | All Rights Reserved.</p>
+					</div>
+				</div>
 
-			  <div class="col-md-6 col-sm-6">
-				   <ul class="social-icon">
-						<li><a href="#" class="fa fa-facebook"></a></li>
-						<li><a href="#" class="fa fa-twitter"></a></li>
-						<li><a href="#" class="fa fa-linkedin"></a></li>
-				   </ul>
-			  </div>
-			  
-		 </div>
-	</div>
-</footer>
+				<div class="col-md-6 col-sm-6">
+					<ul class="social-icon">
+							<li><a href="#" class="fa fa-facebook"></a></li>
+							<li><a href="#" class="fa fa-twitter"></a></li>
+							<li><a href="#" class="fa fa-linkedin"></a></li>
+					</ul>
+				</div>
+				
+			</div>
+		</div>
+	</footer>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script>
+		var token = $('input[name="csrfmiddlewaretoken"]').prop('value');
+
+		//만약 현재 페이지를 파라미터로 가져와서 값이 있으면
+		var paramPage = getParameterByName('page');
+		//파라미터로 가져온 페이지+1하고 없으면 2로 지정
+		var page = paramPage===''?$("#page").val():parseInt(paramPage)+1;
+		$("#page").val(parseInt(page)); // 가져온 페이지로 input 값 대체
+
+		$(window).scroll(function(){
+			// 현재 하단 스크롤 위치
+			var scrollHeight = $(window).scrollTop() + $(window).outerHeight();
+			// 페이지 전체 높이
+			var documentHeight = $(document).height();
+			console.log(scrollHeight, documentHeight);
+
+			if(scrollHeight>=documentHeight && page!=="{{totalPage}}") {
+				page = $("#page").val();
+				callMorePostAjax(page);
+				$("#page").val(parseInt(page)+1);
+			}
+		});
+		
+		// 다른 페이지에서 다음 페이지 정보를 로드해서 갖고옴
+		function callMorePostAjax(page) {
+			$.ajax({
+				type:'POST',
+				url: "{% url 'mainpage:storeInfo_ajax' id=store.id %}",
+				contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+				data: {
+					'page': page,
+					'csrfmiddlewaretoken': token
+				},
+				success: addMorePostAjax,
+				dataType: 'html'
+			});
+		}
+		// 다음 페이지 게시글을 아래에 추가
+		function addMorePostAjax(data, textStatus, jqXHR) {
+			$('#postlist').append(data);
+		}
+		// page 파라미터 가져오기
+		function getParameterByName(name) {
+			name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+			var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+					results = regex.exec(location.search);
+			return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+		}
+
+	</script>
 
 	</body>
 </html>
