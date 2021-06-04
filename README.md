@@ -10,6 +10,7 @@ $ pip install django==3.2
 $ pip install mysqlclient
 $ pip install django-allauth
 $ pip install pillow
+$ pip install django-summernote
 ```
 - 실행 전 Notion/Django/Secrets에 있는 Secrets.json파일을 받아 최상위 폴더에 저장
 ```bash
