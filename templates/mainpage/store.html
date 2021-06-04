@@ -138,7 +138,7 @@
                 var documentHeight = $(document).height();
                 console.log(scrollHeight, documentHeight);
     
-                if(scrollHeight>=documentHeight-1 && page!=="{{totalPage}}") {
+                if(scrollHeight>=documentHeight-1 && page!=="{{totalPage}}" && "{{totalPage}}"!=="1") {
                     page = $("#page").val();
                     callMorePostAjax(page, category);
                     $("#page").val(parseInt(page)+1);
