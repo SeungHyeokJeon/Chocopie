@@ -164,7 +164,7 @@ def map(request):
 def detailStore(request, store_id):
     store = Stores.objects.get(id=int(store_id))
     owner = Userinfo.objects.get(id=int(store.owner_id))
-    board = Boards.objects.filter(store=int(store_id)).order_by('id')
+    board = Boards.objects.filter(store=int(store_id)).order_by('-id')
 
     listLength = 5  # 한번에 불러올 게시글 개수
     totalPage = math.ceil(len(board)/listLength) # 전체 페이지 계산

@@ -83,8 +83,8 @@
 								</div>
 							</header>
 
-							<a href="#" class="image featured"><img src="../../static/images/apple.jpg" alt="" /></a>
-							<p>{{postlist.content | striptags}}</p>
+							<a href="#" class="image featured"><img src="{{postlist.thumbnail}}" alt="" /></a>
+							<p>{{postlist.content | safe}}</p>
 					
 							<footer>
 								<ul class="actions">
