@@ -8,10 +8,19 @@ class BoardsForm(forms.ModelForm):
         max_length=200,
         widget=forms.TextInput(
             attrs={
-                'class':'sample',
-                'placeholder':'제목을 입력해주세요.'
+                'class':'titlewrite',
+                'placeholder':'제목을 입력해주세요.',
             }
         )
+    )
+    thumbnail = forms.FileField(
+        widget=forms.FileInput(
+            attrs={
+                'class':'fileupload',
+            }
+        )
+
+        
     )
     class Meta:
         model = Boards
