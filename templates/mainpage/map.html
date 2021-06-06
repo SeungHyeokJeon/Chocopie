@@ -60,7 +60,7 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d77f78a6bd42dca1c01fb94cea012e91&libraries=services"></script>
 <script>
-var list_lat = document.getElementById("market_lat").innerText.split('\,'); // 화남... , 안되고 \,으로 됨..
+var list_lat = document.getElementById("market_lat").innerText.split('\,');
 var list_lng = document.getElementById("market_lng").innerText.split('\,');
 var list_name = document.getElementById("market_name").innerText.split('\,');
 var list_road_address = document.getElementById("market_road_address").innerText.split('\,');
@@ -73,7 +73,7 @@ var selectMarketNumber = 0;
 var selectedMarker = null;
 var selectInfowindow = null;
 function send() {
-    var market = document.getElementById("selectMarketName").value;
+    var market = document.getElementById("selectMarketName").value.trim();
     if ( market ){
         alert( market + "맞나요?"); 
         document.getElementById("marketPost").submit();
