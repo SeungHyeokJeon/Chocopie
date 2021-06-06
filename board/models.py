@@ -34,7 +34,7 @@ class Boards(models.Model):
     views = models.IntegerField(blank=True, null=True)
     date_posted = models.DateTimeField(blank=True, null=True)
     date_updated = models.DateTimeField(blank=True, null=True)
-    is_noticed = models.IntegerField(blank=True, null=True)
+    is_noticed = models.BooleanField(blank=True, null=True)
 
     class Meta:
         managed = True
