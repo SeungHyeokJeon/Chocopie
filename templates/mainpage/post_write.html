@@ -37,7 +37,14 @@
 		}
 		.fileupload {
 			margin-top:10px;
-			margin-bottom:10px;
+		}
+		li{
+			display:inline;
+		}
+		input[type="number"]::-webkit-outer-spin-button,
+		input[type="number"]::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
 		}
 	</style>
 
@@ -78,7 +85,8 @@
 				<!-- Main -->
 				<div id="postwrite">
 
-					<form action="{% url 'mainpage:post_write' store_id=store.id %}" method="POST">
+					<form id="postform" action="{% url 'mainpage:post_write' store_id=store.id %}" method="POST">
+					<!-- <form name="postform" action="{% url 'mainpage:test' %}" method="POST"> -->
                         {% csrf_token %}
                         {% for field in form %}
                             <div class="fieldWrapper">
@@ -89,9 +97,14 @@
                                 {% endif %}
                             </div>
                         {% endfor %}
-                        <input type="submit" value="제출">
+						<div id="itemadd">
+							
+							<!-- 물품 등록 section -->
+							<button type="button" onclick="addInputItem();">물품추가</button>
+							
+						</div>
+						<input type="submit" id="inputSubmit" value="등록" style="margin-top:10px;">
                     </form>
-
 				</div>
 
 
@@ -163,7 +176,26 @@
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script>
+		var count = 0;
 
+		function addInputItem(textStatus, jqXHR) {
+			var data = "<div id=\"item"+count+"\" class=\"item\">";
+			data+=			"<ul>";
+			data+=				"<li><button id=\"removeButton\" type=\"button\" onclick=\"removeInputItem("+count+")\">-</button></li>";
+			data+=				"<li><input id=\"itemname\" type=\"text\" class=\"itemname\" name=\"itemname[]\" placeholder=\"물품명을 입력해주세요.\"></li>";
+			data+=				"<li><input id=\"itemprice\" type=\"number\" class=\"itemprice\" name=\"itemprice[]\" placeholder=\"물품가격\"></li>";
+			data+=				"<li><input id=\"itemcount\" type=\"number\" class=\"itemcount\" name=\"itemcount[]\" placeholder=\"수량\"></li>";
+			data+=			"</ul>";
+			data+=		"</div>";
+			
+			$('#itemadd').append(data);
+			count+=1;
+		}
+
+		function removeInputItem(id, textStatus, jqXHR) {
+			var tag = "#item"+id;
+			$(tag).remove();
+		}
 	</script>
 
 	</body>

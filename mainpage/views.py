@@ -253,6 +253,16 @@ def post_write(request, store_id):
             post.thumbnail = request.POST.get('thumbnail')
             post.views=0
             post.date_posted=timezone.datetime.now()
+
+            itemname = request.POST.getlist('itemname[]')
+            itemprice = request.POST.getlist('itemprice[]')
+            itemcount = request.POST.getlist('itemcount[]')
+            itemList = '{'
+            for name, price, count in zip(itemname, itemprice, itemcount):
+                itemList+='{"itemname":"'+name+'","itemprice":"'+price+'","itemcount":"'+count+'"}'
+            itemList += '}'
+            post.item = itemList
+
             post.save()
             return redirect(reverse('mainpage:detailStore', kwargs={'store_id':store_id}))
 

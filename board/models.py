@@ -31,6 +31,7 @@ class Boards(models.Model):
     writer_name = models.CharField(max_length=256)
     title = models.CharField(max_length=1024)
     content = models.TextField(blank=True, null=True)
+    item = models.TextField(blank=True, null=True) #json
     thumbnail = models.ImageField(upload_to='post_thumbnail/', blank=True, null=True)
     views = models.IntegerField(blank=True, null=True)
     date_posted = models.DateTimeField(blank=True, null=True)

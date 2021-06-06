@@ -13,18 +13,19 @@ class BoardsForm(forms.ModelForm):
             }
         )
     )
-    thumbnail = forms.FileField(
-        widget=forms.FileInput(
-            attrs={
-                'class':'fileupload',
-            }
-        )
+    # thumbnail = forms.FileField(
+    #     required=False,
+    #     widget=forms.FileInput(
+    #         attrs={
+    #             'class':'fileupload',
+    #         }
+    #     )
+    # )
 
-        
-    )
     class Meta:
         model = Boards
-        fields = ['title', 'content', 'thumbnail']
+        # fields = ['title', 'content', 'thumbnail']
+        fields = ['title', 'content']
         widgets={
             'content': SummernoteWidget(),
         }
