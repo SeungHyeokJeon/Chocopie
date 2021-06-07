@@ -72,21 +72,36 @@
                     <div id="store_list" class="row">
                         <input id="page" type="hidden" value="2">
                         {% for store in stores %}
-                            {% if store.category == item %}
-                            <div class="infinite-container">
-                                <div class="col-md-7" style="margin-bottom:20px;">
-                                    <a href="#!"><img class="img-fluid rounded mb-3 mb-md-0" src="{{store.mainimage.url}}" width="450"></a>
+                            {% if item != '찜한가게' %}
+                                {% if store.category == item %}
+                                <div class="infinite-container">
+                                    <div class="col-md-7" style="margin-bottom:20px;">
+                                        <a href="#!"><img class="img-fluid rounded mb-3 mb-md-0" src="{{store.mainimage.url}}" width="450"></a>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <h2 class="card-title"><a href="{% url 'mainpage:detailStore' store_id=store.id %}">{{ store.name }}</a></h2>
+                                        <p>{{ store.introduce }}</p>
+                                    </div>
                                 </div>
-                                <div class="col-md-5">
-                                    <h2 class="card-title"><a href="{% url 'mainpage:detailStore' store_id=store.id %}">{{ store.name }}</a></h2>
-                                    <p>{{ store.introduce }}</p>
+                                <!-- 기본적으로 다음 페이지 지정해주기 위함 -->
+                                {% endif %}
+                            {% else %}
+                                <div class="infinite-container">
+                                    <div class="col-md-7" style="margin-bottom:20px;">
+                                        <a href="#!"><img class="img-fluid rounded mb-3 mb-md-0" src="{{store.mainimage.url}}" width="450"></a>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <h2 class="card-title"><a href="{% url 'mainpage:detailStore' store_id=store.id %}">{{ store.name }}</a></h2>
+                                        <p>{{ store.introduce }}</p>
+                                    </div>
                                 </div>
-                                
-                            </div>
-                            <!-- 기본적으로 다음 페이지 지정해주기 위함 -->
-                            
                             {% endif %}
+
                         {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="row">
+                        텅
                     </div>
                 {% endif %}
 

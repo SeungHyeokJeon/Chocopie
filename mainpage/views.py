@@ -66,9 +66,25 @@ def storepage(request):
     return render(request, 'mainpage/store.html')
 
 def storepage(request, item):
-    marketNum = request.session['marketNum'] # 시장번호
+    # 찜한가게와 일반 카테고리일때 데이터 불러오는 구문 변경
+    if item=='찜한가게':
+        authId = request.session.get('_auth_user_id')
+        userinfo = Userinfo.objects.get(id=authId)
+        likeStores = userinfo.like_store.split(',')
+        likeStores = ' '.join(likeStores).split()
 
-    data = Stores.objects.filter(category=item, market_id=marketNum).order_by('id')
+        query = Q()
+        for idx in likeStores:
+            query.add(Q(id=idx),query.OR)
+        data = Stores.objects.filter(query).order_by('id')
+
+        print(data[0].id)
+
+    else:
+        marketNum = request.session['marketNum'] # 시장번호
+
+        data = Stores.objects.filter(category=item, market_id=marketNum).order_by('id')
+
 
     listLength = 5  # 한번에 불러올 게시글 개수
     totalPage = math.ceil(len(data)/listLength) # 전체 페이지 계산
@@ -92,9 +108,24 @@ def storepage(request, item):
 
 def storepage_ajax(request):
     item = request.POST.get('item')
-    marketNum = request.session['marketNum'] # 시장번호
+    
+    # 찜한가게와 일반 카테고리일때 데이터 불러오는 구문 변경
+    if item=='찜한가게':
+        authId = request.session.get('_auth_user_id')
+        userinfo = Userinfo.objects.get(id=authId)
+        likeStores = userinfo.like_store.split(',')
+        print(likeStores)
+        likeStores = ' '.join(likeStores).split()
 
-    data = Stores.objects.filter(category=item, market_id=marketNum).order_by('id')
+        query = Q()
+        for idx in likeStores:
+            query.add(Q(id=idx),query.OR)
+        data = Stores.objects.filter(query).order_by('id')
+
+    else:
+        marketNum = request.session['marketNum'] # 시장번호
+
+        data = Stores.objects.filter(category=item, market_id=marketNum).order_by('id')
 
     listLength = 5
     totalPage = math.ceil(len(data)/listLength)
@@ -189,7 +220,13 @@ def detailStore(request, store_id):
     return render(request, 'mainpage/store_info.html', data)
 
 def detailStore_ajax(request, id):
-    board = Boards.objects.filter(store=id).order_by('id')
+    board = Boards.objects.filter(store=id).order_by('-id')
+
+    # item 불러오기
+    query = Q()
+    for idx in board:
+        query.add(Q(board_id=idx.id),query.OR)
+    items = Items.objects.filter(query)
 
     listLength = 5  # 한번에 불러올 게시글 개수
     totalPage = math.ceil(len(board)/listLength) # 전체 페이지 계산
@@ -207,7 +244,8 @@ def detailStore_ajax(request, id):
     
     context = {
         'board': board_list,
-        'totalPage':totalPage
+        'totalPage':totalPage,
+        'item' : items,
     }
     return render(request, 'mainpage/board_ajax.html', context)
 
@@ -244,6 +282,7 @@ def userConfig(request, element_id):
     else:
         return JsonResponse({'message': 'ERROR'}, status=401)
     return JsonResponse({'message': 'SUCCESS'}, status=200)
+
 
 def dbupload(request):
     BASE_DIR = Path(__file__).resolve().parent.parent
