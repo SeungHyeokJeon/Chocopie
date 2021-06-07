@@ -24,6 +24,7 @@ class Userinfo(models.Model):
     email = models.CharField(max_length=256, blank=True, null=True)
     address = models.CharField(max_length=1024, blank=True, null=True)
     date_joined = models.DateTimeField(blank=True, null=True)
+    like_store = models.CharField(max_length=30, blank=True, null=True)
 
     class Meta:
         managed = True
