@@ -60,7 +60,7 @@ class Items(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=256)
     price = models.IntegerField(blank=True, null=True)
-    count = models.IntegerField(blank=True, null=True)
+    # count = models.IntegerField(blank=True, null=True)
     board_id = models.ForeignKey(Boards, models.CASCADE)
 
     class Meta:

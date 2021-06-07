@@ -31,7 +31,6 @@
 	<body>
 
 <!-- Navigation section  -->
-
 <div class="navbar navbar-default navbar-static-top" role="navigation">
 	<div class="container">
 		 <div class="navbar-header">
@@ -84,8 +83,61 @@
 							</header>
 
 							<a href="#" class="image featured"><img src="{{postlist.thumbnail}}" alt="" /></a>
-							<p>{{postlist.content | safe}}</p>
-					
+							{{postlist.content | safe}}
+							
+							<div id="items">
+								<!-- 물품 들어갈 자리 -->
+								{% if postlist.item %}
+									<form method="post" action="#">
+										<div class="row uniform">
+											<div class="12u$" id="itemselect">
+												<div class="select-wrapper">
+											
+													<select name="demo-category" id="postItem{{postlist.id}}" onchange="selectItem({{postlist.id}})">
+														<option value="none">- 품목 -</option>
+														{% for idx in item %}
+															{% if idx.board_id.id == postlist.id %}
+																<option value="{{idx.id}}">{{idx.name}}</option>
+															{% endif %}
+														{% endfor %}
+													</select>
+												</div>
+											</div>
+											<div id="selectedItems">
+												<div id="selectedItem1">
+													<button type="button" onclick="deleteItem(1)">-</button>
+													<input type="hidden" name="itemoriginalprice1" value=10000>
+													<input type="text" name="itemname1" value="r" disabled>
+													수량: <input type="number" name="itemcount1" value=1 onchange="changeItemCount(1)" min="1" max="10000" required>
+													<input type="number" name="itemprice1" value=10000 disabled>
+												</div>
+
+												<div id="selectedItem2">
+													<button type="button" onclick="deleteItem(2)">-</button>
+													<input type="hidden" name="itemoriginalprice2" value=10000>
+													<input type="text" name="itemname2" value="r" disabled>
+													수량: <input type="number" name="itemcount2" value=1 onchange="changeItemCount(2)" min="1" max="10000" required>
+													<input type="number" name="itemprice2" value=10000 disabled>
+												</div>
+											</div>
+
+											<div>
+												합계:
+												<input type="number" name="totalPrice" value=0 disabled>
+											</div>
+											
+
+											<div class="12u$">
+												<ul class="actions fit">
+													<li><input type="submit" value="장바구니 담기" /></li>
+													<li><input type="reset" value="취소" /></li>
+												</ul>
+											</div>
+										</div>
+									</form>
+								{% endif %}
+							</div>
+
 							<footer>
 								<ul class="actions">
 									<!-- <li><a href="single.html" class="button big">글 상세보기</a></li> -->
@@ -222,6 +274,7 @@
 				dataType: 'html'
 			});
 		}
+
 		// 다음 페이지 게시글을 아래에 추가
 		function addMorePostAjax(data, textStatus, jqXHR) {
 			$('#postlist').append(data);
@@ -234,6 +287,47 @@
 			return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 		}
 
+		// 상품 선택
+		function selectItem(postid) {
+			var selectedItem = document.getElementById("postItem"+postid).value;
+
+			console.log(selectedItem);
+			// 상품 가격 가져오기
+			for(var i=0;i<1;i++) {
+				{% for idx in item %}
+				if(selectedItem=={{idx.id}}) {
+					var price = parseInt("{{idx.price}}");
+					break;
+				}
+				{% endfor %}
+			}
+			
+			var tag = "<div>";
+		}
+
+
+		var totalPrice = 0;
+		function changeItemCount(num) {
+			var itemoriginalprice1 = document.getElementsByName('itemoriginalprice'+num)[0].value;
+			var itemcount = parseInt(document.getElementsByName('itemcount'+num)[0].value);
+
+			// 해당 상품 합계 설정
+			var itemprice = document.getElementsByName("itemprice"+num);
+			itemprice[0].value = itemoriginalprice1*itemcount;
+
+			// 상품 총 합계 설정
+			document.getElementsByName('totalPrice')[0].value = parseInt(itemprice[0].value);
+		}
+
+		function deleteItem(num, textStatus, jqXHR) {
+			// 삭제하려는 상품 가격 제거
+			var itemprice = parseInt(document.getElementsByName("itemprice"+num)[0].value);
+			var totalprice = parseInt(document.getElementsByName('totalPrice')[0].value);
+			document.getElementsByName('totalPrice')[0].value = totalprice-itemprice;
+
+			var tag = "#selectedItem"+num;
+			$(tag).remove();
+		}
 	</script>
 
 	</body>

@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 
 from accounts.models import Userinfo
 from board.models import Stores, Boards, Items
@@ -161,17 +162,24 @@ def map(request):
     context = {'traditional_markets':traditional_markets}
     return render(request, 'mainpage/map.html', context)
 
+from django.core import serializers
+
 def detailStore(request, store_id):
     store = Stores.objects.get(id=int(store_id))
     owner = Userinfo.objects.get(id=int(store.owner_id))
     board = Boards.objects.filter(store=int(store_id)).order_by('-id')
+
+    # item 불러오기
+    query = Q()
+    for idx in board:
+        query.add(Q(board_id=idx.id),query.OR)
+    items = Items.objects.filter(query)
 
     listLength = 5  # 한번에 불러올 게시글 개수
     totalPage = math.ceil(len(board)/listLength) # 전체 페이지 계산
 
     paginator = Paginator(board,listLength) # 게시글 나누기
     page = request.POST.get('page') # page 파라미터 있으면 갖고오기
-    print('page:',page,'/',totalPage)
     
     try:
         board_list=paginator.page(page) # 현재 페이지 지정
@@ -184,7 +192,8 @@ def detailStore(request, store_id):
         'store' : store,
         'owner' : owner,
         'board': board_list,
-        'totalPage':totalPage
+        'item' : items,
+        'totalPage':totalPage,
     }
     return render(request, 'mainpage/store_info.html', data)
 
@@ -263,15 +272,13 @@ def post_write(request, store_id):
 
             itemname = request.POST.getlist('itemname[]')
             itemprice = request.POST.getlist('itemprice[]')
-            itemcount = request.POST.getlist('itemcount[]')
+            # itemcount = request.POST.getlist('itemcount[]')
             
-            for name, price, count in zip(itemname, itemprice, itemcount):
+            for name, price in zip(itemname, itemprice):
                 item = Items()
                 item.name=name
                 item.price=price
-                item.count=count
                 item.board_id=uploadedPost
-                print(item.name, item.price, item.count)
                 item.save()
 
             # 등록된 게시글에 item항목 추가
