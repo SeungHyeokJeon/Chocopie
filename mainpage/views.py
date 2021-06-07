@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from accounts.models import Userinfo
-from board.models import Stores, Boards
+from board.models import Stores, Boards, Items
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from allauth.account.models import EmailAddress
@@ -244,6 +244,7 @@ def post_write(request, store_id):
     if request.method == "POST":
         form = BoardsForm(request.POST, request.FILES)
         if form.is_valid():
+            # 게시글 먼저 등록
             post = Boards()
             post.store=store
             post.writer=userinfo
@@ -254,16 +255,35 @@ def post_write(request, store_id):
             post.views=0
             post.date_posted=timezone.datetime.now()
 
+            post.save()
+            
+
+            # 등록된 게시글 통해 item 등록
+            uploadedPost = Boards.objects.get(writer=post.writer, date_posted=post.date_posted)
+
             itemname = request.POST.getlist('itemname[]')
             itemprice = request.POST.getlist('itemprice[]')
             itemcount = request.POST.getlist('itemcount[]')
-            itemList = '{'
+            
             for name, price, count in zip(itemname, itemprice, itemcount):
-                itemList+='{"itemname":"'+name+'","itemprice":"'+price+'","itemcount":"'+count+'"}'
-            itemList += '}'
-            post.item = itemList
+                item = Items()
+                item.name=name
+                item.price=price
+                item.count=count
+                item.board_id=uploadedPost
+                print(item.name, item.price, item.count)
+                item.save()
 
-            post.save()
+            # 등록된 게시글에 item항목 추가
+            itemList = Items.objects.filter(board_id=uploadedPost)
+
+            itemId = ''
+            for idx in itemList: # item 번호 이어 붙이기
+                itemId += str(idx.id)+','
+
+            uploadedPost.item = itemId
+            uploadedPost.save()
+
             return redirect(reverse('mainpage:detailStore', kwargs={'store_id':store_id}))
 
     else:

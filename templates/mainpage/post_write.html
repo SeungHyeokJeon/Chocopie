@@ -86,7 +86,6 @@
 				<div id="postwrite">
 
 					<form id="postform" action="{% url 'mainpage:post_write' store_id=store.id %}" method="POST">
-					<!-- <form name="postform" action="{% url 'mainpage:test' %}" method="POST"> -->
                         {% csrf_token %}
                         {% for field in form %}
                             <div class="fieldWrapper">
