@@ -103,22 +103,9 @@
 													</select>
 												</div>
 											</div>
+											
 											<div id="selectedItems">
-												<div id="selectedItem1">
-													<button type="button" onclick="deleteItem(1)">-</button>
-													<input type="hidden" name="itemoriginalprice1" value=10000>
-													<input type="text" name="itemname1" value="r" disabled>
-													수량: <input type="number" name="itemcount1" value=1 onchange="changeItemCount(1)" min="1" max="10000" required>
-													<input type="number" name="itemprice1" value=10000 disabled>
-												</div>
-
-												<div id="selectedItem2">
-													<button type="button" onclick="deleteItem(2)">-</button>
-													<input type="hidden" name="itemoriginalprice2" value=10000>
-													<input type="text" name="itemname2" value="r" disabled>
-													수량: <input type="number" name="itemcount2" value=1 onchange="changeItemCount(2)" min="1" max="10000" required>
-													<input type="number" name="itemprice2" value=10000 disabled>
-												</div>
+												<!-- 선택된 물품이 들어갈 자리 -->
 											</div>
 
 											<div>
@@ -289,44 +276,63 @@
 
 		// 상품 선택
 		function selectItem(postid) {
-			var selectedItem = document.getElementById("postItem"+postid).value;
-
+			var selectedItem = $('#postItem'+postid).val();
+			console.log($('#selectedItem'+selectedItem).length);
 			console.log(selectedItem);
-			// 상품 가격 가져오기
-			for(var i=0;i<1;i++) {
-				{% for idx in item %}
-				if(selectedItem=={{idx.id}}) {
-					var price = parseInt("{{idx.price}}");
-					break;
+			if(selectedItem!='none' && $('#selectedItem'+selectedItem).length===0) {
+				// 상품 정보 가져오기
+				for(var i=0;i<1;i++) {
+					{% for idx in item %}
+						if(selectedItem=={{idx.id}}) {
+							var id = parseInt("{{idx.id}}")
+							var name = "{{idx.name}}";
+							var price = parseInt("{{idx.price}}");
+							break;
+						}
+					{% endfor %}
 				}
-				{% endfor %}
+				
+				// 상품 선택 태그 추가
+				var tag = 	'<div id="selectedItem'+id+'">';
+					tag +=		'<button type="button" onclick="deleteItem('+id+')">-</button>'
+					tag +=		'<input type="hidden" name="itemoriginalprice" value='+price+'>'
+					tag +=		'<input type="text" name="itemname" value="'+name+'" disabled>'
+					tag +=		'수량: <input type="number" name="itemcount" value=1 onchange="changeItemCount('+id+')" min="1" max="10000" required>'
+					tag +=		'<input type="number" name="itemprice" value='+price+' disabled>'
+					tag +=	'</div>';
+				$('#selectedItems').append(tag);
+
+				// 해당 상품 합계 설정
+				setTotalPrice();
 			}
-			
-			var tag = "<div>";
 		}
 
-
-		var totalPrice = 0;
 		function changeItemCount(num) {
-			var itemoriginalprice1 = document.getElementsByName('itemoriginalprice'+num)[0].value;
-			var itemcount = parseInt(document.getElementsByName('itemcount'+num)[0].value);
+			var itemoriginalprice1 = $('#selectedItem'+num).find($('input[name=itemoriginalprice]')).val();
+			var itemcount = parseInt($('#selectedItem'+num).find($('input[name=itemcount]')).val());
 
 			// 해당 상품 합계 설정
-			var itemprice = document.getElementsByName("itemprice"+num);
-			itemprice[0].value = itemoriginalprice1*itemcount;
+			var itemprice = document.getElementsByName("itemprice");
+			$('#selectedItem'+num).find($('input[name=itemprice]')).val(itemoriginalprice1*itemcount);
 
-			// 상품 총 합계 설정
-			document.getElementsByName('totalPrice')[0].value = parseInt(itemprice[0].value);
+			setTotalPrice();
 		}
 
 		function deleteItem(num, textStatus, jqXHR) {
-			// 삭제하려는 상품 가격 제거
-			var itemprice = parseInt(document.getElementsByName("itemprice"+num)[0].value);
-			var totalprice = parseInt(document.getElementsByName('totalPrice')[0].value);
-			document.getElementsByName('totalPrice')[0].value = totalprice-itemprice;
+			$('#selectedItem'+num).remove();
 
-			var tag = "#selectedItem"+num;
-			$(tag).remove();
+			setTotalPrice();
+		}
+
+		function setTotalPrice() {
+			// 상품 총 합계 설정
+			var a = $('#selectedItems').children();
+			// 선택된 상품 요소의 개수를 통해 각각 아이템 값을 더해줌
+			var totalprice = 0;
+			for(var i=0;i<a.length;i++) {
+				totalprice += parseInt(a.find($('input[name=itemprice]:eq('+i+')')).val());
+			}
+			$('input[name=totalPrice]').val(totalprice)
 		}
 	</script>
 
