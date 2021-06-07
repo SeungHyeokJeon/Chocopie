@@ -144,7 +144,7 @@ def saveStore(request):
         stores.date_joined = timezone.datetime.now()
         # 데이터베이스에 저장
         stores.save()
-        return redirect('/detail/' + str(stores.id))
+        return redirect(reverse('mainpage:detailStore', kwargs={'store_id':stores.id}))
     else:
         return redirect(reverse('mainpage:mainpage'))
     
@@ -154,8 +154,6 @@ def map(request):
     ).values('id', 'name', 'road_address', 'latitude', 'longitude')
     context = {'traditional_markets':traditional_markets}
     return render(request, 'mainpage/map.html', context)
-
-from django.core import serializers
 
 def detailStore(request, store_id):
     store = Stores.objects.get(id=int(store_id))
