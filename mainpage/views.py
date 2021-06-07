@@ -186,6 +186,26 @@ def map(request):
     context = {'traditional_markets':traditional_markets}
     return render(request, 'mainpage/map.html', context)
 
+def heartStore(request):
+    if(request.method == 'POST'):
+        authId = request.session.get('_auth_user_id')
+        store_id = request.POST['store_id']
+        User = Userinfo.objects.get(id=authId)
+        
+        if User.like_store is not None:
+            likeList = User.like_store.split(',')
+        
+            if store_id not in likeList:
+                User.like_store = User.like_store + store_id +','
+            else:
+                likeList.remove(store_id)
+                User.like_store = ",".join(likeList)
+        else:
+            User.like_store = store_id +','
+
+        User.save()
+    return JsonResponse({'message': 'SUCCESS'}, status=200)
+
 def detailStore(request, store_id):
     store = Stores.objects.get(id=int(store_id))
     owner = Userinfo.objects.get(id=int(store.owner_id))

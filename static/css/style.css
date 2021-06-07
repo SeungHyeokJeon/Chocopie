@@ -805,5 +805,9 @@ footer .col-md-4 {
 }
 
 }
-
-
+ .fa {
+  color: #ce1212;
+}
+/* .fa:hover, fa:active, fa:focus {
+  color: #ce1212;
+}  */

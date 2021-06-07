@@ -138,6 +138,20 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script>
             var token = $('input[name="csrfmiddlewaretoken"]').prop('value');
+
+            //찜한목록 가져오기
+            var likeList = '{{userInfo.like_store}}'.trim();
+
+            likeList = likeList.split('\,');
+            for(i=0; i<likeList.length-1; i++){
+                var url = "#0".replace('0', String(likeList[i]));
+
+                $(url).css({
+                    'color': '#ce1212'
+                });
+                
+                $(url).toggleClass('fa-heart-o fa-heart');
+            }
     
             //만약 현재 페이지를 파라미터로 가져와서 값이 있으면
             var category = '{{item}}';
@@ -186,6 +200,28 @@
                         results = regex.exec(location.search);
                 return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
             }
+
+            //찜한목록 표시하고 데이터베이스 업로드
+            $(document).on("click", "#heart", function(){
+                var class_by_id = $(this).find('i').attr('class');
+                var toggle = $(this).find('i');
+                url = "{% url 'mainpage:heartStore' %}";
+                $.ajax({ 
+                    type:'POST',
+                    dataType: 'json',
+                    url: url,
+                    data: {
+                        'store_id':$(this).attr('store_id'),
+                    },
+                    success: function(){
+                        if (class_by_id === "fa fa-heart-o fa-3x"){
+                            toggle.toggleClass('fa-heart-o fa-heart');   
+                        } else {
+                            toggle.toggleClass('fa-heart fa-heart-o');  
+                        }
+                    },
+                });
+            });
     
         </script>
     </body>

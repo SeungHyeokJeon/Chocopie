@@ -75,7 +75,9 @@
                     {% endif %}
                     <a href="{% url 'mainpage:map' %}" class="fa fa-search" style="color:#777;font-size:30px;"></a>
                </div>
-
+               {% if selectMarketName %}
+                    <a style="float: right; margin-right: 20px;" href="{% url 'mainpage:makestore' %}"><h3><i style="color:black;"class="fa fa-plus"></i> 가게 만들기</h3></a>
+               {% endif %}
           </div>
           
      </div>
@@ -85,21 +87,17 @@
 
 <section id="portfolio">
      <div class="container">
-          {% if selectMarketName %}
-               <a href="{% url 'mainpage:makestore' %}">가게 만들기</a>
-          {% endif %}
           <div class="row">
-               
                <div class="col-md-4 col-sm-6">
                     <a href="{% url 'mainpage:storepage' item='농산물' %}" >
-                    <div class="portfolio-thumb">
+                         <div class="portfolio-thumb">
                               <img src="{% static "images/portfolio-img1.jpg" %}" class="img-responsive" alt="Portfolio">
-                                   <div class="portfolio-overlay">
-                                        <div class="portfolio-item">
-                                             <h3>농산물</h3>
-                                             <small>Agricultural produce</small>
-                                        </div>
+                              <div class="portfolio-overlay">
+                                   <div class="portfolio-item">
+                                        <h3>농산물</h3>
+                                        <small>Agricultural produce</small>
                                    </div>
+                              </div>
                          </div>
                     </a>
                </div>
@@ -108,12 +106,12 @@
                     <a href="{% url 'mainpage:storepage' item='수산물' %}" >
                          <div class="portfolio-thumb">
                               <img src="{% static "images/portfolio-img2.jpg" %}" class="img-responsive" alt="Portfolio">
-                                   <div class="portfolio-overlay">
-                                        <div class="portfolio-item">
-                                             <h3>수산물</h3>
-                                             <small>Aquatic products</small>
-                                        </div>
+                              <div class="portfolio-overlay">
+                                   <div class="portfolio-item">
+                                        <h3>수산물</h3>
+                                        <small>Aquatic products</small>
                                    </div>
+                              </div>
                          </div>
                     </a>
                </div>
