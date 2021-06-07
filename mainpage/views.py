@@ -3,6 +3,7 @@ from pathlib import Path
 from datetime import datetime
 import math
 
+from django.http  import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -73,12 +74,13 @@ def storepage(request, item):
         likeStores = userinfo.like_store.split(',')
         likeStores = ' '.join(likeStores).split()
 
-        query = Q()
-        for idx in likeStores:
-            query.add(Q(id=idx),query.OR)
-        data = Stores.objects.filter(query).order_by('id')
-
-        print(data[0].id)
+        if likeStores:
+            query = Q()
+            for idx in likeStores:
+                query.add(Q(id=idx),query.OR)
+            data = Stores.objects.filter(query).order_by('id')
+        else:
+            data=""
 
     else:
         marketNum = request.session['marketNum'] # 시장번호
@@ -117,10 +119,13 @@ def storepage_ajax(request):
         print(likeStores)
         likeStores = ' '.join(likeStores).split()
 
-        query = Q()
-        for idx in likeStores:
-            query.add(Q(id=idx),query.OR)
-        data = Stores.objects.filter(query).order_by('id')
+        if likeStores:
+            query = Q()
+            for idx in likeStores:
+                query.add(Q(id=idx),query.OR)
+            data = Stores.objects.filter(query).order_by('id')
+        else:
+            data=""
 
     else:
         marketNum = request.session['marketNum'] # 시장번호

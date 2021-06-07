@@ -21,8 +21,8 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="../../static/css/bootstrap.min.css">
 		<link rel="stylesheet" href="../../static/css/font-awesome.min.css">
+		<link rel="stylesheet" href="{% static 'css/style.css' %}">
 		
-		<link rel="stylesheet" href="../../static/css/style.css">
 		<link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -69,7 +69,7 @@
 						<input id="page" type="hidden" value="2">
 						{% for postlist in board %}
 					<!-- Post -->
-						<div class="post infinite-container">
+						<div class="post infinite-container" id="post{{postlist.id}}">
 
 							<!-- 게시글 제목 -->
 							<header>
@@ -94,7 +94,7 @@
 												<div class="select-wrapper">
 											
 													<select name="demo-category" id="postItem{{postlist.id}}" onchange="selectItem({{postlist.id}})">
-														<option value="none">- 품목 -</option>
+														<option class="form-control" value="none">- 품목 -</option>
 														{% for idx in item %}
 															{% if idx.board_id.id == postlist.id %}
 																<option value="{{idx.id}}">{{idx.name}}</option>
@@ -104,13 +104,12 @@
 												</div>
 											</div>
 											
-											<div id="selectedItems">
+											<div id="selectedItems{{postlist.id}}">
 												<!-- 선택된 물품이 들어갈 자리 -->
 											</div>
 
 											<div>
-												합계:
-												<input type="number" name="totalPrice" value=0 disabled>
+												합계:<input type="number" name="totalPrice{{postlist.id}}" value=0 disabled>
 											</div>
 											
 
@@ -277,8 +276,6 @@
 		// 상품 선택
 		function selectItem(postid) {
 			var selectedItem = $('#postItem'+postid).val();
-			console.log($('#selectedItem'+selectedItem).length);
-			console.log(selectedItem);
 			if(selectedItem!='none' && $('#selectedItem'+selectedItem).length===0) {
 				// 상품 정보 가져오기
 				for(var i=0;i<1;i++) {
@@ -294,20 +291,20 @@
 				
 				// 상품 선택 태그 추가
 				var tag = 	'<div id="selectedItem'+id+'">';
-					tag +=		'<button type="button" onclick="deleteItem('+id+')">-</button>'
+					tag +=		'<button type="button" onclick="deleteItem('+postid+','+id+')">-</button>'
 					tag +=		'<input type="hidden" name="itemoriginalprice" value='+price+'>'
 					tag +=		'<input type="text" name="itemname" value="'+name+'" disabled>'
-					tag +=		'수량: <input type="number" name="itemcount" value=1 onchange="changeItemCount('+id+')" min="1" max="10000" required>'
+					tag +=		'수량: <input type="number" name="itemcount" value=1 onchange="changeItemCount('+postid+','+id+')" min="1" max="10000" required>'
 					tag +=		'<input type="number" name="itemprice" value='+price+' disabled>'
 					tag +=	'</div>';
-				$('#selectedItems').append(tag);
+				$('#selectedItems'+postid).append(tag);
 
 				// 해당 상품 합계 설정
-				setTotalPrice();
+				setTotalPrice(postid);
 			}
 		}
 
-		function changeItemCount(num) {
+		function changeItemCount(postid, num) {
 			var itemoriginalprice1 = $('#selectedItem'+num).find($('input[name=itemoriginalprice]')).val();
 			var itemcount = parseInt($('#selectedItem'+num).find($('input[name=itemcount]')).val());
 
@@ -315,24 +312,23 @@
 			var itemprice = document.getElementsByName("itemprice");
 			$('#selectedItem'+num).find($('input[name=itemprice]')).val(itemoriginalprice1*itemcount);
 
-			setTotalPrice();
+			setTotalPrice(postid);
 		}
 
-		function deleteItem(num, textStatus, jqXHR) {
+		function deleteItem(postid, num, textStatus, jqXHR) {
 			$('#selectedItem'+num).remove();
 
-			setTotalPrice();
+			setTotalPrice(postid);
 		}
 
-		function setTotalPrice() {
-			// 상품 총 합계 설정
-			var a = $('#selectedItems').children();
+		function setTotalPrice(postid) {
 			// 선택된 상품 요소의 개수를 통해 각각 아이템 값을 더해줌
 			var totalprice = 0;
-			for(var i=0;i<a.length;i++) {
-				totalprice += parseInt(a.find($('input[name=itemprice]:eq('+i+')')).val());
-			}
-			$('input[name=totalPrice]').val(totalprice)
+			$('#selectedItems'+postid).find($('input[name=itemprice]')).each(function(idx) {
+				totalprice += parseInt($(this).val());
+			});
+
+			$('input[name=totalPrice'+String(postid)+']').val(totalprice);
 		}
 	</script>
 
