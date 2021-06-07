@@ -2,6 +2,16 @@ from django.db import models
 from allauth.account.models import EmailAddress
 from django.contrib.auth.models import User
 from allauth.socialaccount.models import SocialAccount, SocialApp, SocialToken
+import requests
+from random import randint
+
+class PhoneVerification(models.Model):
+    user  = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    phone = models.CharField(unique=True, max_length=11)
+    code  = models.CharField(max_length=6)
+    
+    class Meta:
+        db_table = 'phone_verifications'
 
 # Create your models here.
 class Userinfo(models.Model):

@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from accounts.views import SMSVerificationView, SMSConfirmView
 
 app_name = 'mainpage'
 urlpatterns = [
@@ -13,6 +14,9 @@ urlpatterns = [
     path('makestore/',views.makestore, name='makestore'),
     path('savestore/',views.saveStore, name='saveStore'),
     path('mypage/',views.mypage, name='mypage'),
+    path('config/<str:element_id>',views.userConfig, name='userConfig'),
+    path('sms/', SMSVerificationView, name='smsverification'),
+    path('smsVerification/', SMSConfirmView, name='smsconfirm'),
     #path('store/',views.store, name='store'),
     #path('dbupload/', views.dbupload, name='dbupload'),
 ]

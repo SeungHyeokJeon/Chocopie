@@ -90,17 +90,6 @@ def storepage(request, item):
     }
     return render(request, 'mainpage/store.html', context)
 
-def makestore(request):
-    marketNum = request.session['marketNum']
-    selectMarketName = request.session['selectMarketName'] 
-    selectMarketAddress =  request.session['selectMarketAddress']
-    data = { 
-        'marketNum' : marketNum,
-        'selectMarketName' : selectMarketName, 
-        'selectMarketAddress' : selectMarketAddress
-    }
-    return render(request, 'mainpage/makestore.html', data)
-
 def storepage_ajax(request):
     item = request.POST.get('item')
     marketNum = request.session['marketNum'] # 시장번호
@@ -128,26 +117,30 @@ def storepage_ajax(request):
     return render(request, 'mainpage/store_list_ajax.html', context)
 
 def makestore(request):
-    traditional_markets = traditional_market.objects.filter(
-
-    ).values('id', 'name', 'road_address', 'latitude', 'longitude')
-    context = {'traditional_markets':traditional_markets}
-    return render(request, 'mainpage/makestore.html', context)
+    marketNum = request.session['marketNum']
+    selectMarketName = request.session['selectMarketName'] 
+    selectMarketAddress =  request.session['selectMarketAddress']
+    data = { 
+        'marketNum' : marketNum,
+        'selectMarketName' : selectMarketName, 
+        'selectMarketAddress' : selectMarketAddress
+    }
+    return render(request, 'mainpage/makestore.html', data)
 
 def saveStore(request):
     if(request.method == 'POST'):
         stores = Stores()
+        print(request.POST['owner'])
         stores.owner = Userinfo.objects.get(id=int(request.POST['owner']))
-        stores.market = Userinfo.objects.get(id=int(request.POST['marketNum']))
+        stores.market = traditional_market.objects.get(id=int(request.POST['marketNum']))
 
         stores.name = request.POST['name']
         stores.category = request.POST['category']
-        stores.address = request.POST['address'] + '(' + request.POST['addressSub'] + ')'
+        stores.address = request.POST['address'] + ',' + request.POST['addressSub']
         stores.introduce = request.POST['introduce']
         #post.user = request.user
         stores.mainimage = request.FILES['imgs']
             
-        #stores.phone 
         stores.date_joined = timezone.datetime.now()
         # 데이터베이스에 저장
         stores.save()
@@ -220,10 +213,39 @@ def detailStore_ajax(request, id):
     }
     return render(request, 'mainpage/board_ajax.html', context)
 
-
-    
 def mypage(request):
-    return render(request, 'mainpage/mypage.html')
+    authId = request.session.get('_auth_user_id')
+    userinfo = Userinfo.objects.get(id=authId)
+    data = {
+        'userinfo':userinfo,
+    }
+    return render(request, 'mainpage/mypage.html', data)
+
+def userConfig(request, element_id):
+    userid = request.POST['owner']
+    if element_id == "name":
+        User = Userinfo.objects.get(id=userid)
+        User.name = request.POST['name']
+        User.save()
+
+    elif element_id == "gender":
+        User = Userinfo.objects.get(id=userid)
+        User.gender = False if request.POST['gender'] == "남성" else True
+        User.save()
+
+    elif element_id == "birthday":
+        User = Userinfo.objects.get(id=userid)
+        User.birthday = request.POST['birthday']
+        User.save()
+
+    elif element_id == "address":
+        User = Userinfo.objects.get(id=userid)
+        User.address = request.POST['address'] + "," + request.POST['addressSub']
+        User.save()
+
+    else:
+        return JsonResponse({'message': 'ERROR'}, status=401)
+    return JsonResponse({'message': 'SUCCESS'}, status=200)
 
 def dbupload(request):
     BASE_DIR = Path(__file__).resolve().parent.parent

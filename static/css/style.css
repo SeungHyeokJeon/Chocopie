@@ -406,6 +406,25 @@ padding-bottom: 15px;
 width:300px;
 height:45px;
 }
+#contact .section-bar{
+  text-align: center;
+  line-height: 1.1;
+  font-style: normal;
+  font: 21px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: rgb(177, 159, 159);
+  font-weight: 400;
+  letter-spacing: 4px;
+}
+#contact .section-title{
+  padding-bottom: 0px; 
+  height: 60px;
+  border-color: rgb(177, 159, 159);
+  margin-top: 42px;
+  margin-bottom: 22px;
+  border-bottom: solid rgb(177, 159, 159);
+}
 
 #contact .col-md-6,
 #contact .col-md-12 {
@@ -422,12 +441,11 @@ margin-top: 10px;
 margin-bottom: 10px;
 transition: all 0.4s ease-in-out;
 }
-
 #contact .form-control:hover {
 border-color: #777;
 }
 
-#contact input,
+#contact input:not(.form-control-1),
 #contact select {
 height: 50px;
 }
@@ -445,8 +463,39 @@ transition: all 0.4s ease-in-out;
 background: #000;
 }
 
+#contact .form-control-1 {
+  border: 1px solid #f0f0f0;
+  box-shadow: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  height: 50px;
+  transition: all 0.4s ease-in-out;
+}
+#contact .form-control-1:hover {
+  border-color: #777;
+}
+#contact .form-control-1:read-only {
+  background: #f0f0f0;
+}
 
-
+#contact button:not(.btn) {
+  background: #ffffff;
+  border-radius: 4px;
+  border: 1px solid #f0f0f0;
+  color: black;
+  height: 36px;
+  font-weight: 400;
+  transition: all 0.4s ease-in-out;
+  float: right;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  margin-left: 5px;
+}
+    
+#contact button:hover:not(.btn) {
+  border-color: #777;
+}  
 /*---------------------------------------
  Blog section              
 -----------------------------------------*/
@@ -675,31 +724,38 @@ padding-top: 16px;
  Map            
 -----------------------------------------*/
 .makerContnet {
-text-align:center;
+  text-align:center;
 } 
 .btn{
-font-size: 25px;
-padding: 15px 30px;
-margin-bottom: 15px;
-background-color: #FF2221;
-color: white;
-border: 3px solid white; 
-border-radius: 30px;
-text-transform: 4px;
-opacity: 0.7;
-font-family: 'Work Sans', sans-serif;
+  font-size: 25px;
+  padding: 15px 30px;
+  margin-bottom: 15px;
+  background-color: #FF2221;
+  color: white;
+  border: 3px solid white; 
+  border-radius: 30px;
+  text-transform: 4px;
+  opacity: 0.7;
+  font-family: 'Work Sans', sans-serif;
 }
 .btn:focus{
-outline: none;
+  outline: none;
 }
 .btn:hover{
-background-color: #FF2221;
-opacity: 1;
-color: white;
+  background-color: #FF2221;
+  opacity: 1;
+  color: white;
 }
 .marketName{
-display: inline;
-font-size: 25px;
+  display: inline;
+  font-size: 25px;
+}
+/* Sidebar */
+
+#sidebar {
+  margin-right: 3em;
+  min-width: 22em;
+  width: 22em;
 }
 /*---------------------------------------
  Mobile Responsive         

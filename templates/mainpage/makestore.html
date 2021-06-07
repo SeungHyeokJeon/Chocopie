@@ -11,7 +11,7 @@
 <meta name="author" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-<title>Magnet - Minimal Portfolio Template</title>
+<title>정통시장</title>
 
 <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
 <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}">
@@ -19,6 +19,7 @@
 <!-- Main css -->
 <link rel="stylesheet" href="{% static "css/style.css" %}">
 <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 <body>
@@ -88,7 +89,8 @@
                          </div>
                          <div class="col-md-6 col-sm-6">
                               <label for="marketNum">시장</label>
-                              <input class="form-control" type="text" name="marketNum" id="marketNum" value={{selectMarketName}} readonly>
+                              <input style="display: none;" type="text" name="marketNum" id="marketNum" value="{{marketNum}}" readonly>
+                              <input class="form-control" type="text" name="marketName" id="marketName" value="{{selectMarketName}}" readonly>
                          </div>
                          <div class="col-md-6 col-sm-6">
                               <label for="input-image">업로드</label>
