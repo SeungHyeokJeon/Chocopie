@@ -89,12 +89,12 @@
 								<!-- 물품 들어갈 자리 -->
 								{% if postlist.item %}
 									<form method="post" action="#">
-										<div class="row uniform">
-											<div class="12u$" id="itemselect">
+										<hr>
+										<div class="row uniform" style="margin-top: 10px; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+											<div class="8u$" id="itemselect">
 												<div class="select-wrapper">
-											
 													<select name="demo-category" id="postItem{{postlist.id}}" onchange="selectItem({{postlist.id}})">
-														<option class="form-control" value="none">- 품목 -</option>
+														<option value="none"> 품목 </option>
 														{% for idx in item %}
 															{% if idx.board_id.id == postlist.id %}
 																<option value="{{idx.id}}">{{idx.name}}</option>
@@ -103,20 +103,19 @@
 													</select>
 												</div>
 											</div>
-											
-											<div id="selectedItems{{postlist.id}}">
+											<div class="8u$" id="selectedItems{{postlist.id}}">
 												<!-- 선택된 물품이 들어갈 자리 -->
 											</div>
 
-											<div>
-												합계:<input type="number" name="totalPrice{{postlist.id}}" value=0 disabled>
+											<div class="8u$">
+												<label style="color:black; font-size:16px; height: 45px; line-height: 45px;">총 상품 금액</label>
+												<label for="itemprice" style="padding:0; margin-top:5px; margin-right:45px; height: 45px; font-size:26px; color:red; float: right;">원</label>
+												<input style="text-align:right; color:red; margin:0; margin-right:10px; padding:0px; height: 45px; width:100px; font-size: 26px; float: right; font-weight: bold; display:inline; border:none; " type="text" name="totalPrice{{postlist.id}}" value=0 disabled>
 											</div>
-											
-
-											<div class="12u$">
+											<div class="8u$">
 												<ul class="actions fit">
 													<li><input type="submit" value="장바구니 담기" /></li>
-													<li><input type="reset" value="취소" /></li>
+													<li><input style="margin-left:133px;" type="reset" value="취소" /></li>
 												</ul>
 											</div>
 										</div>
@@ -131,7 +130,7 @@
 								<ul class="stats">
 									<li></li>
 									<!-- <li><a href="#" class="icon fa-heart">28</a></li> -->
-									<li><a href="#" class="icon fa-comment">{{postlist.views}}</a></li>
+									<!-- <li><a href="#" class="icon fa-comment">{{postlist.views}}</a></li> -->
 								</ul>
 							</footer>
 
@@ -291,17 +290,39 @@
 				
 				// 상품 선택 태그 추가
 				var tag = 	'<div id="selectedItem'+id+'">';
-					tag +=		'<button type="button" onclick="deleteItem('+postid+','+id+')">-</button>'
 					tag +=		'<input type="hidden" name="itemoriginalprice" value='+price+'>'
 					tag +=		'<input type="text" name="itemname" value="'+name+'" disabled>'
-					tag +=		'수량: <input type="number" name="itemcount" value=1 onchange="changeItemCount('+postid+','+id+')" min="1" max="10000" required>'
-					tag +=		'<input type="number" name="itemprice" value='+price+' disabled>'
+					tag +=		'<div style="height:45px;">'
+					tag +=			'<button style="padding:0px; box-shadow: none;" type="button" onclick="fnCalCount('+postid+','+id+',\'minus\');">-</button>'
+					tag +=			'<input style="text-align: center;" type="number" name="itemcount" value=1 onchange="changeItemCount('+postid+','+id+')" min="1" max="10000" required>'
+					tag +=			'<button style="padding: 0px; box-shadow: none; width:10px;" type ="button" onclick="fnCalCount('+postid+','+id+',\'plus\');">+</button>'
+					tag +=			'<button style="padding: 0px; height: 45px; margin-left: 10px; margin-right: 10px; float: right; font-size: 26px; padding: 0px; box-shadow: none;" onclick="deleteItem('+postid+','+id+')"><i style="color:black;" class="fa fa-times"></i></button>'
+					tag += 			'<label for="itemprice" style="padding:0; margin-top:5px; font-weight:normal; height: 45px; font-size:26px; color:black; float: right;">원</label>'
+					tag +=			'<input style="text-align:right; margin:0; margin-right:10px; font-weight:normal; padding:0px; height: 45px; width:100px; font-size: 26px; float: right; display:inline; border:none; " type="text" name="itemprice" value='+price+' disabled>'
+					tag +=		'</div>'
+					tag += '<hr>'			
 					tag +=	'</div>';
+					
 				$('#selectedItems'+postid).append(tag);
 
 				// 해당 상품 합계 설정
 				setTotalPrice(postid);
 			}
+		}
+		function fnCalCount(postid, num, type){
+			var itemcount = parseInt($('#selectedItem'+num).find($('input[name=itemcount]')).val());
+			if(type==='plus'){
+				$('#selectedItem'+num).find($('input[name=itemcount]')).val(itemcount+1);
+			}
+			else {
+				if(itemcount-1==0) {
+					$('#selectedItem'+num).find($('input[name=itemcount]')).val(1);
+				}
+				else {
+					$('#selectedItem'+num).find($('input[name=itemcount]')).val(itemcount-1);
+				}
+			}
+			changeItemCount(postid,num);
 		}
 
 		function changeItemCount(postid, num) {

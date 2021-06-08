@@ -1571,7 +1571,7 @@
 	input[type="reset"],
 	input[type="button"],
 	button,
-	.button {
+	.button{
 		-moz-appearance: none;
 		-webkit-appearance: none;
 		-ms-appearance: none;
@@ -1590,6 +1590,7 @@
 		font-size: 0.6em;
 		font-weight: 800;
 		height: 4.8125em;
+		
 		letter-spacing: 0.25em;
 		line-height: 4.8125em;
 		padding: 0 2.5em;
@@ -1745,6 +1746,9 @@
 		font-size: 0.9em;
 		font-weight: 700;
 		margin: 0 0 1em 0;
+		font-weight: bold;
+		color: #ffffff;
+		
 	}
 
 	input[type="text"],
@@ -1768,7 +1772,7 @@
 		text-decoration: none;
 		width: 100%;
 	}
-
+	
 		input[type="text"]:invalid,
 		input[type="password"]:invalid,
 		input[type="email"]:invalid,
@@ -1820,14 +1824,25 @@
 		.select-wrapper select::-ms-expand {
 			display: none;
 		}
-
+		
 	input[type="text"],
 	input[type="password"],
 	input[type="email"],
 	select {
-		height: 2.75em;
+		padding: .8em .5em; /* 여백으로 높이 설정 */
+		font-family: inherit;  /* 폰트 상속 */
+		background-color: white;
+		border: 1px solid #999;
+		border-radius: 0px; /* iOS 둥근모서리 제거 */
+		-webkit-appearance: none; /* 네이티브 외형 감추기 */
+		-moz-appearance: none;
+		appearance: none;
+		margin-bottom: 20px;	
 	}
-
+	hr{
+		width: 100%;
+		display: block;
+	}
 	textarea {
 		padding: 0.75em 1em;
 	}
@@ -2806,7 +2821,15 @@
 		padding: 4.5em;
 		width: 90em;
 	}
+	input[type="number"]{
+		border: none;
+	}
 
+	input[type="number"]::-webkit-outer-spin-button,
+	input[type="number"]::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
 		body.is-menu-visible #wrapper {
 			opacity: 0.15;
 		}
@@ -2921,3 +2944,5 @@
 	#intro header p {
 		font-size: 1.2em;
 	}
+
+	
