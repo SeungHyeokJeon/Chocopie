@@ -2,35 +2,73 @@
 
       {% for postlist in board %}
 <!-- Post -->
-      <div class="post infinite-container">
+<div class="post infinite-container" id="post{{postlist.id}}">
 
-            <!-- 게시글 제목 -->
-            <header>
-                  <div class="title">
-                        <h2><a href="#">{{postlist.title}}</a></h2>
-                  </div>
-                  <div class="meta">
-                        <time class="published" datetime="{{postlist.date_posted}}">{{postlist.date_posted}}</time>
-                        <a href="#" class="author"><span class="name">{{postlist.writer_name}}</span></a>
-                  </div>
-            </header>
+      <!-- 게시글 제목 -->
+      <header>
+            <div class="title">
+                  <h2><a href="#">{{postlist.title}}</a></h2>
+            </div>
+            <div class="meta">
+                  <time class="published" datetime="{{postlist.date_posted}}">{{postlist.date_posted}}</time>
+                  <a href="#" class="author"><span class="name">{{postlist.writer_name}}</span></a>
+            </div>
+      </header>
 
-            <a href="#" class="image featured"><img src="../../static/images/apple.jpg" alt="" /></a>
-            {{postlist.content | safe}}
+      <a href="#" class="image featured"><img src="{{postlist.thumbnail}}" alt="" /></a>
+      {{postlist.content | safe}}
+      
+      <div id="items">
+            <!-- 물품 들어갈 자리 -->
+            {% if postlist.item %}
+                  <form method="post" action="#">
+                        <hr>
+                        <div class="row uniform" style="margin-top: 10px; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                              <div class="8u$" id="itemselect">
+                                    <div class="select-wrapper">
+                                          <select name="demo-category" id="postItem{{postlist.id}}" onchange="selectItem({{postlist.id}})">
+                                                <option value="none"> 품목 </option>
+                                                {% for idx in item %}
+                                                      {% if idx.board_id.id == postlist.id %}
+                                                            <option value="{{idx.id}}">{{idx.name}}</option>
+                                                      {% endif %}
+                                                {% endfor %}
+                                          </select>
+                                    </div>
+                              </div>
+                              <div class="8u$" id="selectedItems{{postlist.id}}">
+                                    <!-- 선택된 물품이 들어갈 자리 -->
+                              </div>
 
-            <footer>
-                  <ul class="actions">
-                        <!-- <li><a href="single.html" class="button big">글 상세보기</a></li> -->
-                  </ul>
-                  <ul class="stats">
-                        <li></li>
-                        <!-- <li><a href="#" class="icon fa-heart">28</a></li> -->
-                        <li><a href="#" class="icon fa-comment">{{postlist.views}}</a></li>
-                  </ul>
-            </footer>
-
+                              <div class="8u$">
+                                    <label style="color:black; font-size:16px; height: 45px; line-height: 45px;">총 상품 금액</label>
+                                    <label for="itemprice" style="padding:0; margin-top:5px; margin-right:45px; height: 45px; font-size:26px; color:red; float: right;">원</label>
+                                    <input style="text-align:right; color:red; margin:0; margin-right:10px; padding:0px; height: 45px; width:100px; font-size: 26px; float: right; font-weight: bold; display:inline; border:none; " type="text" name="totalPrice{{postlist.id}}" value=0 disabled>
+                              </div>
+                              <div class="8u$">
+                                    <ul class="actions fit">
+                                          <li><input type="submit" value="장바구니 담기" /></li>
+                                          <li><input style="margin-left:133px;" type="reset" value="취소" /></li>
+                                    </ul>
+                              </div>
+                        </div>
+                  </form>
+            {% endif %}
       </div>
-      {% endfor %}
+
+      <footer>
+            <ul class="actions">
+                  <!-- <li><a href="single.html" class="button big">글 상세보기</a></li> -->
+            </ul>
+            <ul class="stats">
+                  <li></li>
+                  <!-- <li><a href="#" class="icon fa-heart">28</a></li> -->
+                  <!-- <li><a href="#" class="icon fa-comment">{{postlist.views}}</a></li> -->
+            </ul>
+      </footer>
+
+</div>
+{% endfor %}
 
 
 {% endif %}

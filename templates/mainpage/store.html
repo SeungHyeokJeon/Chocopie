@@ -76,7 +76,7 @@
                                 {% if store.category == item %}
                                 <div class="infinite-container">
                                     <div class="col-md-7" style="margin-bottom:20px;">
-                                        <a href="#!"><img class="img-fluid rounded mb-3 mb-md-0" src="{{store.mainimage.url}}" width="450"></a>
+                                        <a href="#!"><img class="img-fluid rounded mb-3 mb-md-0" src="{{store.mainimage.url}}" style="width:640px; height:360px"></a>
                                     </div>
                                     <div class="col-md-5">
                                         <h2 style="display:inline;" class="card-title"><a href="{% url 'mainpage:detailStore' store_id=store.id %}">{{ store.name }}</a></h2>

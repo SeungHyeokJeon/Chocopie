@@ -64,7 +64,7 @@
 			<div id="wrapper">
 
 				<!-- Main -->
-				<div id="postlist">
+				<div id="postlist" style="width:826px">
 					{% if board %}
 						<input id="page" type="hidden" value="2">
 						{% for postlist in board %}
@@ -147,11 +147,14 @@
 				</div>
 
 
-				<div id="about">
+				<div id="about" style="padding-top: 20px;">
 				<!-- Sidebar -->
 					<section id="sidebar">
 						<!-- Intro -->
-							<section id="intro">
+							<section>
+								<a href="#!"><img class="img-fluid rounded mb-3 mb-md-0" src="{{store.mainimage.url}}" width="310"></a>
+							</section>
+							<section id="intro" style="margin: 20px; padding-top: 20px; ">
 								<header>
 									<h2>{{store.name}}</h2>
 								</header>
