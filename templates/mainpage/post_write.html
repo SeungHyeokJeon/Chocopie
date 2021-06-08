@@ -99,7 +99,7 @@
 						<div id="itemadd">
 							
 							<!-- 물품 등록 section -->
-							<button type="button" onclick="addInputItem();">물품추가</button>
+							<button style="margin-top:15px" type="button" onclick="addInputItem();">물품추가</button>
 							
 						</div>
 						<input type="submit" id="inputSubmit" value="등록" style="margin-top:10px;">
@@ -179,13 +179,13 @@
 
 		function addInputItem(textStatus, jqXHR) {
 			var data = "<div id=\"item"+count+"\" class=\"item\">";
-			data+=			"<ul>";
-			data+=				"<li><button id=\"removeButton\" type=\"button\" onclick=\"removeInputItem("+count+")\">-</button></li>";
-			data+=				"<li><input id=\"itemname\" type=\"text\" class=\"itemname\" name=\"itemname[]\" placeholder=\"물품명을 입력해주세요.\"></li>";
-			data+=				"<li><input id=\"itemprice\" type=\"number\" class=\"itemprice\" name=\"itemprice[]\" placeholder=\"물품가격\"></li>";
-			//data+=				"<li><input id=\"itemcount\" type=\"number\" class=\"itemcount\" name=\"itemcount[]\" placeholder=\"수량\"></li>";
-			data+=			"</ul>";
-			data+=		"</div>";
+			data+=	"<ul>";
+			data+=		"<li><input style=\"width:300px\" id=\"itemname\" type=\"text\" class=\"itemname\" name=\"itemname[]\" placeholder=\"물품명을 입력해주세요.\"></li>";
+			data+=		"<li><input style=\"width:100px; \" id=\"itemprice\" type=\"number\" class=\"itemprice\" name=\"itemprice[]\" placeholder=\"물품가격\"></li>";
+			data+=		"<li><button style=\"margin:0; margin-right:10px; font-weight:normal; padding:0px; height: 45px; width:100px; font-size: 26px; box-shadow: none; display:inline; border:none;\" id=\"removeButton\" type=\"button\" onclick=\"removeInputItem("+count+")\"><i style=\"color:black;\" class=\"fa fa-times\"></i></button></li>";
+			//data+=	"<li><input id=\"itemcount\" type=\"number\" class=\"itemcount\" name=\"itemcount[]\" placeholder=\"수량\"></li>";
+			data+=	"</ul>";
+			data+="</div>";
 			
 			$('#itemadd').append(data);
 			count+=1;
