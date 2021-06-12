@@ -10,7 +10,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 
 from accounts.models import Userinfo
-from board.models import Stores, Boards, Items
+from board.models import Stores, Boards, Items, Comments
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from allauth.account.models import EmailAddress
@@ -215,11 +215,12 @@ def detailStore(request, store_id):
     owner = Userinfo.objects.get(id=int(store.owner_id))
     board = Boards.objects.filter(store=int(store_id)).order_by('-id')
 
-    # item 불러오기
+    # item, comment 불러오기
     query = Q()
     for idx in board:
         query.add(Q(board_id=idx.id),query.OR)
     items = Items.objects.filter(query)
+    comments = Comments.objects.filter(query)
 
     listLength = 5  # 한번에 불러올 게시글 개수
     totalPage = math.ceil(len(board)/listLength) # 전체 페이지 계산
@@ -239,6 +240,7 @@ def detailStore(request, store_id):
         'owner' : owner,
         'board': board_list,
         'item' : items,
+        'comment': comments,
         'totalPage':totalPage,
     }
     return render(request, 'mainpage/store_info.html', data)
@@ -384,3 +386,61 @@ def post_write(request, store_id):
         'form':form
     }
     return render(request,'mainpage/post_write.html', context)
+
+def addComment(request, board_id):
+    authId = request.session.get('_auth_user_id')
+    userinfo = Userinfo.objects.get(id=authId)
+    board = Boards.objects.get(id=board_id)
+
+    context={}
+    if request.method == "POST":
+        if request.POST['add'] == 'true':
+            comment = Comments()
+
+            comment.board = board
+            comment.writer = userinfo
+            comment.writer_name = userinfo.name
+            comment.content = request.POST['comment']
+            nowDate = timezone.now()
+            comment.date_posted = nowDate
+
+            comment.save()
+            
+            commentData = Comments.objects.get(writer = userinfo, date_posted=nowDate)
+
+            context = {
+                'comment': commentData,
+                'board': board,
+            }
+
+        elif request.POST['add'] == 'first':
+            commentData = Comments.objects.filter(board=board_id).order_by('id')
+
+            if commentData.count()-2<0:
+                length=0
+            else:
+                length=commentData.count()-2
+
+            commentData = commentData[length:]
+            context = {
+                'comment': commentData,
+                'board': board,
+            }
+
+        else:
+            commentData = Comments.objects.filter(board=board_id).order_by('id')
+
+            if commentData.count()-2<0:
+                length=commentData.count()
+            else:
+                length=commentData.count()-2
+
+            commentData = commentData[:length]
+
+            context = {
+                'comment': commentData,
+                'board': board,
+            }
+
+    
+    return render(request, 'mainpage/comment_ajax.html', context)

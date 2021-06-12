@@ -1,0 +1,19 @@
+{% if comment %}
+      {% if comment|length == 0 %}
+            <div id="comment{{comment.id}}">
+                  {{comment.writer_name}}
+                  {{comment.content}}
+                  {{comment.date_posted}}
+            </div>
+      {% else %}
+            {% for commentlist in comment %}
+                  {% if commentlist.board_id == board.id %}
+                        <div id="comment{{commentlist.id}}">
+                              {{commentlist.writer_name}}
+                              {{commentlist.content}}
+                              {{commentlist.date_posted}}
+                        </div>
+                  {% endif %}
+            {% endfor %}
+      {% endif %}
+{% endif %}

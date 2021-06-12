@@ -26,7 +26,46 @@
 		<link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	</head>
+
+	<script>
+		// 처음 로드 시 댓글 두개씩 가져와서 넣기
+		function loadCommentAjax(postid, uploadSwitch) {
+			var token = $('input[name="csrfmiddlewaretoken"]').prop('value');
+			var commentTag = '#inputComment'+String(postid);
+			var comment = $(commentTag).val();
+
+			// 댓글 업로드
+			if(uploadSwitch!=false){
+				if(comment=='') {
+					alert('댓글을 입력해주세요.');
+				}
+				else {
+					var url = "{% url 'mainpage:addComment' board_id=0 %}".replace('0', postid);
+					$.ajax({
+						type:'POST',
+						url: url,
+						contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+						data: {
+							'comment': comment,
+							'postid': postid,
+							'add': uploadSwitch,
+							'csrfmiddlewaretoken': token
+						},
+						success: function(data, textStatus, jqXHR){
+							var commentTag = '#inputComment'+postid;
+							var commentList = '#comment'+postid;
+
+							$(commentList).append(data);
+							$(commentTag).val('');
+						},
+						dataType: 'html'
+					});
+				}
+			}
+		}
+	</script>
 
 	<body>
 
@@ -88,7 +127,6 @@
 							<div id="items">
 								<!-- 물품 들어갈 자리 -->
 								{% if postlist.item %}
-									<form method="post" action="#">
 										<hr>
 										<div class="row uniform" style="margin-top: 10px; display: flex; justify-content: center; align-items: center; flex-direction: column;">
 											<div class="8u$" id="itemselect">
@@ -112,6 +150,7 @@
 												<label for="itemprice" style="padding:0; margin-top:5px; margin-right:45px; height: 45px; font-size:26px; color:red; float: right;">원</label>
 												<input style="text-align:right; color:red; margin:0; margin-right:10px; padding:0px; height: 45px; width:100px; font-size: 26px; float: right; font-weight: bold; display:inline; border:none; " type="text" name="totalPrice{{postlist.id}}" value=0 disabled>
 											</div>
+
 											<div class="8u$">
 												<ul class="actions fit">
 													<li><input type="submit" value="장바구니 담기" /></li>
@@ -119,11 +158,10 @@
 												</ul>
 											</div>
 										</div>
-									</form>
 								{% endif %}
 							</div>
 
-							<footer>
+							<div>
 								<ul class="actions">
 									<!-- <li><a href="single.html" class="button big">글 상세보기</a></li> -->
 								</ul>
@@ -132,7 +170,25 @@
 									<!-- <li><a href="#" class="icon fa-heart">28</a></li> -->
 									<!-- <li><a href="#" class="icon fa-comment">{{postlist.views}}</a></li> -->
 								</ul>
-							</footer>
+							</div>
+
+							<div>
+								<button type="button" id="allCommentView" onclick="callMoreCommentAjax({{postlist.id}},false);">댓글 보기</button>
+							</div>
+
+							<div id="comment{{postlist.id}}" class="8u$">
+								<!-- 댓글 들어갈 자리 -->
+								<script>
+									loadCommentAjax({{postlist.id}}, 'first');
+								</script>
+							</div>
+
+							<div class="8u$">
+								<ul class="actions fit">
+									<li><input id="inputComment{{postlist.id}}"type="text" placeholder="댓글을 남겨주세요." /></li>
+									<li><button type="button" style="margin-left:133px;" onclick="callMoreCommentAjax({{postlist.id}},true);">등록</button></li>
+								</ul>
+							</div>
 
 						</div>
 						{% endfor %}
@@ -224,7 +280,7 @@
 		</div>
 	</footer>
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	
 	<script>
 		var token = $('input[name="csrfmiddlewaretoken"]').prop('value');
 
@@ -248,7 +304,7 @@
 			}
 		});
 		
-		// 다른 페이지에서 다음 페이지 정보를 로드해서 갖고옴
+		// 다른 페이지에서 다음 페이지 정보를 로드해서 갖고옴 - 게시글
 		function callMorePostAjax(page) {
 			$.ajax({
 				type:'POST',
@@ -354,6 +410,67 @@
 
 			$('input[name=totalPrice'+String(postid)+']').val(totalprice);
 		}
+
+		// 댓글 작성후 업로드, 작성한 댓글 불러오기
+		function callMoreCommentAjax(postid, uploadSwitch) {
+			var commentTag = '#inputComment'+String(postid);
+			var comment = $(commentTag).val();
+
+			// 댓글 업로드
+			if(uploadSwitch!=false){
+				if(comment=='') {
+					alert('댓글을 입력해주세요.');
+				}
+				else {
+					var url = "{% url 'mainpage:addComment' board_id=0 %}".replace('0', postid);
+					$.ajax({
+						type:'POST',
+						url: url,
+						contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+						data: {
+							'comment': comment,
+							'postid': postid,
+							'add': uploadSwitch,
+							'csrfmiddlewaretoken': token
+						},
+						success: function(data, textStatus, jqXHR){
+							var commentTag = '#inputComment'+postid;
+							var commentList = '#comment'+postid;
+
+							$(commentList).append(data);
+							$(commentTag).val('');
+						},
+						dataType: 'html'
+					});
+				}
+			}
+			// 댓글 모두 보기 클릭
+			else {
+				var url = "{% url 'mainpage:addComment' board_id=0 %}".replace('0', postid);
+				$.ajax({
+					type:'POST',
+					url: url,
+					contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+					data: {
+						'comment': comment,
+						'postid': postid,
+						'add': uploadSwitch,
+						'csrfmiddlewaretoken': token
+					},
+					success: function(data, textStatus, jqXHR){
+						var commentTag = '#inputComment'+postid;
+						var commentList = '#comment'+postid;
+
+						$(commentList).prepend(data);
+						$(commentTag).val('');
+					},
+					dataType: 'html'
+				});
+				$('#allCommentView').remove()
+			}
+		}
+		// 댓글에 요소 추가
+		
 	</script>
 
 	</body>

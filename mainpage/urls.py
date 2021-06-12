@@ -18,6 +18,7 @@ urlpatterns = [
     path('config/<str:element_id>',views.userConfig, name='userConfig'),
     path('sms/', SMSVerificationView, name='smsverification'),
     path('smsVerification/', SMSConfirmView, name='smsconfirm'),
+    path('addComment/<int:board_id>', views.addComment, name='addComment'),
     #path('store/',views.store, name='store'),
     #path('dbupload/', views.dbupload, name='dbupload'),
 ]
