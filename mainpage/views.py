@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-from datetime import datetime
 import math
 
 from django.http  import JsonResponse, HttpResponse
@@ -40,7 +39,7 @@ def mainpage(request):
                 name = socialAccountInfo.extra_data['name']
 
             # 회원가입할 객체 생성하고 등록
-            userInstance = Userinfo(id=User.objects.get(id=authId), provider=provider, name=name, date_joined=datetime.now())
+            userInstance = Userinfo(id=User.objects.get(id=authId), provider=provider, name=name, date_joined=timezone.now())
             userInstance.save()
 
     # 받은 parameter의 종류가 POST인 경우만 데이터를 넘겨줌
@@ -177,7 +176,7 @@ def saveStore(request):
         #post.user = request.user
         stores.mainimage = request.FILES['imgs']
             
-        stores.date_joined = timezone.datetime.now()
+        stores.date_joined = timezone.now()
         # 데이터베이스에 저장
         stores.save()
         return redirect(reverse('mainpage:detailStore', kwargs={'store_id':stores.id}))
@@ -346,7 +345,7 @@ def post_write(request, store_id):
             post.content = request.POST.get('content')
             post.thumbnail = request.POST.get('thumbnail')
             post.views=0
-            post.date_posted=timezone.datetime.now()
+            post.date_posted=timezone.now()
 
             post.save()
             
