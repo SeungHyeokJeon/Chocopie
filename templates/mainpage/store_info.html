@@ -173,7 +173,7 @@
 							</div>
 
 							<div>
-								<button type="button" id="allCommentView" onclick="callMoreCommentAjax({{postlist.id}},false);">댓글 보기</button>
+								<button type="button" id="allCommentView{{postlist.id}}" onclick="callMoreCommentAjax({{postlist.id}},false);">댓글 보기</button>
 							</div>
 
 							<div id="comment{{postlist.id}}" class="8u$">
@@ -466,7 +466,7 @@
 					},
 					dataType: 'html'
 				});
-				$('#allCommentView').remove()
+				$('#allCommentView'+postid).remove()
 			}
 		}
 		// 댓글에 요소 추가
