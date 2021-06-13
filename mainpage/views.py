@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 import math
+from collections import OrderedDict
 
 from django.http  import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
@@ -60,7 +61,6 @@ def mainpage(request):
         return render(request, 'mainpage/main.html', data)
     else:
         return render(request, 'mainpage/main.html')
-
 
 def storepage(request):
     return render(request, 'mainpage/store.html')
@@ -274,6 +274,51 @@ def detailStore_ajax(request, id):
         'item' : items,
     }
     return render(request, 'mainpage/board_ajax.html', context)
+
+def cart(request):
+    authId = request.session.get('_auth_user_id')
+
+    user = Userinfo.objects.get(id=authId)
+    jsonData = user.shopping_basket
+    print('불러온 데이터: ',jsonData)
+
+    if request.method == "POST":
+        store_id = request.POST['storeid']
+        id_list = request.POST.getlist('id_list[]')
+        count_list = request.POST.getlist('count_list[]')
+
+        # 장바구니에 등록된 상품이 있는지 확인하기
+        if store_id in jsonData:
+            # 장바구니에 있으면 해당 상점의 장바구니에 항목 추가하기
+            for i in jsonData:
+                if i==store_id:
+                    if len(id_list)>1:
+                        for id, count in zip(id_list, count_list):
+                            print(id,count)
+                            jsonData[i].append({'itemid':id,'count':count})
+                    else:
+                        jsonData[i].append({'itemid':id_list[0],'count':count_list[0]})
+
+        else:
+            # 장바구니에 없으면 새로 만들어서 추가하기
+            jsonData[store_id]=[]
+            if len(id_list)>1:
+                for id, count in id_list, count_list:
+                    jsonData[store_id].append({'itemid':id,'count':count})
+            else:
+                jsonData[store_id].append({'itemid':id_list[0],'count':count_list[0]})
+
+        print('항목이 추가된 후: ',jsonData)
+        
+        # 항목 업데이트
+        user.shopping_basket = jsonData
+        user.save()
+                
+
+    context = {
+        'user':user,
+    }
+    return render(request, 'mainpage/cart.html', context)
 
 def mypage(request):
     authId = request.session.get('_auth_user_id')

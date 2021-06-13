@@ -1,0 +1,243 @@
+
+<!doctype html>
+{% load static %}
+<html>
+    <head>
+        <title>장바구니</title>
+        <meta charSet="utf-8"/>
+        <meta name="referrer" content="always"/>
+        <meta http-equiv="Content-Script-Type" content="text/javascript"/>
+        <meta http-equiv="Content-Style-Type" content="text/css"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+        <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <!-- Main css -->
+        <link rel="stylesheet" href="{% static "css/style.css" %}">
+        <link rel="shortcut icon" href="https://ssl.pstatic.net/imgshopping/search/m/static/20191226163224/favicon.ico"/>
+        <link type="text/css" rel="stylesheet" href="https://img-shop.pstatic.net/cart/static/pc/20210531/93/css/global.css?1622454659326"/><link type="text/css" rel="stylesheet" href="https://img-shop.pstatic.net/cart/static/pc/20210531/93/css/app.css?1622454659326"/>
+    
+    <script>
+        var g_ssc = "smartstore.cart";
+        var ccsrv = "cc.naver.com";
+    </script>
+    </head>
+    <body>
+        <div id="popup">
+
+        </div> <div id="app">
+            <div class="cart">
+               <div class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon icon-bar"></span>
+                        <span class="icon icon-bar"></span>
+                        <span class="icon icon-bar"></span>
+                    </button>
+                    <a href="{% url 'mainpage:mainpage' %}" class="navbar-brand"><img class="logo" src="{% static 'images/logo.png' %}"></a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <!-- <li class="active"><a href="index.html">Projects</a></li> -->
+                        {% if user.is_authenticated %}
+                        {{user.username}} 님이 로그인중
+                        <li><a href="#" class="fa fa-shopping-cart"></a></li>
+                        <li><a href="{% url 'mainpage:mypage' %}" class="fa fa-user"></a></li>
+                        <li><a href="{% url 'accounts:logout' %}">Logout</a> </li>
+                        {% else %}
+                        <li><a href="{% url 'accounts:login' %}">Login</a> </li>
+                        {% endif %}
+                    </ul>
+                </div>
+        </div>
+                <main class="page_cart" style="margin-top: 25px;">
+                    <div class="header--etu_onc5ey">
+                        <h2 class="title--2KkcT4Vfqk on--1CGCpfo0Wz"><a href="{% url 'mainpage:cart' %}" class="link--12jcUrGVuS">일반 장바구니<span class="blind">선택됨</span></a></h2>         
+                    </div>
+                    <h3 class="blind">장바구니 목록</h3>
+                    <table class="table--1aTBT9emfH">
+                        <caption>
+                            <span class="blind">장바구니 내역</span>
+                        </caption>
+                        <colgroup>
+                            <col class="col_1--5TSKjnuT7E"/>
+                            <col class="col_2--YKLfiddUoQ"/>
+                            <col class="col_3--3kO7FM0QDn"/>
+                            <col class="col_4--2HuEbgLS2c"/>
+                            <col class="col_5--1Q8JnXqems"/>
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th scope="col" class="th--1G-vGQPU9O">
+                                <div class="checkbox--2IUF1PL_-B">
+                                    <input type="checkbox" id="check_all" checked="" class="input--3_IdTFCV9i"/>
+                                    <label for="check_all" class="blind">전체 상품 선택</label>
+                                </div>
+                                </th>
+                                <th style="text-align: center;" scope="col" class="th--1G-vGQPU9O">상품정보</th>
+                                <th style="text-align: center;" scope="col" class="th--1G-vGQPU9O">옵션</th>
+                                <th style="text-align: center;" scope="col" class="th--1G-vGQPU9O">상품금액</th>
+                                <th style="text-align: center;" scope="col" class="th--1G-vGQPU9O">배송비</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table_row--2U-tpJvyb0">
+                                <td class="table_cell--275JhdiLLN">
+                                    <div class="checkbox--2IUF1PL_-B">
+                                        <input type="checkbox" id="bundle_checkbox_20210609-2816866b-c86c-11eb-ad37-a0369ffbc018" checked="" class="input--3_IdTFCV9i"/>
+                                        <label for="bundle_checkbox_20210609-2816866b-c86c-11eb-ad37-a0369ffbc018" class="blind">상품 선택</label>
+                                    </div>
+                                </td>
+                                <td class="table_cell--275JhdiLLN">
+                                    <div class="product_desc_wrap--zuWDCqlLRY">
+                                        <div class="product_description--1jr4jHj2Z6">
+                                            <span class="product_thumb--1Aak_Tp20Y">
+                                                <img src="https://shop-phinf.pstatic.net/20210527_208/1622076493051DHWME_JPEG/23212272691696570_174426403.jpeg?type=f500_500" alt="" class="product_img--eMB0AlWn-k"/></span><a href="https://smartstore.naver.com/home-food" class="product_merchant_name--3nN1_So3k8" target="_blank">집밥연구소</a>
+                                                    <span class="product_name--2bJ9UmFvLy">
+                                                        가정식 수제 반찬 자취 밑반찬 세트 나물 명이나물 콩잎 무말랭이 장조림 배달 정기배...
+                                                    </span>
+                                                        <span class="product_price_area--23diYtRh3l">
+                                                            <span class="product_price_sale--3U2ZKpqVst">3,480
+                                                                <span class="unit--QJ9mRKiK7h">원</span>
+                                                            </span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            <div class="product_button_area--2KUYbbs4L_">
+                                                <button type="button" class="image_button--2HGEJDQgL_ button_delete--tPuYUkH9gl"><span class="blind">상품 삭제</span></button>
+                                            </div>
+                                    </td>
+                                    <td class="table_cell--275JhdiLLN valign_top--9Nd_R07bO0">
+                                        <div class="product_item_wrap--34FMvPu1Gp">
+                                            <div class="product_options--2hBZ8Hv882">
+
+                                                <div class="product_item--JRfn-qG1MT">선택1 : 3.조림/볶음 / 선택2 : 02.간장우엉조림(140g) /  1개 (+500원)
+                                                    <button type="button" class="image_button--2HGEJDQgL_ button_delete--tPuYUkH9gl">
+                                                        <span class="blind">옵션 삭제</span>
+                                                    </button>
+                                                </div>
+                                                <!-- <div class="product_item--JRfn-qG1MT">선택1 : 2.요리 / 선택2 : 04.두부참치스테이크(200g) /  1개 (+500원)
+                                                    <button type="button" class="image_button--2HGEJDQgL_ button_delete--tPuYUkH9gl">
+                                                        <span class="blind">옵션 삭제</span>
+                                                    </button>
+                                                </div>
+                                                <div class="product_item--JRfn-qG1MT">선택1 : 1.나물 / 선택2 : 02.곤드레나물(120g) /  2개 (+2,000원)
+                                                    <button type="button" class="image_button--2HGEJDQgL_ button_delete--tPuYUkH9gl">
+                                                        <span class="blind">옵션 삭제</span></button>
+                                                </div> -->
+                                                    <!-- <div class="product_option_box--dENyJZz7fa">
+                                                        <button type="button" class="button--5k8iuM-MLM button_small--28jGxridSI button_basic--3tycEu-kPR">주문조건 추가/변경</button>
+                                                    </div> -->
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="table_cell--275JhdiLLN">
+                                        <div class="product_price--2AFUPFoN48">
+                                            <em class="product_detail_price--30rE3VCS3C">16,920<span class="unit--3wsh7BvteA">원</span></em>
+                                            <div class="product_button_box--2-dPPQE5yR">
+                                                <button type="button" class="button--5k8iuM-MLM button_small--28jGxridSI button_green--1eB5FAPIr9">주문하기</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td rowspan="1" class="table_cell--275JhdiLLN">
+                                    <div class="delivery_fee--1PBnsS7rHS">
+                                        <div class="delivery_fee_area--3NxwzYRznD">
+                                            <span class="delivery_fee_price--2K3a2uUa7-">3,500<span class="unit--2CgCgZ_vwV">원</span></span>
+                                            <div class="delivery_fee_txt--3ty5Ghi6dU">(4만원 이상 구매 시 배송비 무료)</div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="product_button_box--16zt2aJNF5">
+                        <div class="area_checkbox--2vLk9ZqVjM">
+                            <div class="checkbox--2IUF1PL_-B">
+                                <input type="checkbox" id="PRODUCT_BUTTON_BOX_CHECK_BOX_ID" checked="" class="input--3_IdTFCV9i"/>
+                                <label for="PRODUCT_BUTTON_BOX_CHECK_BOX_ID" class="blind">전체선택</label>
+                            </div>
+                        </div>
+                        <button type="button" class="button--5k8iuM-MLM button_small--28jGxridSI button_basic--3tycEu-kPR">선택상품 삭제</button>
+                    </div>
+                    <h3 class="blind">주문금액 정보</h3>
+                    <div class="order_calculator--2zlH_jz09P">
+                        <div class="product_price_detail--uc8kecGUYk">
+                            <dl class="product_price--2hbbWXbdsD"><dt>총 상품금액</dt>
+                                <dd>
+                                    <span class="price--mkyVLxZMtX">16,920</span>원</dd>
+                                </dl>
+                                <dl class="product_price--2hbbWXbdsD"><dt>배송비</dt>
+                                    <dd><span class="price--mkyVLxZMtX">3,500</span>원</dd></dl>
+                                    <dl class="product_price--2hbbWXbdsD"><dt>할인예상금액</dt>
+                                        <dd class="discount--2DcAGJGrTj"><span class="price--mkyVLxZMtX">0</span>원</dd>
+                                    </dl>
+                                </div>
+                                <div class="product_price_total--3Qb27-JOGF">
+                                    <span class="text_mart--2kMJYDiHte">총 주문금액</span>
+                                    <span class="text_point--1cHzZ5UYp1"><span class="price--mkyVLxZMtX">20,420</span>원</span></div></div>
+                                    <div class="cart_button_box--JOMYa2uN_Q">
+                                        <a href="#" class="link_home---nGlCB8xT6">쇼핑 계속하기</a>
+                                        <button type="button" class="button--5k8iuM-MLM button_large--1ZN0PbKi7m button_green--1eB5FAPIr9">주문하기</button>
+                                        </div>
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+        <footer>
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-md-3 col-sm-3">
+                        <img class="logo" src="../../static/images/logo.png">
+                    </div>
+
+                    <div class="col-md-4 col-sm-4">
+                        <p>124 Market Street, Suite 3570 San Francisco, CA 3042 United States</p>
+                    </div>
+
+                    <div class="col-md-offset-1 col-md-4 col-sm-offset-1 col-sm-3">
+                        <p><a href="mailto:youremail@gmail.com">hello@yourstudio.co</a></p>
+                        <p>(+01) 2048937 / 02 203403</p>
+                    </div>
+
+                    <div class="clearfix col-md-12 col-sm-12">
+                        <hr>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6">
+                        <div class="footer-copyright">
+                                <p>© 2016 Magnet Studio | All Rights Reserved.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6">
+                        <ul class="social-icon">
+                                <li><a href="#" class="fa fa-facebook"></a></li>
+                                <li><a href="#" class="fa fa-twitter"></a></li>
+                                <li><a href="#" class="fa fa-linkedin"></a></li>
+                        </ul>
+                    </div>
+                    
+                </div>
+            </div>
+        </footer>
+    </body>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        //json pasre 가능하도록 작은따옴표를 큰따옴표로 치환
+        var data = "{{ user.shopping_basket|safe }}".replace(/'/g,'\"');
+        console.log("replaced data:",data);
+        var json = JSON.parse(data);
+        console.log(json);
+        for(var i in json){
+            for(var j=0; j<json[i].length; j++){
+                console.log(i, json[i][j].itemid, json[i][j].count);
+            }
+            
+        }
+
+    </script>
+
+</html>

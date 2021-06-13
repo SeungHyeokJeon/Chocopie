@@ -14,6 +14,7 @@ urlpatterns = [
     path('makestore/',views.makestore, name='makestore'),
     path('savestore/',views.saveStore, name='saveStore'),
     path('heartStore/', views.heartStore, name='heartStore'),
+    path('cart/', views.cart, name='cart'),
     path('mypage/',views.mypage, name='mypage'),
     path('config/<str:element_id>',views.userConfig, name='userConfig'),
     path('sms/', SMSVerificationView, name='smsverification'),
