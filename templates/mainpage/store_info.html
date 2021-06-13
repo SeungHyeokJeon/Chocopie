@@ -153,7 +153,7 @@
 
 											<div class="8u$">
 												<ul class="actions fit">
-													<li><input type="submit" value="장바구니 담기" /></li>
+													<li><input type="submit" value="장바구니 담기" onclick="insertCart({{postlist.id}},{{store.id}})" /></li>
 													<li><input style="margin-left:133px;" type="reset" value="취소" /></li>
 												</ul>
 											</div>
@@ -469,7 +469,38 @@
 				$('#allCommentView'+postid).remove()
 			}
 		}
-		// 댓글에 요소 추가
+		
+		// 장바구니 등록
+		function insertCart(postid, storeid) {
+			// 선택된 상품id와 개수 가져오기
+			var url = "#selectedItems0".replace('0',postid);
+			var id_list = [];
+			var num_list = [];
+			for(var i=0; i<($(url).find('div').length/2); i++) {
+				var item_id = $(url).find('div:eq(0)'.replace('0',i*2));
+				var item_num = $(item_id).find('input:eq(2)');
+				console.log(item_id.attr('id').substr(12,item_id.attr('id').length), item_num.val());
+				id_list.push(item_id.attr('id').substr(12,item_id.attr('id').length));
+				num_list.push(item_num.val());
+			}
+
+			$.ajax({
+				type:'POST',
+				url: "{% url 'mainpage:cart' %}",
+				contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+				dataType: 'json',
+				data: {
+					'storeid': storeid,
+					'id_list[]': id_list,
+					'count_list[]': num_list,
+					'csrfmiddlewaretoken': token
+				},
+				success: function(data, textStatus, jqXHR){
+					alert('장바구니에 등록되었습니다.');
+				}
+			});
+			$('#selectedItems'+postid).remove()
+		}
 		
 	</script>
 
