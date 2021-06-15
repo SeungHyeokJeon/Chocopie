@@ -311,9 +311,49 @@ def cart(request):
         user.shopping_basket = jsonData
         user.save()
                 
+    # 상점 정보 불러오기
+    if jsonData:
+        query = Q()
+        for idx in jsonData:
+            query.add(Q(id=idx),query.OR)
+        store = Stores.objects.filter(query).order_by('id')
+    
+    # 상품 불러오기 및 상품 수량 저장하기
+    query = Q()
+    itemcount = {}
+    for storeid in jsonData:
+        for idx in jsonData[storeid]:
+            query.add(Q(id=idx['itemid']),query.OR)
+            itemcount[idx['itemid']]=idx['count']
+    item = Items.objects.filter(query).order_by('id')
+
+    # 가게별 물건 총합 계산
+    price = {}
+        # 총합 초기화
+    for idx in store:
+        price[idx.id]=0
+        # 총합 계산
+    for item_idx in item:
+        for itemcount_idx in itemcount:
+            if itemcount_idx==str(item_idx.id):
+                for store_idx in store:
+                    if item_idx.store_id.id==store_idx.id:
+                        # 모든 조건이 만족하면 해당 가게 총합 추가
+                        prices = int(itemcount[itemcount_idx])*item_idx.price
+                        price[store_idx.id]+=prices
+
+    # 장바구니 들어 있는 모든 물품 총합 계산
+    total=0
+    for idx in price:
+        total+=price[idx]
+    price['total'] = total
 
     context = {
         'user':user,
+        'store':store,
+        'item':item,
+        'itemcounts':itemcount,
+        'totalprice':price,
     }
     return render(request, 'mainpage/cart.html', context)
 

@@ -1,6 +1,7 @@
 
 <!doctype html>
 {% load static %}
+{% load humanize %}
 <html>
     <head>
         <title>장바구니</title>
@@ -22,6 +23,7 @@
         var ccsrv = "cc.naver.com";
     </script>
     </head>
+
     <body>
         <div id="popup">
 
@@ -53,9 +55,8 @@
         </div>
                 <main class="page_cart" style="margin-top: 25px;">
                     <div class="header--etu_onc5ey">
-                        <h2 class="title--2KkcT4Vfqk on--1CGCpfo0Wz"><a href="{% url 'mainpage:cart' %}" class="link--12jcUrGVuS">일반 장바구니<span class="blind">선택됨</span></a></h2>         
+                        <h2 class="title--2KkcT4Vfqk on--1CGCpfo0Wz"><a href="{% url 'mainpage:cart' %}" class="link--12jcUrGVuS">장바구니<span class="blind">선택됨</span></a></h2>         
                     </div>
-                    <h3 class="blind">장바구니 목록</h3>
                     <table class="table--1aTBT9emfH">
                         <caption>
                             <span class="blind">장바구니 내역</span>
@@ -75,80 +76,71 @@
                                     <label for="check_all" class="blind">전체 상품 선택</label>
                                 </div>
                                 </th>
-                                <th style="text-align: center;" scope="col" class="th--1G-vGQPU9O">상품정보</th>
-                                <th style="text-align: center;" scope="col" class="th--1G-vGQPU9O">옵션</th>
+                                <th style="text-align: center;" scope="col" class="th--1G-vGQPU9O">가게정보</th>
+                                <th style="text-align: center;" scope="col" class="th--1G-vGQPU9O">상품</th>
                                 <th style="text-align: center;" scope="col" class="th--1G-vGQPU9O">상품금액</th>
-                                <th style="text-align: center;" scope="col" class="th--1G-vGQPU9O">배송비</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="table_row--2U-tpJvyb0">
-                                <td class="table_cell--275JhdiLLN">
-                                    <div class="checkbox--2IUF1PL_-B">
-                                        <input type="checkbox" id="bundle_checkbox_20210609-2816866b-c86c-11eb-ad37-a0369ffbc018" checked="" class="input--3_IdTFCV9i"/>
-                                        <label for="bundle_checkbox_20210609-2816866b-c86c-11eb-ad37-a0369ffbc018" class="blind">상품 선택</label>
-                                    </div>
-                                </td>
-                                <td class="table_cell--275JhdiLLN">
-                                    <div class="product_desc_wrap--zuWDCqlLRY">
-                                        <div class="product_description--1jr4jHj2Z6">
-                                            <span class="product_thumb--1Aak_Tp20Y">
-                                                <img src="https://shop-phinf.pstatic.net/20210527_208/1622076493051DHWME_JPEG/23212272691696570_174426403.jpeg?type=f500_500" alt="" class="product_img--eMB0AlWn-k"/></span><a href="https://smartstore.naver.com/home-food" class="product_merchant_name--3nN1_So3k8" target="_blank">집밥연구소</a>
-                                                    <span class="product_name--2bJ9UmFvLy">
-                                                        가정식 수제 반찬 자취 밑반찬 세트 나물 명이나물 콩잎 무말랭이 장조림 배달 정기배...
-                                                    </span>
-                                                        <span class="product_price_area--23diYtRh3l">
-                                                            <span class="product_price_sale--3U2ZKpqVst">3,480
-                                                                <span class="unit--QJ9mRKiK7h">원</span>
-                                                            </span>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            <div class="product_button_area--2KUYbbs4L_">
-                                                <button type="button" class="image_button--2HGEJDQgL_ button_delete--tPuYUkH9gl"><span class="blind">상품 삭제</span></button>
+                            {% for storelist in store %}
+                                <tr class="table_row--2U-tpJvyb0">
+                                    <td class="table_cell--275JhdiLLN">
+                                        <div class="checkbox--2IUF1PL_-B">
+                                            <!-- 상품선택 -->
+                                            <input type="checkbox" id="bundle_checkbox_20210609-2816866b-c86c-11eb-ad37-a0369ffbc018" checked="" class="input--3_IdTFCV9i"/>
+                                        </div>
+                                    </td>
+                                    <td id="itemslist" class="table_cell--275JhdiLLN">
+                                        <div class="product_desc_wrap--zuWDCqlLRY">
+                                            <div class="product_description--1jr4jHj2Z6">
+                                                <span class="product_thumb--1Aak_Tp20Y">
+                                                <img src="{{storelist.mainimage.url}}" alt="" class="product_img--eMB0AlWn-k"/></span>
+                                                <a class="product_merchant_name--3nN1_So3k8" target="_blank">{{storelist.market.name}}</a>
+                                                <span class="product_name--2bJ9UmFvLy">
+                                                    {{storelist.name}}
+                                                </span>
                                             </div>
+                                        </div>
+                                        <div class="product_button_area--2KUYbbs4L_">
+                                            <!-- 가게 삭제 -->
+                                            <button type="button" class="image_button--2HGEJDQgL_ button_delete--tPuYUkH9gl"></button>
+                                        </div>
                                     </td>
                                     <td class="table_cell--275JhdiLLN valign_top--9Nd_R07bO0">
                                         <div class="product_item_wrap--34FMvPu1Gp">
                                             <div class="product_options--2hBZ8Hv882">
-
-                                                <div class="product_item--JRfn-qG1MT">선택1 : 3.조림/볶음 / 선택2 : 02.간장우엉조림(140g) /  1개 (+500원)
-                                                    <button type="button" class="image_button--2HGEJDQgL_ button_delete--tPuYUkH9gl">
-                                                        <span class="blind">옵션 삭제</span>
-                                                    </button>
-                                                </div>
-                                                <!-- <div class="product_item--JRfn-qG1MT">선택1 : 2.요리 / 선택2 : 04.두부참치스테이크(200g) /  1개 (+500원)
-                                                    <button type="button" class="image_button--2HGEJDQgL_ button_delete--tPuYUkH9gl">
-                                                        <span class="blind">옵션 삭제</span>
-                                                    </button>
-                                                </div>
-                                                <div class="product_item--JRfn-qG1MT">선택1 : 1.나물 / 선택2 : 02.곤드레나물(120g) /  2개 (+2,000원)
-                                                    <button type="button" class="image_button--2HGEJDQgL_ button_delete--tPuYUkH9gl">
-                                                        <span class="blind">옵션 삭제</span></button>
-                                                </div> -->
-                                                    <!-- <div class="product_option_box--dENyJZz7fa">
-                                                        <button type="button" class="button--5k8iuM-MLM button_small--28jGxridSI button_basic--3tycEu-kPR">주문조건 추가/변경</button>
-                                                    </div> -->
+                                                <!-- item 불러오기 -->
+                                                {% for itemlist in item %}
+                                                <!-- 상점에 맞는 item들 불러오기 -->
+                                                {% if itemlist.store_id.id == storelist.id %}
+                                                    <!-- 상품 수량 불러오기 -->
+                                                    {% for itemid, itemcount in itemcounts.items %}
+                                                    {% if itemid == itemlist.id|stringformat:"s" %}
+                                                        <div id="cartItem{{itemlist.id}}" class="product_item--JRfn-qG1MT">
+                                                            {{itemlist.name}}({{itemlist.price|intcomma}}원) / {{itemcount}}개
+                                                            <!-- 상품 하나 삭제 -->
+                                                            <button type="button" class="image_button--2HGEJDQgL_ button_delete--tPuYUkH9gl"></button>
+                                                        </div>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                                {% endfor %}
                                             </div>
                                         </div>
                                     </td>
                                     <td class="table_cell--275JhdiLLN">
                                         <div class="product_price--2AFUPFoN48">
-                                            <em class="product_detail_price--30rE3VCS3C">16,920<span class="unit--3wsh7BvteA">원</span></em>
-                                            <div class="product_button_box--2-dPPQE5yR">
-                                                <button type="button" class="button--5k8iuM-MLM button_small--28jGxridSI button_green--1eB5FAPIr9">주문하기</button>
-                                            </div>
+                                            <em class="product_detail_price--30rE3VCS3C">
+                                            {% for key, value in totalprice.items %}
+                                                {% if key|stringformat:"s" == storelist.id|stringformat:"s" %}
+                                                    {{value|intcomma}}
+                                                {% endif %}
+                                            {% endfor %}
+                                            <span class="unit--3wsh7BvteA">원</span></em>
                                         </div>
                                     </td>
-                                    <td rowspan="1" class="table_cell--275JhdiLLN">
-                                    <div class="delivery_fee--1PBnsS7rHS">
-                                        <div class="delivery_fee_area--3NxwzYRznD">
-                                            <span class="delivery_fee_price--2K3a2uUa7-">3,500<span class="unit--2CgCgZ_vwV">원</span></span>
-                                            <div class="delivery_fee_txt--3ty5Ghi6dU">(4만원 이상 구매 시 배송비 무료)</div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                     <div class="product_button_box--16zt2aJNF5">
@@ -162,22 +154,22 @@
                     </div>
                     <h3 class="blind">주문금액 정보</h3>
                     <div class="order_calculator--2zlH_jz09P">
-                        <div class="product_price_detail--uc8kecGUYk">
+                        {% comment %} <div class="product_price_detail--uc8kecGUYk">
                             <dl class="product_price--2hbbWXbdsD"><dt>총 상품금액</dt>
                                 <dd>
-                                    <span class="price--mkyVLxZMtX">16,920</span>원</dd>
+                                    <span class="price--mkyVLxZMtX">{{totalprice.total|intcomma}}</span>원</dd>
                                 </dl>
-                                <dl class="product_price--2hbbWXbdsD"><dt>배송비</dt>
+                                <dl class=""><dt></dt>
                                     <dd><span class="price--mkyVLxZMtX">3,500</span>원</dd></dl>
                                     <dl class="product_price--2hbbWXbdsD"><dt>할인예상금액</dt>
                                         <dd class="discount--2DcAGJGrTj"><span class="price--mkyVLxZMtX">0</span>원</dd>
                                     </dl>
-                                </div>
+                                </div> {% endcomment %}
                                 <div class="product_price_total--3Qb27-JOGF">
                                     <span class="text_mart--2kMJYDiHte">총 주문금액</span>
-                                    <span class="text_point--1cHzZ5UYp1"><span class="price--mkyVLxZMtX">20,420</span>원</span></div></div>
+                                    <span class="text_point--1cHzZ5UYp1"><span class="price--mkyVLxZMtX">{{totalprice.total|intcomma}}</span>원</span></div></div>
                                     <div class="cart_button_box--JOMYa2uN_Q">
-                                        <a href="#" class="link_home---nGlCB8xT6">쇼핑 계속하기</a>
+                                        <a href="{% url 'mainpage:mainpage' %}" class="link_home---nGlCB8xT6">쇼핑 계속하기</a>
                                         <button type="button" class="button--5k8iuM-MLM button_large--1ZN0PbKi7m button_green--1eB5FAPIr9">주문하기</button>
                                         </div>
                                         
