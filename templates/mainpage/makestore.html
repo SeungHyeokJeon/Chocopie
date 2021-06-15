@@ -48,7 +48,7 @@
                     <!-- <li class="active"><a href="index.html">Projects</a></li> -->
                     {% if user.is_authenticated %}
                     {{user.username}} 님이 로그인중
-                    <li><a href="#" class="fa fa-shopping-cart"></a></li>
+                    <li><a href="{% url 'mainpage:cart' %}" class="fa fa-shopping-cart"></a></li>
                     <li><a href="{% url 'mainpage:mypage' %}" class="fa fa-user"></a></li>
                     <li><a href="{% url 'accounts:logout' %}">Logout</a> </li>
                     {% else %}

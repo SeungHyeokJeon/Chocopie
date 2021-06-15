@@ -351,7 +351,7 @@ def cart(request):
         price['total'] = total
 
         context = {
-            'user':user,
+            'users':user,
             'store':store,
             'item':item,
             'itemcounts':itemcount,
@@ -361,7 +361,7 @@ def cart(request):
     # 장바구니에 등록된 상품이 없을경우
     else:
         context = {
-            'user':user,
+            'users':user,
         }
     return render(request, 'mainpage/cart.html', context)
 
