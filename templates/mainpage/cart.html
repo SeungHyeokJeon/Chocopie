@@ -82,6 +82,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                        {% if totalprice %}
                             {% for storelist in store %}
                                 <tr class="table_row--2U-tpJvyb0">
                                     <td class="table_cell--275JhdiLLN">
@@ -141,6 +142,7 @@
                                     </td>
                                 </tr>
                             {% endfor %}
+                        {% endif %}
                         </tbody>
                     </table>
                     <div class="product_button_box--16zt2aJNF5">
