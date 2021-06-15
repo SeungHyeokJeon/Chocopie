@@ -115,9 +115,10 @@
 								<div class="title">
 									<h2><a href="#">{{postlist.title}}</a></h2>
 								</div>
-								<div class="meta">
-									<time class="published" datetime="{{postlist.date_posted}}">{{postlist.date_posted}}</time>
-									<a href="#" class="author"><span class="name">{{postlist.writer_name}}</span></a>
+								<div class="meta" style="padding:20px; padding-top:55px">
+									<time style="" datetime="{{postlist.date_posted}}">{{postlist.date_posted}}</time>
+									<br>
+									<label style="color:black; font-size:14px; height: 45px; line-height: 45px;">{{postlist.writer_name}}</label>
 								</div>
 							</header>
 
@@ -160,34 +161,31 @@
 										</div>
 								{% endif %}
 							</div>
-
-							<div>
-								<ul class="actions">
-									<!-- <li><a href="single.html" class="button big">글 상세보기</a></li> -->
-								</ul>
-								<ul class="stats">
-									<li></li>
-									<!-- <li><a href="#" class="icon fa-heart">28</a></li> -->
-									<!-- <li><a href="#" class="icon fa-comment">{{postlist.views}}</a></li> -->
-								</ul>
+							<div style="margin-top:30px; margin-left:0px" class="8u$">
+								<a style="float: left; margin-right:200px" id="heart" href="#!"><i style="color:black;"id="{{postlist.id}}" class="fa fa-plus-square-o fa-2x"></i></a>
+								{% comment %} <button type="button" id="allCommentView{{postlist.id}}" onclick="callMoreCommentAjax({{postlist.id}},false);">^</button> {% endcomment %}
 							</div>
 
-							<div>
-								<button type="button" id="allCommentView{{postlist.id}}" onclick="callMoreCommentAjax({{postlist.id}},false);">댓글 보기</button>
-							</div>
-
-							<div id="comment{{postlist.id}}" class="8u$">
+							<div id="comment{{postlist.id}}" class="12u$">
 								<!-- 댓글 들어갈 자리 -->
 								<script>
 									loadCommentAjax({{postlist.id}}, 'first');
 								</script>
 							</div>
 
-							<div class="8u$">
-								<ul class="actions fit">
-									<li><input id="inputComment{{postlist.id}}"type="text" placeholder="댓글을 남겨주세요." /></li>
-									<li><button type="button" style="margin-left:133px;" onclick="callMoreCommentAjax({{postlist.id}},true);">등록</button></li>
-								</ul>
+							<div class="8u$" style="display: inline;">
+								<input style="display: inline; width:500px; margin:0px margin-left:30px"id="inputComment{{postlist.id}}" type="text" placeholder="댓글을 남겨주세요." />
+									<button type="button" 
+									style=
+										"
+										 margin-left: 20px;
+										 padding: 0px;
+										 border-radius: 10px;
+										 height: 45px;
+										 width: 75px;
+										 text-align: center;
+										"
+									onclick="callMoreCommentAjax({{postlist.id}},true);">보내기</button>
 							</div>
 
 						</div>
@@ -415,9 +413,8 @@
 		function callMoreCommentAjax(postid, uploadSwitch) {
 			var commentTag = '#inputComment'+String(postid);
 			var comment = $(commentTag).val();
-
 			// 댓글 업로드
-			if(uploadSwitch!=false){
+			if(uploadSwitch!=false & uploadSwitch!='first'){
 				if(comment=='') {
 					alert('댓글을 입력해주세요.');
 				}
@@ -501,7 +498,22 @@
 			});
 			$('#selectedItems'+postid).remove()
 		}
-		
+
+		//댓글 추가
+            $(document).on("click", "#heart", function(){
+                var class_by_id = $(this).find('i').attr('class');
+				var id = $(this).find('i').attr('id');
+                var toggle = $(this).find('i');
+               
+				if (class_by_id === "fa fa-plus-square-o fa-2x"){	
+					callMoreCommentAjax(id, false);
+					toggle.toggleClass('fa fa-plus-square-o fa-2x fa fa-minus-square-o fa-2x');   
+				} else {
+					document.getElementById('comment'+id).innerHTML ="";
+					callMoreCommentAjax(id, 'first');
+					toggle.toggleClass('fa fa-minus-square-o fa-2x fa fa-plus-square-o fa-2x');  
+				}
+            });
 	</script>
 
 	</body>
