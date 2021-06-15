@@ -280,7 +280,6 @@ def cart(request):
 
     user = Userinfo.objects.get(id=authId)
     jsonData = user.shopping_basket
-    print('불러온 데이터: ',jsonData)
 
     if request.method == "POST":
         store_id = request.POST['storeid']
@@ -303,13 +302,11 @@ def cart(request):
             # 장바구니에 없으면 새로 만들어서 추가하기
             jsonData[store_id]=[]
             if len(id_list)>1:
-                for id, count in id_list, count_list:
+                for id, count in zip(id_list, count_list):
                     jsonData[store_id].append({'itemid':id,'count':count})
             else:
                 jsonData[store_id].append({'itemid':id_list[0],'count':count_list[0]})
 
-        print('항목이 추가된 후: ',jsonData)
-        
         # 항목 업데이트
         user.shopping_basket = jsonData
         user.save()
