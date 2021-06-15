@@ -409,6 +409,7 @@ def post_write(request, store_id):
                 item.name=name
                 item.price=price
                 item.board_id=uploadedPost
+                item.store_id=store
                 item.save()
 
             # 등록된 게시글에 item항목 추가

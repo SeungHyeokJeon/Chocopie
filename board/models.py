@@ -62,6 +62,7 @@ class Items(models.Model):
     price = models.IntegerField(blank=True, null=True)
     # count = models.IntegerField(blank=True, null=True)
     board_id = models.ForeignKey(Boards, models.CASCADE)
+    store_id = models.ForeignKey(Stores, models.CASCADE)
 
     class Meta:
         managed=True
