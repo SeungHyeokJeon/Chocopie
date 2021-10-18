@@ -28,7 +28,7 @@ SECRET_KEY = secrets['SECRET_KEY']
 DEBUG = True
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['114.70.93.84:8000', 'localhost', '114.70.93.84']
+ALLOWED_HOSTS = ['114.70.93.90:8000', 'localhost', '114.70.93.90']
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`

@@ -66,6 +66,9 @@ def storepage(request):
     return render(request, 'mainpage/store.html')
 
 def storepage(request, item):
+    search_param = request.POST.get('search') # 검색 값이 존재하면 가져오기
+    print(search_param)
+
     # 찜한가게와 일반 카테고리일때 데이터 불러오는 구문 변경
     if item=='찜한가게':
         authId = request.session.get('_auth_user_id')
@@ -83,8 +86,10 @@ def storepage(request, item):
 
     else:
         marketNum = request.session['marketNum'] # 시장번호
-
-        data = Stores.objects.filter(category=item, market_id=marketNum).order_by('id')
+        if search_param!=None: # 검색 값이 있을경우 해당하는 가게만 검색
+            data = Stores.objects.filter(category=item, market_id=marketNum, name__contains=search_param).order_by('id')
+        else:
+            data = Stores.objects.filter(category=item, market_id=marketNum).order_by('id')
 
 
     listLength = 5  # 한번에 불러올 게시글 개수
@@ -103,12 +108,14 @@ def storepage(request, item):
     context = {
         'stores' : store_list,
         'totalPage':totalPage,
-        'item' : item
+        'item' : item,
+        'search_param' : search_param
     }
     return render(request, 'mainpage/store.html', context)
 
 def storepage_ajax(request):
     item = request.POST.get('item')
+    search_param = request.POST.get('search') # 검색 값이 존재하면 가져오기
     
     # 찜한가게와 일반 카테고리일때 데이터 불러오는 구문 변경
     if item=='찜한가게':
@@ -129,7 +136,10 @@ def storepage_ajax(request):
     else:
         marketNum = request.session['marketNum'] # 시장번호
 
-        data = Stores.objects.filter(category=item, market_id=marketNum).order_by('id')
+        if search_param!=None: # 검색 값이 있을경우 해당하는 가게만 검색
+            data = Stores.objects.filter(category=item, market_id=marketNum, name=search_param).order_by('id')
+        else:
+            data = Stores.objects.filter(category=item, market_id=marketNum).order_by('id')
 
     listLength = 5
     totalPage = math.ceil(len(data)/listLength)
@@ -147,7 +157,8 @@ def storepage_ajax(request):
     context = {
         'stores' : store_list,
         'totalPage':totalPage,
-        'item' : item
+        'item' : item,
+        'search_param' : search_param
     }
     return render(request, 'mainpage/store_list_ajax.html', context)
 
