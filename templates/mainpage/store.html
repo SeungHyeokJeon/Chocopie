@@ -193,15 +193,21 @@
                 
                 $(url).toggleClass('fa-heart-o fa-heart');
             }
+
+            // 검색현황 유지
+            if('{{search_param}}'!='None') {
+                $("#search").val('{{search_param}}');
+            }
     
             //만약 현재 페이지를 파라미터로 가져와서 값이 있으면
             var category = '{{item}}';
             var search_param = '{{search_param}}';
+            var radio_value = 'id';
             var paramPage = getParameterByName('page');
             //파라미터로 가져온 페이지+1하고 없으면 2로 지정
             var page = paramPage===''?$("#page").val():parseInt(paramPage)+1;
             $("#page").val(parseInt(page)); // 가져온 페이지로 input 값 대체
-    
+
             $(window).scroll(function(){
                 // 현재 하단 스크롤 위치
                 var scrollHeight = $(window).scrollTop() + $(window).outerHeight();
