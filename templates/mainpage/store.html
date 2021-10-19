@@ -87,7 +87,7 @@
                         <ul class="sorting-order-options" style="list-style:none; padding:0;"
 
                             <li class="" style="float:left; margin-right:20px;">
-                                <input type="radio" id="sorter-sortDesc" name="sorter" value="name" checked> 
+                                <input type="radio" id="sorter-sortDesc" name="sorter" value="name" > 
                                 <label for="sorter-sortDesc" class="item-name" data-srp-log='{"group":"FILTER", "filterType":"SORT_KEY", "id":-sortDesc"}'>이름순</label>
                             </li>
                             <li class="" style="float:left; margin-right:20px;">
@@ -95,7 +95,7 @@
                                 <label for="sorter-sortDesc" class="item-name" data-srp-log='{"group":"FILTER", "filterType":"SORT_KEY", "id":-sortDesc"}'>인기순</label>
                             </li>
                              <li class="" style="float: left; margin-right:20px;">
-                                <input type="radio" id="sorter-sortDesc" name="sorter" value="date" > 
+                                <input type="radio" id="sorter-sortDesc" name="sorter" value="id" checked> 
                                 <label for="sorter-sortDesc" class="item-name" data-srp-log='{"group":"FILTER", "filterType":"SORT_KEY", "id":"sortDesc"}'>최신순</label>
                             </li>
                         </ul>
@@ -108,8 +108,8 @@
 
                 <!-- Project One-->
                 {% if stores %}
+                    <input id="page" type="hidden" value="2">
                     <div id="store_list" class="row">
-                        <input id="page" type="hidden" value="2">
                         {% for store in stores %}
                             {% if item != '찜한가게' %}
                                 {% if store.category == item %}
@@ -232,7 +232,8 @@
                         'page': page,
                         'csrfmiddlewaretoken': token,
                         'item': category,
-                        'search_param': search_param
+                        'search_param': search_param,
+                        'order': radio_value
                     },
                     success: addMorePostAjax,
                     dataType: 'html'
@@ -274,10 +275,16 @@
 
             // 정렬 이벤트
             $("input[name='sorter']:radio").change(function() {
-                var radioValue = this.value;
+                radio_value = this.value;
+                
+                $('#store_list').empty();
+                callMorePostAjax(1, category);
 
-                alert(radioValue);
+                page=2
+                $("#page").val(parseInt(page));
             })
+
+            
     
         </script>
     </body>

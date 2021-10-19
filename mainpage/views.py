@@ -114,31 +114,32 @@ def storepage(request, item):
 
 def storepage_ajax(request):
     item = request.POST.get('item')
-    search_param = request.POST.get('search') # 검색 값이 존재하면 가져오기
-    
+    search_param = request.POST.get('search_param') # 검색 값이 존재하면 가져오기
+    # 페이지를 이동하면 무조건 최신순으로 정렬되고, radio 버튼 클릭시에만 동적으로 화면 변화시키기 위해 _ajax에만 작성
+    order = request.POST.get('order') if request.POST.get('order')!='None' else 'id' # 특정 기준 정렬
+
     # 찜한가게와 일반 카테고리일때 데이터 불러오는 구문 변경
     if item=='찜한가게':
         authId = request.session.get('_auth_user_id')
         userinfo = Userinfo.objects.get(id=authId)
         likeStores = userinfo.like_store.split(',')
-        print(likeStores)
         likeStores = ' '.join(likeStores).split()
 
         if likeStores:
             query = Q()
             for idx in likeStores:
                 query.add(Q(id=idx),query.OR)
-            data = Stores.objects.filter(query).order_by('id')
+            data = Stores.objects.filter(query).order_by(order)
         else:
             data=""
 
     else:
         marketNum = request.session['marketNum'] # 시장번호
 
-        if search_param!=None: # 검색 값이 있을경우 해당하는 가게만 검색
-            data = Stores.objects.filter(category=item, market_id=marketNum, name=search_param).order_by('id')
+        if search_param!='None' or search_param!='': # 검색 값이 있을경우 해당하는 가게만 검색
+            data = Stores.objects.filter(category=item, market_id=marketNum, name__contains=search_param).order_by(order)
         else:
-            data = Stores.objects.filter(category=item, market_id=marketNum).order_by('id')
+            data = Stores.objects.filter(category=item, market_id=marketNum).order_by(order)
 
     listLength = 5
     totalPage = math.ceil(len(data)/listLength)
@@ -157,7 +158,8 @@ def storepage_ajax(request):
         'stores' : store_list,
         'totalPage':totalPage,
         'item' : item,
-        'search_param' : search_param
+        'search_param' : search_param,
+        'order' : order
     }
     return render(request, 'mainpage/store_list_ajax.html', context)
 
