@@ -85,8 +85,13 @@
                 <div class="search-sorting">
                     <div id="searchSortingOrder">
                         <ul class="sorting-order-options" style="list-style:none; padding:0;"
+
                             <li class="" style="float:left; margin-right:20px;">
-                                <input type="radio" id="sorter-sortDesc" name="sorter" value=-heart" > 
+                                <input type="radio" id="sorter-sortDesc" name="sorter" value="name" checked> 
+                                <label for="sorter-sortDesc" class="item-name" data-srp-log='{"group":"FILTER", "filterType":"SORT_KEY", "id":-sortDesc"}'>이름순</label>
+                            </li>
+                            <li class="" style="float:left; margin-right:20px;">
+                                <input type="radio" id="sorter-sortDesc" name="sorter" value="heart" > 
                                 <label for="sorter-sortDesc" class="item-name" data-srp-log='{"group":"FILTER", "filterType":"SORT_KEY", "id":-sortDesc"}'>인기순</label>
                             </li>
                              <li class="" style="float: left; margin-right:20px;">
@@ -262,7 +267,11 @@
             });
 
             // 정렬 이벤트
+            $("input[name='sorter']:radio").change(function() {
+                var radioValue = this.value;
 
+                alert(radioValue);
+            })
     
         </script>
     </body>
