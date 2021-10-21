@@ -280,6 +280,13 @@
 	<script>
 		var token = $('input[name="csrfmiddlewaretoken"]').prop('value');
 
+		// 검색현황 유지
+		if('{{search_param}}'!='None') {
+			$("#search").val('{{search_param}}');
+		}
+
+		var search_param = '';
+		var radio_value = 'id';
 		//만약 현재 페이지를 파라미터로 가져와서 값이 있으면
 		var paramPage = getParameterByName('page');
 		//파라미터로 가져온 페이지+1하고 없으면 2로 지정
@@ -308,7 +315,9 @@
 				contentType: 'application/x-www-form-urlencoded; charset=utf-8',
 				data: {
 					'page': page,
-					'csrfmiddlewaretoken': token
+					'csrfmiddlewaretoken': token,
+					'search_param': search_param,
+					'order': radio_value
 				},
 				success: addMorePostAjax,
 				dataType: 'html'
@@ -426,7 +435,7 @@
 							'comment': comment,
 							'postid': postid,
 							'add': uploadSwitch,
-							'csrfmiddlewaretoken': token
+							'csrfmiddlewaretoken': token,
 						},
 						success: function(data, textStatus, jqXHR){
 							var commentTag = '#inputComment'+postid;

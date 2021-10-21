@@ -85,7 +85,7 @@ def storepage(request, item):
 
     else:
         marketNum = request.session['marketNum'] # 시장번호
-        if search_param!=None or search_param!='': # 검색 값이 있을경우 해당하는 가게만 검색
+        if search_param!=None and search_param!='None' and search_param!='': # 검색 값이 있을경우 해당하는 가게만 검색
             data = Stores.objects.filter(category=item, market_id=marketNum, name__contains=search_param).order_by('id')
         else:
             data = Stores.objects.filter(category=item, market_id=marketNum).order_by('id')
@@ -136,7 +136,7 @@ def storepage_ajax(request):
     else:
         marketNum = request.session['marketNum'] # 시장번호
 
-        if search_param!='None' or search_param!='': # 검색 값이 있을경우 해당하는 가게만 검색
+        if search_param!='None' and search_param!='': # 검색 값이 있을경우 해당하는 가게만 검색
             data = Stores.objects.filter(category=item, market_id=marketNum, name__contains=search_param).order_by(order)
         else:
             data = Stores.objects.filter(category=item, market_id=marketNum).order_by(order)
@@ -223,9 +223,15 @@ def heartStore(request):
     return JsonResponse({'message': 'SUCCESS'}, status=200)
 
 def detailStore(request, store_id):
+    search_param = request.POST.get('search') # 검색 값이 존재하면 가져오기
+
     store = Stores.objects.get(id=int(store_id))
     owner = Userinfo.objects.get(id=int(store.owner_id))
-    board = Boards.objects.filter(store=int(store_id)).order_by('-id')
+
+    if search_param!=None and search_param!='None' and search_param!='':
+        board = Boards.objects.filter(store=int(store_id), title__contains=search_param).order_by('-id')
+    else:
+        board = Boards.objects.filter(store=int(store_id)).order_by('-id')
 
     # item, comment 불러오기
     query = Q()
@@ -254,11 +260,19 @@ def detailStore(request, store_id):
         'item' : items,
         'comment': comments,
         'totalPage':totalPage,
+        'search_param' : search_param,
     }
     return render(request, 'mainpage/store_info.html', data)
 
 def detailStore_ajax(request, id):
-    board = Boards.objects.filter(store=id).order_by('-id')
+    search_param = request.POST.get('search_param') # 검색 값이 존재하면 가져오기
+    # 페이지를 이동하면 무조건 최신순으로 정렬되고, radio 버튼 클릭시에만 동적으로 화면 변화시키기 위해 _ajax에만 작성
+    order = request.POST.get('order') if request.POST.get('order')!='None' else 'id' # 특정 기준 정렬
+
+    if search_param!='None' and search_param!='':
+        board = Boards.objects.filter(store=id, title__contains=search_param).order_by('-'+order)
+    else:
+        board = Boards.objects.filter(store=id).order_by('-'+order)
 
     # item 불러오기
     query = Q()
@@ -284,6 +298,8 @@ def detailStore_ajax(request, id):
         'board': board_list,
         'totalPage':totalPage,
         'item' : items,
+        'search_param' : search_param,
+        'order': order
     }
     return render(request, 'mainpage/board_ajax.html', context)
 
