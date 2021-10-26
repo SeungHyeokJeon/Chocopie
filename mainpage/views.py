@@ -303,6 +303,41 @@ def detailStore_ajax(request, id):
     }
     return render(request, 'mainpage/board_ajax.html', context)
 
+def configStore(request, store_id):
+    store = Stores.objects.get(id=int(store_id))
+    numbers = re.sub(r'[^0-9]', '', str(store.market))
+    market = traditional_market.objects.get(id=int(numbers))
+    address = store.address.split(',')[0]
+    address2 = store.address.split(',')[1]
+    data = { 
+        'store' : store,
+        'market' : market,
+        'address' : address,
+        'address2' : address2,
+    }
+    return render(request, 'mainpage/makestore.html', data)
+
+def configStore2(request, store_id):
+    if(request.method == 'POST'):
+        store = Stores.objects.get(id=int(store_id))
+        store.owner = Userinfo.objects.get(id=int(request.POST['owner']))
+        store.market = traditional_market.objects.get(id=int(request.POST['marketNum']))
+
+        store.name = request.POST['name']
+        store.category = request.POST['category']
+        store.address = request.POST['address'] + ',' + request.POST['addressSub']
+        store.introduce = request.POST['introduce']
+        
+        #post.user = request.user
+        if request.FILES.get('imgs') is not None:
+            store.mainimage = request.FILES['imgs']
+  
+        # 데이터베이스에 저장
+        store.save()
+        return redirect(reverse('mainpage:detailStore', kwargs={'store_id':store.id}))
+    else:
+        return redirect(reverse('mainpage:mainpage'))
+
 def cart(request):
     authId = request.session.get('_auth_user_id')
 

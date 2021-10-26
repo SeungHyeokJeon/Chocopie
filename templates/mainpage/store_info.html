@@ -105,51 +105,34 @@
 				<div style="width:826px">
 
 					<!-- search and sort -->
-					<div class="container">
-						<div class="icons-container"style="margin-bottom: 20px">
+					<div class="16u$">
+						<div class="16u$" style="display: flex; flex-direction: row;">
 							<form name="search_form" action="{% url 'mainpage:detailStore' store_id=store.id %}" method="post">
 								<input style="
-										border-width: 0px 0px 2px 0px;
-										width: 40%;
-										height: 68px;
-										background: white;            
-										font-size: x-large;          
-									"
-								type="text" placeholder="찾고 싶은 가게를 검색해보세요!" class="form-control-1" id="search" name="search"/>
-		
-								<button type="submit"
-									style=" 
-										border: 0;
-										width: 55px;
-										background-color: white;
-										margin-left: -5%;
-										position: relative;
-									"
-								>
-									<i class="fa fa-search" style="font-size: 35px;"></i>
-								</button>
-							</form>
+									border-width: 0px 0px 2px 0px;
+									width: 100%;
+									height: 68px;
+									background: white;            
+									font-size: x-large;          
+								"
+								type="text" placeholder="찾고 싶은 게시글를 검색해보세요!" class="form-control-1" id="search" name="search"/>
 						</div>
-						<div class="search-sorting">
-							<div id="searchSortingOrder">
-								<ul class="sorting-order-options" style="list-style:none; padding:0;"
-		
-									<li class="" style="float:left; margin-right:20px;">
-										<input type="radio" id="sorter-sortDesc" name="sorter" value="name" > 
-										<label for="sorter-sortDesc" class="item-name" data-srp-log='{"group":"FILTER", "filterType":"SORT_KEY", "id":-sortDesc"}'>이름순</label>
-									</li>
-									<li class="" style="float:left; margin-right:20px;">
-										<input type="radio" id="sorter-sortDesc" name="sorter" value="heart" > 
-										<label for="sorter-sortDesc" class="item-name" data-srp-log='{"group":"FILTER", "filterType":"SORT_KEY", "id":-sortDesc"}'>판매순</label>
-									</li>
-									<li class="" style="float: left; margin-right:20px;">
-										<input type="radio" id="sorter-sortDesc" name="sorter" value="id" checked> 
-										<label for="sorter-sortDesc" class="item-name" data-srp-log='{"group":"FILTER", "filterType":"SORT_KEY", "id":"sortDesc"}'>최신순</label>
-									</li>
-								</ul>
-							</div>
+						<div class="4u$">
+							<button type="submit"
+								style=" 
+								border: 0;
+								box-shadow: 0 0 0 0;
+								width: 55px;
+								padding: 0;
+								background-color: white;
+								margin-left: %;
+							"
+							>
+								<i class="fa fa-search" style="font-size: 35px;"></i>
+							</button>
+						</form>
 						</div>
-					</div>
+					</div>				
 
 					<!-- Post Start -->
 					<div id="postlist">
@@ -341,7 +324,6 @@
 		}
 
 		var search_param = '{{search_param}}';
-		var radio_value = 'id';
 		//만약 현재 페이지를 파라미터로 가져와서 값이 있으면
 		var paramPage = getParameterByName('page');
 		//파라미터로 가져온 페이지+1하고 없으면 2로 지정
@@ -369,7 +351,6 @@
 		
 		// 다른 페이지에서 다음 페이지 정보를 로드해서 갖고옴 - 게시글
 		function callMorePostAjax(page) {
-			console.log(search_param,radio_value);
 			$.ajax({
 				type:'POST',
 				url: "{% url 'mainpage:detailStore_ajax' id=store.id %}",
@@ -378,7 +359,6 @@
 					'page': page,
 					'csrfmiddlewaretoken': token,
 					'search_param': search_param,
-					'order': radio_value
 				},
 				success: addMorePostAjax,
 				dataType: 'html'
@@ -582,18 +562,6 @@
 					toggle.toggleClass('fa fa-minus-square-o fa-2x fa fa-plus-square-o fa-2x');  
 				}
             });
-
-
-		// 정렬 이벤트
-		$("input[name='sorter']:radio").change(function() {
-			radio_value = this.value;
-			
-			$('#postlist').empty();
-			callMorePostAjax(1);
-
-			page=2
-			$("#page").val(parseInt(page));
-		})
 	</script>
 
 	</body>

@@ -58,7 +58,7 @@
             <div class="container">
                 <!-- Page Heading/Breadcrumbs-->
                 <br>
-                <div class="icons-container"style="margin-bottom: 20px">
+                <div class="icons-container"style="margin-bottom: 0px">
                     <form name="search_form" action="{% url 'mainpage:storepage' item=item %}" method="post">
                         <input style="
                                 border-width: 0px 0px 2px 0px;
@@ -82,24 +82,21 @@
                         </button>
                     </form>
                 </div>
-                <div class="search-sorting">
-                    <div id="searchSortingOrder">
-                        <ul class="sorting-order-options" style="list-style:none; padding:0;"
-
+                <div class="breadcrumb mb-4" style="background-color:white; padding-left:5px">
+                    <ul class="sorting-order-options" style="padding:0; list-style:none;" >
+                        <li class="" style="float:left; margin-right:20px;" >
+                            <input type="radio" id="sorter-name" name="sorter" value="name" > 
+                            <label for="sorter-name" class="item-name" >이름순</label>
+                        </li>
+                        <li class="" style="float:left; margin-right:20px;">
+                            <input type="radio" id="sorter-heart" name="sorter" value="heart" > 
+                            <label for="sorter-heart" class="item-heart" >인기순</label>
+                        </li>
                             <li class="" style="float:left; margin-right:20px;">
-                                <input type="radio" id="sorter-sortDesc" name="sorter" value="name" > 
-                                <label for="sorter-sortDesc" class="item-name" data-srp-log='{"group":"FILTER", "filterType":"SORT_KEY", "id":-sortDesc"}'>이름순</label>
-                            </li>
-                            <li class="" style="float:left; margin-right:20px;">
-                                <input type="radio" id="sorter-sortDesc" name="sorter" value="heart" > 
-                                <label for="sorter-sortDesc" class="item-name" data-srp-log='{"group":"FILTER", "filterType":"SORT_KEY", "id":-sortDesc"}'>인기순</label>
-                            </li>
-                             <li class="" style="float: left; margin-right:20px;">
-                                <input type="radio" id="sorter-sortDesc" name="sorter" value="id" checked> 
-                                <label for="sorter-sortDesc" class="item-name" data-srp-log='{"group":"FILTER", "filterType":"SORT_KEY", "id":"sortDesc"}'>최신순</label>
-                            </li>
-                        </ul>
-                    </div>
+                            <input type="radio" id="sorter-date" name="sorter" value="id" > 
+                            <label for="sorter-date" class="item-date" >최신순</label>
+                        </li>
+                    </ul>
                 </div>
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item"><a href="{% url 'mainpage:mainpage' %}">Home</a></li>
