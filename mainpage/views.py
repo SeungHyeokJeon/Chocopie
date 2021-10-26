@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 import math
 from collections import OrderedDict
-
+import re
 from django.http  import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse

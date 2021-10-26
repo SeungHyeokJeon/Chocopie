@@ -10,7 +10,7 @@
 		<title>가게 상세정보 보기!!!</title>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		
+
 		<link rel="stylesheet" href="../../static/css/store_inform.css" />
 
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -22,7 +22,7 @@
 		<link rel="stylesheet" href="../../static/css/bootstrap.min.css">
 		<link rel="stylesheet" href="../../static/css/font-awesome.min.css">
 		<link rel="stylesheet" href="{% static 'css/style.css' %}">
-		
+
 		<link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -106,42 +106,43 @@
 
 					<!-- search and sort -->
 					<div class="16u$">
-						<div class="16u$" style="display: flex; flex-direction: row;">
-							<form name="search_form" action="{% url 'mainpage:detailStore' store_id=store.id %}" method="post">      
-								<div class="8u$">
-									<input style="
-										border-width: 0px 0px 2px 0px;
-										width: 100%;
-										height: 68px;
-										background: white;            
-										font-size: x-large;          
-									"
-									type="text" placeholder="찾고 싶은 게시글를 검색해보세요!" class="form-control-1" id="search" name="search"/>
-								</div>
-						
-								<div class="8u$">
-								<button type="submit"
-									style=" 
-									border: 0;
-									box-shadow: 0 0 0 0;
-									width: 55px;
-									padding: 0;
-									background-color: white;
-								"
-								>
-								<i class="fa fa-search" style="font-size: 35px;"></i>
-								</button>
-								</div>
-							</form>
-						</div>
-					</div>      				
+						<form name="search_form" action="{% url 'mainpage:detailStore' store_id=store.id %}" method="post">
+							<div class="16u$" style="display: flex; flex-direction: row;">
+
+									<div class="8u$">
+											<input style="
+												border-width: 0px 0px 2px 0px;
+												width: 100%;
+												height: 68px;
+												background: white;
+												font-size: x-large;
+											"
+											type="text" placeholder="찾고 싶은 게시글를 검색해보세요!" class="form-control-1" id="search" name="search"/>
+									</div>
+
+									<div class="8u$">
+										<button type="submit"
+											style="
+											border: 0;
+											box-shadow: 0 0 0 0;
+											width: 55px;
+											padding: 0;
+											background-color: white;
+										"
+										>
+										<i class="fa fa-search" style="font-size: 35px;"></i>
+										</button>
+									</div>
+							</div>
+						</form>
+					</div>
 
 					<!-- Post Start -->
 					<div id="postlist">
 						{% if board %}
 							<input id="page" type="hidden" value="2">
 							{% for postlist in board %}
-						
+
 
 							<!-- Post -->
 							<div class="post infinite-container" id="post{{postlist.id}}">
@@ -160,7 +161,7 @@
 
 								<a href="#" class="image featured"><img src="{{postlist.thumbnail}}" alt="" /></a>
 								{{postlist.content | safe}}
-								
+
 								<div id="items">
 									<!-- 물품 들어갈 자리 -->
 									{% if postlist.item %}
@@ -211,7 +212,7 @@
 
 								<div class="8u$" style="display: inline;">
 									<input style="display: inline; width:500px; margin:0px margin-left:30px"id="inputComment{{postlist.id}}" type="text" placeholder="댓글을 남겨주세요." />
-										<button type="button" 
+										<button type="button"
 										style=
 											"
 											margin-left: 20px;
@@ -256,24 +257,24 @@
 							</section>
 
 							<section>
-								<p>Tel. {{store.phone}}</p>
 								<p>{{store.address}}</p>
 							</section>
 
 							{% if store.owner_id == user.id %}
 							<section>
 								<a href="{% url 'mainpage:post_write' store_id=store.id %}" class="button big">글쓰기</a>
+								<a href="{% url 'mainpage:configStore' store_id=store.id %}" class="button big">수정</a>
 							</section>
 							{% endif %}
 
-					
 
-					
+
+
 					</section>
 
 				</div>
 		</div>
-			
+
 	<!-- Footer Section -->
 
 	<footer>
@@ -310,12 +311,12 @@
 							<li><a href="#" class="fa fa-linkedin"></a></li>
 					</ul>
 				</div>
-				
+
 			</div>
 		</div>
 	</footer>
 
-	
+
 	<script>
 		var page_2_switch = false;
 		var token = $('input[name="csrfmiddlewaretoken"]').prop('value');
@@ -350,7 +351,7 @@
 				$("#page").val(parseInt(page)+1);
 			}
 		});
-		
+
 		// 다른 페이지에서 다음 페이지 정보를 로드해서 갖고옴 - 게시글
 		function callMorePostAjax(page) {
 			$.ajax({
@@ -394,7 +395,7 @@
 						}
 					{% endfor %}
 				}
-				
+
 				// 상품 선택 태그 추가
 				var tag = 	'<div id="selectedItem'+id+'">';
 					tag +=		'<input type="hidden" name="itemoriginalprice" value='+price+'>'
@@ -407,9 +408,9 @@
 					tag += 			'<label for="itemprice" style="padding:0; margin-top:5px; font-weight:normal; height: 45px; font-size:26px; color:black; float: right;">원</label>'
 					tag +=			'<input style="text-align:right; margin:0; margin-right:10px; font-weight:normal; padding:0px; height: 45px; width:100px; font-size: 26px; float: right; display:inline; border:none; " type="text" name="itemprice" value='+price+' disabled>'
 					tag +=		'</div>'
-					tag += '<hr>'			
+					tag += '<hr>'
 					tag +=	'</div>';
-					
+
 				$('#selectedItems'+postid).append(tag);
 
 				// 해당 상품 합계 설정
@@ -516,7 +517,7 @@
 				$('#allCommentView'+postid).remove()
 			}
 		}
-		
+
 		// 장바구니 등록
 		function insertCart(postid, storeid) {
 			// 선택된 상품id와 개수 가져오기
@@ -554,14 +555,14 @@
                 var class_by_id = $(this).find('i').attr('class');
 				var id = $(this).find('i').attr('id');
                 var toggle = $(this).find('i');
-               
-				if (class_by_id === "fa fa-plus-square-o fa-2x"){	
+
+				if (class_by_id === "fa fa-plus-square-o fa-2x"){
 					callMoreCommentAjax(id, false);
-					toggle.toggleClass('fa fa-plus-square-o fa-2x fa fa-minus-square-o fa-2x');   
+					toggle.toggleClass('fa fa-plus-square-o fa-2x fa fa-minus-square-o fa-2x');
 				} else {
 					document.getElementById('comment'+id).innerHTML ="";
 					callMoreCommentAjax(id, 'first');
-					toggle.toggleClass('fa fa-minus-square-o fa-2x fa fa-plus-square-o fa-2x');  
+					toggle.toggleClass('fa fa-minus-square-o fa-2x fa fa-plus-square-o fa-2x');
 				}
             });
 	</script>
