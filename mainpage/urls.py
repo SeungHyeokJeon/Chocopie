@@ -15,6 +15,7 @@ urlpatterns = [
     path('configstore/<int:store_id>', views.configStore, name='configStore'),
     path('configstore2/<int:store_id>', views.configStore2, name='configStore2'),
     path('savestore/',views.saveStore, name='saveStore'),
+    path('deletestore/<int:store_id>',views.deleteStore, name='deleteStore'),
     path('heartStore/', views.heartStore, name='heartStore'),
     path('cart/', views.cart, name='cart'),
     path('mypage/',views.mypage, name='mypage'),

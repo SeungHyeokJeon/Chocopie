@@ -194,6 +194,13 @@ def saveStore(request):
         return redirect(reverse('mainpage:detailStore', kwargs={'store_id':stores.id}))
     else:
         return redirect(reverse('mainpage:mainpage'))
+
+def deleteStore(request, store_id):
+    store = Stores.objects.get(id=int(store_id))
+
+    store.delete()
+
+    return redirect(reverse('mainpage:mainpage'))
     
 def map(request):
     traditional_markets = traditional_market.objects.filter(
