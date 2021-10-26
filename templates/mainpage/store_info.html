@@ -107,32 +107,34 @@
 					<!-- search and sort -->
 					<div class="16u$">
 						<div class="16u$" style="display: flex; flex-direction: row;">
-							<form name="search_form" action="{% url 'mainpage:detailStore' store_id=store.id %}" method="post">
-								<input style="
-									border-width: 0px 0px 2px 0px;
-									width: 100%;
-									height: 68px;
-									background: white;            
-									font-size: x-large;          
+							<form name="search_form" action="{% url 'mainpage:detailStore' store_id=store.id %}" method="post">      
+								<div class="8u$">
+									<input style="
+										border-width: 0px 0px 2px 0px;
+										width: 100%;
+										height: 68px;
+										background: white;            
+										font-size: x-large;          
+									"
+									type="text" placeholder="찾고 싶은 게시글를 검색해보세요!" class="form-control-1" id="search" name="search"/>
+								</div>
+						
+								<div class="8u$">
+								<button type="submit"
+									style=" 
+									border: 0;
+									box-shadow: 0 0 0 0;
+									width: 55px;
+									padding: 0;
+									background-color: white;
 								"
-								type="text" placeholder="찾고 싶은 게시글를 검색해보세요!" class="form-control-1" id="search" name="search"/>
-						</div>
-						<div class="4u$">
-							<button type="submit"
-								style=" 
-								border: 0;
-								box-shadow: 0 0 0 0;
-								width: 55px;
-								padding: 0;
-								background-color: white;
-								margin-left: %;
-							"
-							>
+								>
 								<i class="fa fa-search" style="font-size: 35px;"></i>
-							</button>
-						</form>
+								</button>
+								</div>
+							</form>
 						</div>
-					</div>				
+					</div>      				
 
 					<!-- Post Start -->
 					<div id="postlist">
