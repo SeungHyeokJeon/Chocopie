@@ -266,13 +266,11 @@ def detailStore(request, store_id):
 
 def detailStore_ajax(request, id):
     search_param = request.POST.get('search_param') # 검색 값이 존재하면 가져오기
-    # 페이지를 이동하면 무조건 최신순으로 정렬되고, radio 버튼 클릭시에만 동적으로 화면 변화시키기 위해 _ajax에만 작성
-    order = request.POST.get('order') if request.POST.get('order')!='None' else 'id' # 특정 기준 정렬
 
     if search_param!='None' and search_param!='':
-        board = Boards.objects.filter(store=id, title__contains=search_param).order_by('-'+order)
+        board = Boards.objects.filter(store=id, title__contains=search_param).order_by('-id')
     else:
-        board = Boards.objects.filter(store=id).order_by('-'+order)
+        board = Boards.objects.filter(store=id).order_by('-id')
 
     # item 불러오기
     query = Q()
@@ -285,7 +283,6 @@ def detailStore_ajax(request, id):
 
     paginator = Paginator(board,listLength) # 게시글 나누기
     page = request.POST.get('page') # page 파라미터 있으면 갖고오기
-    print('ajax page:',page)
     
     try:
         board_list=paginator.page(page) # 현재 페이지 지정
@@ -299,7 +296,6 @@ def detailStore_ajax(request, id):
         'totalPage':totalPage,
         'item' : items,
         'search_param' : search_param,
-        'order': order
     }
     return render(request, 'mainpage/board_ajax.html', context)
 
