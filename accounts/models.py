@@ -30,3 +30,23 @@ class Userinfo(models.Model):
     class Meta:
         managed = True
         db_table = 'userinfo'
+
+class OrderList(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    store = models.ForeignKey('board.Stores', models.DO_NOTHING)
+    user = models.ForeignKey(Userinfo, models.CASCADE)
+    user_name = models.CharField(db_column='NAME', max_length=256, blank=True, null=True)
+    user_email = models.CharField(max_length=256, blank=True, null=True)
+    board = models.ForeignKey('board.Boards', models.DO_NOTHING)
+    item = models.ForeignKey('board.Items', models.DO_NOTHING)
+    item_name = models.CharField(max_length=256)
+    item_ea = models.IntegerField(blank=True, null=True)
+    item_price = models.IntegerField(blank=True, null=True)
+    shipping_address = models.CharField(max_length=1024, blank=True, null=True)
+    order_date = models.DateTimeField(blank=True, null=True)
+    shipping_date = models.DateTimeField(blank=True, null=True)
+    order_status = models.CharField(max_length=16, blank=True, null=True)
+
+    class Meta:
+        managed=True
+        db_table = 'orderlist'
