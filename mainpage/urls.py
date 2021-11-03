@@ -18,11 +18,18 @@ urlpatterns = [
     path('deletestore/<int:store_id>',views.deleteStore, name='deleteStore'),
     path('heartStore/', views.heartStore, name='heartStore'),
     path('cart/', views.cart, name='cart'),
+    path('selectDelete/', views.selectDelete, name='selectDelete'),
+    
     path('mypage/',views.mypage, name='mypage'),
+    path('orderstatus/',views.orderstatus, name='orderstatus'),
+
     path('config/<str:element_id>',views.userConfig, name='userConfig'),
     path('sms/', SMSVerificationView, name='smsverification'),
     path('smsVerification/', SMSConfirmView, name='smsconfirm'),
     path('addComment/<int:board_id>', views.addComment, name='addComment'),
     #path('store/',views.store, name='store'),
     #path('dbupload/', views.dbupload, name='dbupload'),
+
+    path('kakaoPay/', views.kakaoPay, name='kakaoPay'),
+    path('kakaoPayLogic/', views.kakaoPayLogic, name='kakaoPayLogic')
 ]

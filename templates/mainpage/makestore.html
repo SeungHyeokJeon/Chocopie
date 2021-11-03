@@ -65,86 +65,88 @@
      <div class="container">
           <div class="row">
                <div class="col-md-offset-1 col-md-10 col-sm-12">
-                    <div class="section-title"> 
+                    
                     {% if store.owner_id == user.id %}
-                         <h3>가게 수정</h3>
+                         <div class="section-title"> 
+                              <h3>가게 수정</h3>
                          </div>
                          <form id="storePost" name=storePost" style="display: block;" method="post" action="{% url 'mainpage:configStore2' store_id=store.id %}" enctype="multipart/form-data" onsubmit="return false">
-                         {% if user.is_authenticated %}
-                         <input type="text" name="owner" value={{user.id}} style="display: none">
-                         {% endif %}
-                         <div class="col-md-6 col-sm-6">
-                              <label for="name">가게이름</label> 
-                              <input class="form-control" type="text" name="name" value="{{store.name}}">
-                         </div>
-                         <div class="col-md-6 col-sm-6">
-                              <label for="category">카테고리</label> 
-                         <select class="form-control" name="category">
-                              {% if store.category == "농산물" %}
-                                   <option value="농산물" selected>농산물</option>
-                              {% else %}
-                                   <option value="농산물">농산물</option>    
-                              {% endif %}  
-
-                              {% if store.category == "수산물" %}
-                                   <option value="수산물" selected>수산물</option>
-                              {% else %}
-                                   <option value="수산물">수산물</option>    
+                              {% if user.is_authenticated %}
+                                   <input type="text" name="owner" value="{{user.id}}" style="display: none">
                               {% endif %}
+                              <div class="col-md-6 col-sm-6">
+                                   <label for="name">가게이름</label> 
+                                   <input class="form-control" type="text" name="name" value="{{store.name}}">
+                              </div>
+                              <div class="col-md-6 col-sm-6">
+                                   <label for="category">카테고리</label> 
+                                   <select class="form-control" name="category">
+                                        {% if store.category == "농산물" %}
+                                             <option value="농산물" selected>농산물</option>
+                                        {% else %}
+                                             <option value="농산물">농산물</option>    
+                                        {% endif %}  
 
-                              {% if store.category == "반찬" %}
-                                   <option value="반찬" selected>반 찬</option>
-                              {% else %}
-                                   <option value="반찬">반 찬</option>    
-                              {% endif %}  
+                                        {% if store.category == "수산물" %}
+                                             <option value="수산물" selected>수산물</option>
+                                        {% else %}
+                                             <option value="수산물">수산물</option>    
+                                        {% endif %}
 
-                              {% if store.category == "의류" %}
-                                   <option value="의류" selected>의 류</option>
-                              {% else %}
-                                   <option value="의류">의 류</option>    
-                              {% endif %} 
+                                        {% if store.category == "반찬" %}
+                                             <option value="반찬" selected>반 찬</option>
+                                        {% else %}
+                                             <option value="반찬">반 찬</option>    
+                                        {% endif %}  
 
-                              {% if store.category == "건강식품" %}
-                                   <option value="건강식품" selected>건강식품</option>
-                              {% else %}
-                                   <option value="건강식품">건강식품</option>    
-                              {% endif %} 
-                          </select>
-                         </div>
-                         <div class="col-md-6 col-sm-6">
-                              <label for="marketNum">시장</label>
-                              <input style="display: none;" type="text" name="marketNum" id="marketNum" value="{{market.id}}" readonly>
-                              <input class="form-control" type="text" name="marketName" id="marketName" value="{{market.name}}" readonly>
-                         </div>
-                         <div class="col-md-6 col-sm-6">
-                              <label for="input-image">업로드</label>
-                              <input class="form-control" type="file" name="imgs" id="input-image">
-                         </div>
-                         <div class="col-md-6 col-sm-6">
-                              <label for="address">주소</label> 
-                              <input onclick="showAdress();" class="form-control" type="text" id="address" name="address" value="{{address}}" readonly>
-                              <input class="form-control" type="text" id="addressSub" name="addressSub" value="{{address2}}">
-                              <!-- <button class="btn" id="btn" onclick="showAdress(); " style="background-color: #14AD03;">주소찾기</button> -->
-                         </div>
-                         <div class="col-md-6 col-sm-6" style="text-align: center;">
-                              <img style="height: 155px; object-fit: fill;" id="preview-image" src="{{store.mainimage.url}}">
-                         </div>
-                         <div class="col-md-12">
-                              <label for="introduce">가게 소개글</label>
-                              <textarea class="form-control" name="introduce" id="introduce" style="resize: none;">{{store.introduce}}</textarea>
-                         </div>
-                         <div class="col-md-11">
-                              <button style="margin-left: auto;" class="btn" id="btn" onclick="" >취소</button>
-                              <button class="btn" id="btn" onclick="send2();" style="background-color: #14AD03;">수정</button>
-                         </div>
-                    </div>
-                    </form>
+                                        {% if store.category == "의류" %}
+                                             <option value="의류" selected>의 류</option>
+                                        {% else %}
+                                             <option value="의류">의 류</option>    
+                                        {% endif %} 
+
+                                        {% if store.category == "건강식품" %}
+                                             <option value="건강식품" selected>건강식품</option>
+                                        {% else %}
+                                             <option value="건강식품">건강식품</option>    
+                                        {% endif %} 
+                                   </select>
+                              </div>
+                              <div class="col-md-6 col-sm-6">
+                                   <label for="marketNum">시장</label>
+                                   <input style="display: none;" type="text" name="marketNum" id="marketNum" value="{{market.id}}" readonly>
+                                   <input class="form-control" type="text" name="marketName" id="marketName" value="{{market.name}}" readonly>
+                              </div>
+                              <div class="col-md-6 col-sm-6">
+                                   <label for="input-image">업로드</label>
+                                   <input class="form-control" type="file" name="imgs" id="input-image">
+                              </div>
+                              <div class="col-md-6 col-sm-6">
+                                   <label for="address">주소</label> 
+                                   <input onclick="showAdress();" class="form-control" type="text" id="address" name="address" value="{{address}}" readonly>
+                                   <input class="form-control" type="text" id="addressSub" name="addressSub" value="{{address2}}">
+                                   <!-- <button class="btn" id="btn" onclick="showAdress(); " style="background-color: #14AD03;">주소찾기</button> -->
+                              </div>
+                              <div class="col-md-6 col-sm-6" style="text-align: center;">
+                                   <img style="height: 155px; object-fit: fill;" id="preview-image" src="{{store.mainimage.url}}">
+                              </div>
+                              <div class="col-md-12">
+                                   <label for="introduce">가게 소개글</label>
+                                   <textarea class="form-control" name="introduce" id="introduce" style="resize: none;">{{store.introduce}}</textarea>
+                              </div>
+                              <div class="col-md-11">
+                                   <button style="" class="btn" id="btn" onclick="location.href='{% url 'mainpage:deleteStore' store_id=store.id %}'" >삭제</button>
+                                   <button style="margin-left: auto;" class="btn" id="btn" onclick="" >취소</button>
+                                   <button class="btn" id="btn" onclick="send2();" style="background-color: #14AD03;">수정</button>
+                              </div>
+                         </form>
                     {% else %}
-                         <h3>가게 생성</h3>
+                         <div class="section-title"> 
+                              <h3>가게 생성</h3>
                          </div>
                          <form id="storePost" name=storePost" style="display: block;" method="post" action="{% url 'mainpage:saveStore' %}" enctype="multipart/form-data" onsubmit="return false">
                          {% if user.is_authenticated %}
-                         <input type="text" name="owner" value={{user.id}} style="display: none">
+                              <input type="text" name="owner" value={{user.id}} style="display: none">
                          {% endif %}
                          <div class="col-md-6 col-sm-6">
                               <label for="name">가게이름</label> 

@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 import math
+import requests
 from collections import OrderedDict
 import re
 from django.http  import JsonResponse, HttpResponse
@@ -110,7 +111,10 @@ def storepage(request, item):
         'item' : item,
         'search_param' : search_param
     }
-    return render(request, 'mainpage/store.html', context)
+    if item!='찜한가게':
+        return render(request, 'mainpage/store.html', context)
+    else:
+        return render(request, 'mainpage/likestore.html', context)
 
 def storepage_ajax(request):
     item = request.POST.get('item')
@@ -177,7 +181,6 @@ def makestore(request):
 def saveStore(request):
     if(request.method == 'POST'):
         stores = Stores()
-        print(request.POST['owner'])
         stores.owner = Userinfo.objects.get(id=int(request.POST['owner']))
         stores.market = traditional_market.objects.get(id=int(request.POST['marketNum']))
 
@@ -431,6 +434,19 @@ def cart(request):
         }
     return render(request, 'mainpage/cart.html', context)
 
+def selectDelete(request):
+    userid = request.POST['owner']
+    stores = request.POST.getlist('storelist')
+    user = Userinfo.objects.get(id=userid)
+    jsonData = user.shopping_basket
+
+    for store in stores:
+        del jsonData[str(store)]
+
+    user.shopping_basket = jsonData
+    user.save()
+    return JsonResponse({'message': 'SUCCESS'}, status=200)
+
 def mypage(request):
     authId = request.session.get('_auth_user_id')
     userinfo = Userinfo.objects.get(id=authId)
@@ -438,6 +454,9 @@ def mypage(request):
         'userinfo':userinfo,
     }
     return render(request, 'mainpage/mypage.html', data)
+
+def orderstatus(request):
+    return render(request, 'mainpage/orderstatus.html')
 
 def userConfig(request, element_id):
     userid = request.POST['owner']
@@ -601,3 +620,51 @@ def addComment(request, board_id):
 
     
     return render(request, 'mainpage/comment_ajax.html', context)
+
+def kakaoPay(request):
+    return render(request, 'mainpage/pay.html')
+
+def kakaoPayLogic(request):
+    if(request.method == 'POST'):
+        user = Userinfo.objects.get(id=request.POST['owner'])
+        jsonData = user.shopping_basket
+        total = request.POST['total']
+        stores = request.POST.getlist('item')
+        item_quantitiy = 0;
+        itemnum = {}
+
+        for store in stores:
+            for item in jsonData[str(store)]:
+                itemnum[int(item['itemid'])] = int(item['count'])
+                item_quantitiy = item_quantitiy + 1
+
+        for k in itemnum.keys():
+            item_name = Items.objects.get(id=k).name
+        item_name = item_name + '외 ' + str(item_quantitiy-1) +'건'
+
+        _admin_key = '99a86ed06378c324ee7887ea0e43ebc6' # 입력필요
+        _url = 'https://kapi.kakao.com/v1/payment/ready'
+        _headers = {
+            'Authorization': "KakaoAK " + _admin_key ,
+        }
+        _data = {
+            "cid": "TC0ONETIME",    # 테스트용 코드
+            "partner_order_id": "1001",     # 주문번호
+            "partner_user_id": user.id,    # 유저 아이디
+            "item_name": item_name,        # 구매 물품 이름
+            "quantity": item_quantitiy,                # 구매 물품 수량
+            "total_amount": total,        # 구매 물품 가격
+            "tax_free_amount": "0",         # 구매 물품 비과세
+            # 내 애플리케이션 -> 앱설정 / 플랫폼 - WEB 사이트 도메인에 등록된 정보만 가능합니다
+            # * 등록 : http://IP:8000 
+            'approval_url':'http://114.70.93.84:8000/mainpage', 
+            'fail_url':'http://114.70.93.84:8000/mainpage/cart/',
+            'cancel_url':'http://114.70.93.84:8000/mainpage/cart/'
+        }
+        _res = requests.post(_url, params=_data, headers=_headers)
+        request.session['tid'] = _res.json()['tid']
+        next_url = _res.json()['next_redirect_pc_url']
+        return redirect(next_url)
+
+#def orderdata(request):
+    

@@ -1,114 +1,117 @@
-<!doctype html>
 {% load static %}
 {% load humanize %}
-<html>
+<!DOCTYPE HTML>
+<html lang="en">
     <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<!-- <link rel="stylesheet" href="{% static "css/store_infor.css" %}"> -->
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<meta name="keywords" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <meta name="description" content="" />
+        <meta name="author" content="" />
         <title>장바구니</title>
-        <meta charSet="utf-8"/>
-        <meta name="referrer" content="always"/>
-        <meta http-equiv="Content-Script-Type" content="text/javascript"/>
-        <meta http-equiv="Content-Style-Type" content="text/css"/>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-        <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
-        <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <!-- Main css -->
-        <link rel="stylesheet" href="{% static "css/style.css" %}">
-        <link rel="shortcut icon" href="https://ssl.pstatic.net/imgshopping/search/m/static/20191226163224/favicon.ico"/>
-        <link type="text/css" rel="stylesheet" href="https://img-shop.pstatic.net/cart/static/pc/20210531/93/css/global.css?1622454659326"/><link type="text/css" rel="stylesheet" href="https://img-shop.pstatic.net/cart/static/pc/20210531/93/css/app.css?1622454659326"/>
-    
-    <script>
-        var g_ssc = "smartstore.cart";
-        var ccsrv = "cc.naver.com";
-    </script>
+		<link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+		<link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}">
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&family=Sunflower:wght@300;500;700&display=swap" rel="stylesheet">
+		<!-- Main css -->
+		<link rel="stylesheet" href="{% static "css/style.css" %}">
+		<link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
     </head>
 
-    <body>
-        <div id="popup">
+	
+	<body>
+	<!-- Navigation section  -->
+	<div class="navbar navbar-default navbar-static-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon icon-bar"></span>
+					<span class="icon icon-bar"></span>
+					<span class="icon icon-bar"></span>
+				</button>
+				<a href="{% url 'mainpage:mainpage' %}" class="navbar-brand"><img class="logo" src="{% static 'images/logo.png' %}"></a>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<!-- <li class="active"><a href="index.html">Projects</a></li> -->
+					{% if user.is_authenticated %}
+					{{user.username}} 님이 로그인중
+					<li><a href="{% url 'mainpage:cart' %}" class="fa fa-shopping-cart"></a></li>
+					<li><a href="{% url 'mainpage:mypage' %}" class="fa fa-user"></a></li>
+					<li><a href="{% url 'accounts:logout' %}">Logout</a> </li>
+					{% else %}
+					<li><a href="{% url 'accounts:login' %}">Login</a> </li>
+					{% endif %}
+				</ul>
+			</div>
+	    </div>
+	</div>
 
-        </div> <div id="app">
-            <div class="cart">
-               <div class="navbar navbar-default navbar-static-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon icon-bar"></span>
-                        <span class="icon icon-bar"></span>
-                        <span class="icon icon-bar"></span>
-                    </button>
-                    <a href="{% url 'mainpage:mainpage' %}" class="navbar-brand"><img class="logo" src="{% static 'images/logo.png' %}"></a>
-                </div>
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                        <!-- <li class="active"><a href="index.html">Projects</a></li> -->
-                        {% if user.is_authenticated %}
-                        {{user.username}} 님이 로그인중
-                        <li><a href="{% url 'mainpage:cart' %}" class="fa fa-shopping-cart"></a></li>
-                        <li><a href="{% url 'mainpage:mypage' %}" class="fa fa-user"></a></li>
-                        <li><a href="{% url 'accounts:logout' %}">Logout</a> </li>
-                        {% else %}
-                        <li><a href="{% url 'accounts:login' %}">Login</a> </li>
-                        {% endif %}
-                    </ul>
-                </div>
-        </div>
-                <main class="page_cart" style="margin-top: 25px;">
-                    <div class="header--etu_onc5ey">
-                        <h2 class="title--2KkcT4Vfqk on--1CGCpfo0Wz"><a href="{% url 'mainpage:cart' %}" class="link--12jcUrGVuS">장바구니<span class="blind">선택됨</span></a></h2>         
+	<section id="contact" style="padding-top:20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-1 col-md-10 col-sm-12" >
+                    <div class="section-title" style="margin-bottom: 12px; margin-top:10px; margin-bottom:20px; border-bottom:0;"> 
+                            <div class="col-md-4 col-sm-4" >
+                            </div>
+                            <div class="col-md-4 col-sm-4" style="border-bottom: solid black;">
+                                <a href="{% url 'mainpage:cart' %}" ><h3 >장바구니</h3></a>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                            </div>
                     </div>
-                    <table class="table--1aTBT9emfH">
-                        <caption>
-                            <span class="blind">장바구니 내역</span>
-                        </caption>
-                        <colgroup>
-                            <col class="col_1--5TSKjnuT7E"/>
-                            <col class="col_2--YKLfiddUoQ"/>
-                            <col class="col_3--3kO7FM0QDn"/>
-                            <col class="col_4--2HuEbgLS2c"/>
-                            <col class="col_5--1Q8JnXqems"/>
-                        </colgroup>
+                    <form action="{% url 'mainpage:kakaoPayLogic' %}" method="post">
+                        {% if user.is_authenticated %}
+                            <input type="text" id="owner" name="owner" value={{user.id}} style="display: none">
+                        {% endif %}
+                    <table class="table table-striped">	
                         <thead>
                             <tr>
-                                <th scope="col" class="th--1G-vGQPU9O">
-                                <div class="checkbox--2IUF1PL_-B">
-                                    <input type="checkbox" id="check_all" checked="" class="input--3_IdTFCV9i"/>
-                                    <label for="check_all" class="blind">전체 상품 선택</label>
+                                <th scope="col" class="">
+                                <div class="">
+                                    {% comment %} <input type="checkbox" id="check_all" checked="" class=""/> {% endcomment %}
                                 </div>
                                 </th>
-                                <th style="text-align: center;" scope="col" class="th--1G-vGQPU9O">가게정보</th>
-                                <th style="text-align: center;" scope="col" class="th--1G-vGQPU9O">상품</th>
-                                <th style="text-align: center;" scope="col" class="th--1G-vGQPU9O">상품금액</th>
+                                <th style="text-align: center;" scope="col" class="">가게정보</th>
+                                <th style="text-align: center;" scope="col" class="">상품</th>
+                                <th style="text-align: center;" scope="col" class="">상품금액</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <div id="storelist_id" style="display: none">
+                            {% for storelist in store %}
+                                {{ storelist.id }},
+                            {% endfor %}
+                        </div>
                         {% if totalprice %}
                             {% for storelist in store %}
-                                <tr class="table_row--2U-tpJvyb0">
-                                    <td class="table_cell--275JhdiLLN">
-                                        <div class="checkbox--2IUF1PL_-B">
+                                <tr class="">
+                                    <td class="" style="vertical-align: middle;">
+                                        <div class="" >
                                             <!-- 상품선택 -->
-                                            <input type="checkbox" id="bundle_checkbox_20210609-2816866b-c86c-11eb-ad37-a0369ffbc018" checked="" class="input--3_IdTFCV9i"/>
+                                            <input type="checkbox" name="item" value="{{storelist.id}}" checked="" />
                                         </div>
                                     </td>
-                                    <td id="itemslist" class="table_cell--275JhdiLLN">
-                                        <div class="product_desc_wrap--zuWDCqlLRY">
-                                            <div class="product_description--1jr4jHj2Z6">
-                                                <span class="product_thumb--1Aak_Tp20Y">
-                                                <img src="{{storelist.mainimage.url}}" alt="" class="product_img--eMB0AlWn-k"/></span>
-                                                <a class="product_merchant_name--3nN1_So3k8" target="_blank">{{storelist.market.name}}</a>
-                                                <span class="product_name--2bJ9UmFvLy">
-                                                    {{storelist.name}}
-                                                </span>
-                                            </div>
+                                    <td id="itemslist" class="text-left" style="width:312px;">
+                                        <div class="" style="margin:0 auto">
+                                            <span class="">
+                                            <a class="" href="{% url 'mainpage:detailStore' store_id=storelist.id %}"><img style="width:128px; height:96px; margin-left:-10%;" src="{{storelist.mainimage.url}}" alt="" class=""/></a></span>
+                                            <a class="" style="padding-left:12px;" target="_blank">{{storelist.market.name}}</a>
+                                            <span class="">
+                                                <a class="" href="{% url 'mainpage:detailStore' store_id=storelist.id %}">{{storelist.name}}</a>
+                                            </span>
                                         </div>
                                         <div class="product_button_area--2KUYbbs4L_">
                                             <!-- 가게 삭제 -->
-                                            <button type="button" class="image_button--2HGEJDQgL_ button_delete--tPuYUkH9gl"></button>
+                                            {% comment %} <button type="button" class=""></button> {% endcomment %}
                                         </div>
                                     </td>
-                                    <td class="table_cell--275JhdiLLN valign_top--9Nd_R07bO0">
-                                        <div class="product_item_wrap--34FMvPu1Gp">
-                                            <div class="product_options--2hBZ8Hv882">
+                                    <td class="text-center" style="width:256px; vertical-align: middle;">
+                                        <div class="" >
+                                            <div id="store{{storelist.id}}" >
                                                 <!-- item 불러오기 -->
                                                 {% for itemlist in item %}
                                                 <!-- 상점에 맞는 item들 불러오기 -->
@@ -116,10 +119,10 @@
                                                     <!-- 상품 수량 불러오기 -->
                                                     {% for itemid, itemcount in itemcounts.items %}
                                                     {% if itemid == itemlist.id|stringformat:"s" %}
-                                                        <div id="cartItem{{itemlist.id}}" class="product_item--JRfn-qG1MT">
+                                                        <div name="store{{storelist.id}}[]" value="{{itemlist.id}}" class="">
                                                             {{itemlist.name}}({{itemlist.price|intcomma}}원) / {{itemcount}}개
                                                             <!-- 상품 하나 삭제 -->
-                                                            <button type="button" class="image_button--2HGEJDQgL_ button_delete--tPuYUkH9gl"></button>
+                                                            {% comment %} <button type="button" class=""></button> {% endcomment %}
                                                         </div>
                                                     {% endif %}
                                                     {% endfor %}
@@ -128,15 +131,15 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="table_cell--275JhdiLLN">
-                                        <div class="product_price--2AFUPFoN48">
-                                            <em class="product_detail_price--30rE3VCS3C">
+                                    <td class="text-center" style="width:256px; vertical-align: middle;">
+                                        <div class="">
+                                            <em class="" style="font-style: normal; font-weight:bold;">
                                             {% for key, value in totalprice.items %}
                                                 {% if key|stringformat:"s" == storelist.id|stringformat:"s" %}
                                                     {{value|intcomma}}
                                                 {% endif %}
                                             {% endfor %}
-                                            <span class="unit--3wsh7BvteA">원</span></em>
+                                            <span style="font-style: normal; font-weight:bold;" class="">원</span></em>
                                         </div>
                                     </td>
                                 </tr>
@@ -144,91 +147,81 @@
                         {% endif %}
                         </tbody>
                     </table>
-                        {% if totalprice %}
-                            <div class="product_button_box--16zt2aJNF5">
-                                <div class="area_checkbox--2vLk9ZqVjM">
-                                    <div class="checkbox--2IUF1PL_-B">
-                                        <input type="checkbox" id="PRODUCT_BUTTON_BOX_CHECK_BOX_ID" checked="" class="input--3_IdTFCV9i"/>
-                                        <label for="PRODUCT_BUTTON_BOX_CHECK_BOX_ID" class="blind">전체선택</label>
-                                    </div>                     
-                                </div>
-                                <button type="button" class="button--5k8iuM-MLM button_small--28jGxridSI button_basic--3tycEu-kPR">선택상품 삭제</button>
+                    {% if totalprice %}
+                        <div class="row" style="padding-left:8px;">
+                            <div class="col-md-1 col-sm-1;">
+                                <input type="checkbox" id="ID" onclick="selectAll(this)" checked="" />
+                                <label for="ID" class="blind" ></label>
                             </div>
-                        {% else %}
-                            <div class="product_button_box--16zt2aJNF5" style="text-align: center;">
-                                <label style="font-size:20px; margin-top:15px;">장바구니에 담긴 상품이 없습니다.</label>
+                            <div>                
+                                <button type="button" onclick="selectDelete()" style="margin-left:-3%; float: none;">선택상품 삭제</button>
                             </div>
-                        {% endif %}
-                    <h3 class="blind">주문금액 정보</h3>
-                    <div class="order_calculator--2zlH_jz09P">
-                        {% comment %} <div class="product_price_detail--uc8kecGUYk">
-                            <dl class="product_price--2hbbWXbdsD"><dt>총 상품금액</dt>
-                                <dd>
-                                    <span class="price--mkyVLxZMtX">{{totalprice.total|intcomma}}</span>원</dd>
-                                </dl>
-                                <dl class=""><dt></dt>
-                                    <dd><span class="price--mkyVLxZMtX">3,500</span>원</dd></dl>
-                                    <dl class="product_price--2hbbWXbdsD"><dt>할인예상금액</dt>
-                                        <dd class="discount--2DcAGJGrTj"><span class="price--mkyVLxZMtX">0</span>원</dd>
-                                    </dl>
-                                </div> {% endcomment %}
-                                <div class="product_price_total--3Qb27-JOGF">
-                                    <span class="text_mart--2kMJYDiHte">총 주문금액</span>
-                                    {% if totalprice.total > 0 %}
-                                        <span class="text_point--1cHzZ5UYp1"><span class="price--mkyVLxZMtX">{{totalprice.total|intcomma}}</span>원</span></div></div>
-                                    {% else %}
-                                        <span class="text_point--1cHzZ5UYp1"><span class="price--mkyVLxZMtX">0</span>원</span></div></div>
-                                    {% endif %}
-                                    <div class="cart_button_box--JOMYa2uN_Q">
-                                        <a href="{% url 'mainpage:mainpage' %}" class="link_home---nGlCB8xT6">쇼핑 계속하기</a>
-                                        <button type="button" class="button--5k8iuM-MLM button_large--1ZN0PbKi7m button_green--1eB5FAPIr9">주문하기</button>
-                                        </div>
-                                        
-                                        </div>
-                                    </div>
-                                </div>
-        <footer>
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-md-3 col-sm-3">
-                        <img class="logo" src="../../static/images/logo.png">
-                    </div>
-
-                    <div class="col-md-4 col-sm-4">
-                        <p>124 Market Street, Suite 3570 San Francisco, CA 3042 United States</p>
-                    </div>
-
-                    <div class="col-md-offset-1 col-md-4 col-sm-offset-1 col-sm-3">
-                        <p><a href="mailto:youremail@gmail.com">hello@yourstudio.co</a></p>
-                        <p>(+01) 2048937 / 02 203403</p>
-                    </div>
-
-                    <div class="clearfix col-md-12 col-sm-12">
-                        <hr>
-                    </div>
-
-                    <div class="col-md-6 col-sm-6">
-                        <div class="footer-copyright">
-                                <p>© 2016 Magnet Studio | All Rights Reserved.</p>
                         </div>
-                    </div>
-
-                    <div class="col-md-6 col-sm-6">
-                        <ul class="social-icon">
-                                <li><a href="#" class="fa fa-facebook"></a></li>
-                                <li><a href="#" class="fa fa-twitter"></a></li>
-                                <li><a href="#" class="fa fa-linkedin"></a></li>
-                        </ul>
-                    </div>
-                    
-                </div>
-            </div>
-        </footer>
-    </body>
-
+                    {% else %}
+                        <div class="" style="text-align: center;">
+                            <label style="font-size:20px; margin-top:15px;">장바구니에 담긴 상품이 없습니다.</label>
+                        </div>
+                    {% endif %}
+                    <div class="col-md-12 col-sm-12" style="text-align:center;">
+                        <span id="" style="font-size:x-large; font-weight:bold;">총 주문금액</span>
+                        {% if totalprice.total > 0 %}
+                            <span class="" style="font-size:x-large; font-weight:bold; color:#FF7878;"><span id="" name"" style="font-size:x-large; font-weight:bold;">{{totalprice.total|intcomma}}</span>원</span></div>
+                            <input type="text" id="total" name="total" value={{totalprice.total}} style="display: none">
+                        {% else %}
+                            <span class="" style="font-size:x-large; font-weight:bold;"><span class="" style="font-size:x-large; font-weight:bold;">0</span>원</span></div>
+                        {% endif %}
+                    <div class="col-md-12 col-sm-12" style="text-align: center;">
+                        <button type="button" class="btn" onclick="location.href='{% url 'mainpage:mainpage' %}'" style="float: none; ">쇼핑 계속하기</button>
+                        <button type="submit" class="btn" style="float: none; background-color: #14AD03;">주문하기</button>           
+                    </div> 
+                    </form>
+				</div>
+			</div>
+		</div>
+    </section>
+    <!-- Scripts -->			
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
+        //전체 선택, 해제
+        function selectAll(selectAll)  {
+            const checkboxes 
+                = document.getElementsByName('item');
+            
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = selectAll.checked;
+            })
+        }
+
+        //선택삭제
+        function selectDelete()  {
+            const checkboxes 
+                = document.getElementsByName('item');
+
+            var storelist_id = [];
+            var count = 0;
+            checkboxes.forEach((checkbox) => {
+                if(checkbox.checked){
+                    storelist_id[count]= String(checkbox.value);
+                    count++;
+                }
+            })
+            url = "{% url 'mainpage:selectDelete' %}";
+            $.ajax({ 
+                type:'POST',
+                dataType: 'json',
+                traditional: true,
+                url: url,
+                data: {
+                    'owner':$('#owner').val(),
+                    'storelist':storelist_id,
+                },
+                success: function(){
+                    alert('삭제되었습니다');
+                    location.reload();
+                },
+            });
+        }
+        
         //json pasre 가능하도록 작은따옴표를 큰따옴표로 치환
         var data = "{{ user.shopping_basket|safe }}".replace(/'/g,'\"');
         console.log("replaced data:",data);
@@ -242,5 +235,5 @@
         }
 
     </script>
-
+</body>
 </html>

@@ -59,13 +59,13 @@
 				  <div class="col-md-offset-1 col-md-10 col-sm-12">
 					   <div class="section-title" > 
 							<div class="col-md-4 col-sm-4">
-								<a href="{% url 'mainpage:storepage' item='찜한가게' %}"><h3 class="section-bar" >찜한 가게 목록</h3></a>
+								<a href="{% url 'mainpage:storepage' item='찜한가게'%}"><h3 class="section-bar" >찜한 가게 목록</h3></a>
 							</div>
 							<div class="col-md-4 col-sm-4" style="border-bottom: solid black;">
-								<a href="{% url 'mainpage:mypage' %}"><h3>마이페이지</h3></a>
+								<a href="{% url 'mainpage:mypage' %}"><h3>내 정보</h3></a>
 							</div>
 							<div class="col-md-4 col-sm-4">
-								<a href="{% url 'mainpage:mainpage' %}"><h3 class="section-bar" >설정</h3></a>
+								<a href="{% url 'mainpage:orderstatus' %}"><h3 class="section-bar" >주문현황</h3></a>
 							</div>
 					   </div>
 							{% if user.is_authenticated %}
