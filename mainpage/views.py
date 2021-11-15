@@ -20,6 +20,8 @@ from mainpage.models import traditional_market
 
 from mainpage.forms import BoardsForm
 
+from urllib.parse import unquote_plus
+
 
 # Create your views here.
 def mainpage(request):
@@ -67,6 +69,9 @@ def storepage(request):
     return render(request, 'mainpage/store.html')
 
 def storepage(request, item):
+    if not item in ['농산물','수산물','축산물','반찬','의류','건강식품']:
+        item = unquote_plus(item)
+
     search_param = request.POST.get('search') # 검색 값이 존재하면 가져오기
 
     # 찜한가게와 일반 카테고리일때 데이터 불러오는 구문 변경
