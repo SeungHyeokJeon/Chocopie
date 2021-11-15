@@ -34,7 +34,7 @@ class Userinfo(models.Model):
 class OrderList(models.Model):
     id = models.BigAutoField(primary_key=True)
     store = models.ForeignKey('board.Stores', models.DO_NOTHING)
-    user = models.ForeignKey(Userinfo, models.CASCADE)
+    user = models.ForeignKey('accounts.Userinfo', models.CASCADE)
     user_name = models.CharField(db_column='NAME', max_length=256, blank=True, null=True)
     user_email = models.CharField(max_length=256, blank=True, null=True)
     board = models.ForeignKey('board.Boards', models.DO_NOTHING)

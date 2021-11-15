@@ -3,14 +3,12 @@ from django.db import models
 from allauth.account.models import EmailAddress
 from django.contrib.auth.models import User
 from allauth.socialaccount.models import SocialAccount, SocialApp, SocialToken
-from accounts.models import Userinfo
-from mainpage.models import traditional_market
 
 # Create your models here.
 # Stores Models은 임시로 여기다 배치함
 class Stores(models.Model):
-    owner = models.ForeignKey(Userinfo, models.CASCADE)
-    market = models.ForeignKey(traditional_market, models.DO_NOTHING, null=True)
+    owner = models.ForeignKey('accounts.Userinfo', models.CASCADE)
+    market = models.ForeignKey('mainpage.traditional_market', models.DO_NOTHING, null=True)
     category = models.CharField(max_length=11, blank=True, null=True)
     name = models.CharField(max_length=256)
     address = models.CharField(max_length=1024, blank=True, null=True)
@@ -27,7 +25,7 @@ class Stores(models.Model):
 class Boards(models.Model):
     id = models.BigAutoField(primary_key=True)
     store = models.ForeignKey(Stores, models.CASCADE)
-    writer = models.ForeignKey(Userinfo, models.DO_NOTHING)
+    writer = models.ForeignKey('accounts.Userinfo', models.DO_NOTHING)
     writer_name = models.CharField(max_length=256)
     title = models.CharField(max_length=1024)
     content = models.TextField(blank=True, null=True)
@@ -46,7 +44,7 @@ class Comments(models.Model):
     id = models.BigAutoField(primary_key=True)
     board = models.ForeignKey(Boards, models.CASCADE)
     parent = models.ForeignKey('self', models.CASCADE, null=True)
-    writer = models.ForeignKey(Userinfo, models.DO_NOTHING)
+    writer = models.ForeignKey('accounts.Userinfo', models.DO_NOTHING)
     writer_name = models.CharField(max_length=256)
     content = models.TextField(blank=True, null=True)
     date_posted = models.DateTimeField(blank=True, null=True)
