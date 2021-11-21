@@ -16,9 +16,11 @@ urlpatterns = [
     path('configstore2/<int:store_id>', views.configStore2, name='configStore2'),
     path('savestore/',views.saveStore, name='saveStore'),
     path('deletestore/<int:store_id>',views.deleteStore, name='deleteStore'),
+    path('detail/<int:store_id>/shipping',views.shipping_status, name='shipping_status'),
     path('heartStore/', views.heartStore, name='heartStore'),
     path('cart/', views.cart, name='cart'),
     path('selectDelete/', views.selectDelete, name='selectDelete'),
+    path('deleteorder/', views.order_delete, name='order_delete'),
     
     path('mypage/',views.mypage, name='mypage'),
     path('orderstatus/',views.orderstatus, name='orderstatus'),

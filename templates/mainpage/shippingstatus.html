@@ -1,0 +1,288 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<!-- <link rel="stylesheet" href="{% static "css/store_infor.css" %}"> -->
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<meta name="keywords" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>마이 페이지</title>
+
+		<link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+		<link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}">
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&family=Sunflower:wght@300;500;700&display=swap" rel="stylesheet">
+		<!-- Main css -->
+		<link rel="stylesheet" href="{% static "css/style.css" %}">
+		<link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
+
+		<style>
+			/* select box text align center */
+			select {
+				text-align-last: center;
+				text-align: center;
+				-ms-text-align-last: center;
+				-moz-text-align-last: center;
+			}
+		</style>
+    </head>
+
+	
+	<body>
+	<!-- Navigation section  -->
+	<div class="navbar navbar-default navbar-static-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon icon-bar"></span>
+					<span class="icon icon-bar"></span>
+					<span class="icon icon-bar"></span>
+				</button>
+				<a href="{% url 'mainpage:mainpage' %}" class="navbar-brand"><img class="logo" src="{% static 'images/logo.png' %}"></a>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<!-- <li class="active"><a href="index.html">Projects</a></li> -->
+					{% if user.is_authenticated %}
+					{{user.username}} 님이 로그인중
+					<li><a href="{% url 'mainpage:cart' %}" class="fa fa-shopping-cart"></a></li>
+					<li><a href="{% url 'mainpage:mypage' %}" class="fa fa-user"></a></li>
+					<li><a href="{% url 'accounts:logout' %}">Logout</a> </li>
+					{% else %}
+					<li><a href="{% url 'accounts:login' %}">Login</a> </li>
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div id="orderlist_id" style="display: none">{% for orderlist in order %}{{ orderlist.id }},{% endfor %}</div>
+	<section id="contact">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-1 col-md-10 col-sm-12" style="text-align:center;">
+					<!-- 이쪽에 날짜 검색기능 넣을것 -->
+					<!-- <div class="section-title" style="margin-bottom: 12px"> 
+						<div class="col-md-4 col-sm-4">
+							<a href="{% url 'mainpage:storepage' item='찜한가게'%}"><h3 class="section-bar">찜한 가게 목록</h3></a>
+						</div>
+						<div class="col-md-4 col-sm-4" style="border-bottom: solid black;">
+							<a href="{% url 'mainpage:orderstatus' %}"><h3>주문현황</h3></a>
+						</div>
+						<div class="col-md-4 col-sm-4">
+							<a href="{% url 'mainpage:mypage' %}"><h3 class="section-bar" >내 정보</h3></a>
+						</div>
+					</div> -->
+					<form action="{% url 'mainpage:kakaoPayLogic' %}" method="post">
+						{% if user.is_authenticated %}
+							<input type="text" id="owner" name="owner" value={{user.id}} style="display: none">
+						{% endif %}			
+						<table class="table table-striped" style="width:100%; margin-top:30px; ">	
+							<thead>
+								<tr>
+									<th scope="col" class="">
+									<div class="">
+										{% comment %} <input type="checkbox" id="check_all" checked="" class=""/> {% endcomment %}
+									</div>
+									</th>
+									<!-- <th style="text-align: center;" scope="col" class="">가게</th> -->
+									<th style="text-align: center;" scope="col" class="">상품</th>
+									<th style="text-align: center;" scope="col" class="">상품금액</th>
+									<th style="text-align: center;" scope="col" class="">배송지</th>
+									<th style="text-align: center;" scope="col" class="">주문날짜</th>
+									<th style="text-align: center;" scope="col" class="">배송날짜</th>
+									<th style="text-align: center;" scope="col" class="">주문상황</th>
+								</tr>
+							</thead>
+								{% if order %}
+									{% for orderlist in order %}
+										<tr class="" id="order_row{{orderlist.id}}">
+
+											<td class="" style="vertical-align: middle;">
+												<div class="" >
+													<!-- 상품선택 -->
+													<input type="checkbox" name="item" value="{{orderlist.id}}" />
+												</div>
+											</td>
+
+											<!-- <td id="itemslist" class="text-left" style="width:256px;">
+												<div class="" style="margin:0 auto">
+													<div class="" style="text-align:center;">
+														<img style="width:128px; height:96px;" src="{{orderlist.store.mainimage.url}}" alt="" class=""/>
+													</div>
+													<div class="" style="text-align:center; margin-top:10px;">
+														<a class="" href="{% url 'mainpage:detailStore' store_id=orderlist.store.id %}">{{orderlist.store.name}}</a>
+													</div>
+												</div>
+											</td> -->
+
+											<td class="text-center" style="width:256px; vertical-align: middle;">												
+												<div id="orderitem{{orderlist.id}}" >
+													<!-- item 불러오기 -->
+													<div id="orderprice{{orderlist.id}}" style="display: none">{{orderlist.item.price}}</div>
+													<div id="orderea{{orderlist.id}}" style="display: none">{{orderlist.item_ea}}</div>
+													<div name="order{{storelist.id}}[]" value="{{itemlist.id}}" class="">
+														{{orderlist.item.name}}({{orderlist.item.price|intcomma}}원) <br>/ {{orderlist.item_ea}}개
+													</div>														
+												</div>												
+											</td>
+
+											<td class="text-center" style="width:224px; vertical-align: middle;">
+												<div class="">													
+													<em class="" style="font-style: normal; font-weight:bold;">
+														<span id="price{{orderlist.id}}" style="font-style: normal; font-weight:bold;" class=""></span>
+													</em>
+												</div>
+											</td>
+
+											<td class="text-center" style="width:256px; vertical-align: middle;">
+												<div class="" >
+													<div id="orderaddress{{orderlist.store.id}}" >
+														{{orderlist.shipping_address}}
+													</div>
+												</div>
+											</td>
+
+											<td class="text-center" style="width:336px; vertical-align: middle;">
+												<div class="" >
+													<div id="orderdate{{orderlist.store.id}}" >
+														{{orderlist.order_date}}
+													</div>
+												</div>
+											</td>
+
+											<td class="text-center" style="width:336px; vertical-align: middle;">
+												<div class="" >
+													<div id="ordershipping{{orderlist.store.id}}" >
+														{% if orderlist.shipping_date %}
+															{{orderlist.shipping_date}}
+														{% else %}
+															-
+														{% endif %}
+													</div>
+												</div>
+											</td>
+											
+											<td class="text-center" style="width:128px; vertical-align: middle;">
+												<div class="" >
+													<div id="orderstatus{{orderlist.store.id}}" >
+														<!-- {{orderlist.order_status}} -->
+														<select name="demo-category" id="ordershipping{{orderlist.store.id}}" onchange="">
+															<option value="결제중" {% if orderlist.order_status == '결제중' %} selected {% endif %}>결제중</option>
+															<option value="결제완료" {% if orderlist.order_status == '결제완료' %} selected {% endif %}>결제완료</option>
+															<option value="배송중" {% if orderlist.order_status == '배송중' %} selected {% endif %}>배송중</option>
+															<option value="배송완료" {% if orderlist.order_status == '배송완료' %} selected {% endif %}>배송완료</option>
+														</select>
+													</div>
+												</div>
+											</td>
+										</tr>
+									{% endfor %}
+							</tbody>
+						</table>
+						
+                        <div class="row" style="padding-left:8px;">
+                            <div class="col-md-1 col-sm-1;" style="text-align:left;">
+                                <input type="checkbox" id="ID" onclick="selectAll(this)" />
+                                <label for="ID" class="blind" ></label>
+                            </div>
+                           
+                        </div>
+						{% else %}
+							<div class="" style="text-align: center; margin-top:50px; margin-bottom:50px;">
+								<label style="font-size:20px; margin-top:15px;">주문하신 상품이 없습니다.</label>
+							</div>
+						{% endif %}
+							
+						<div class="col-md-12 col-sm-12" style="text-align: center;">
+							<button type="button" class="btn" onclick="selectDelete()" style="float: none; ">주문취소</button>
+							<!--<button type="submit" class="btn" style="float: none; background-color: #14AD03;">주문하기</button> -->     
+						</div> 
+                    </form>			
+				</div>
+			</div>
+		</div>
+   </section>
+<!-- Scripts -->			
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+	var order_list = document.getElementById("orderlist_id").innerText.split('\,');
+
+ 	function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+		
+	function getprice()  {
+		for(var idx=0; idx<order_list.length; idx++){
+			var price = document.getElementById("orderprice"+String(order_list[idx])).innerHTML;
+			var ea = document.getElementById("orderea"+String(order_list[idx])).innerHTML;
+			
+			document.getElementById("price"+String(order_list[idx])).innerHTML = numberWithCommas(parseInt(price) * parseInt(ea)) + '원';
+		}		
+	}
+	getprice();
+	//전체 선택, 해제
+	function selectAll(selectAll)  {
+		const checkboxes = document.getElementsByName('item');
+		
+		checkboxes.forEach((checkbox) => {
+			checkbox.checked = selectAll.checked;
+		})
+	}
+
+	//선택삭제
+	function selectDelete()  {
+		const checkboxes = document.getElementsByName('item');
+
+		var orderlist_id = [];
+		var count = 0;
+		checkboxes.forEach((checkbox) => {
+			if(checkbox.checked){
+				orderlist_id[count]= String(checkbox.value);
+				count++;
+			}
+		})
+		url = "{% url 'mainpage:order_delete' %}";
+		$.ajax({ 
+			type:'POST',
+			dataType: 'json',
+			traditional: true,
+			url: url,
+			data: {
+				'owner':$('#owner').val(),
+				'orderlist_ids':orderlist_id,
+			},
+			success: function(){
+				console.log(orderlist_id);
+				alert('삭제되었습니다');
+				for(var idx in orderlist_id) {
+					$('#order_row'+orderlist_id[idx]).remove();
+				}
+			},
+		});
+	}
+	
+	//json pasre 가능하도록 작은따옴표를 큰따옴표로 치환
+	var data = "{{ user.shopping_basket|safe }}".replace(/'/g,'\"');
+	console.log("replaced data:",data);
+	var json = JSON.parse(data);
+	console.log(json);
+	for(var i in json){
+		for(var j=0; j<json[i].length; j++){
+			console.log(i, json[i][j].itemid, json[i][j].count);
+		}
+		
+	}
+
+</script>
+</body>
+</html>

@@ -727,3 +727,31 @@ def orderstatus(request):
             'users':user,
         }
     return render(request, 'mainpage/orderstatus.html', context)
+
+def shipping_status(request, store_id):
+    authId = request.session.get('_auth_user_id')
+    user = Userinfo.objects.get(id=authId)
+    order = OrderList.objects.filter(store_id=store_id).order_by('id')
+    
+    # 주문상품 있을경우
+    context = {
+        'users': user,
+    }
+    if order:
+        context['order']=order
+
+    return render(request, 'mainpage/shippingstatus.html', context)
+
+def order_delete(request):
+    orderlist_ids = request.POST.getlist('orderlist_ids')
+
+    query = Q()
+    for idx in orderlist_ids:
+        query.add(Q(id=idx),query.OR)
+
+    delete_result = OrderList.objects.filter(query).delete()
+    
+    if delete_result[0]:
+        return JsonResponse({'message': 'OK'}, status=200)
+    else:
+        return JsonResponse({'message': 'BAD REQUEST'}, status=400)
