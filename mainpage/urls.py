@@ -31,5 +31,6 @@ urlpatterns = [
     #path('dbupload/', views.dbupload, name='dbupload'),
 
     path('kakaoPay/', views.kakaoPay, name='kakaoPay'),
-    path('kakaoPayLogic/', views.kakaoPayLogic, name='kakaoPayLogic')
+    path('kakaoPayLogic/', views.kakaoPayLogic, name='kakaoPayLogic'),
+    path('approval/', views.approval, name='approval'),
 ]

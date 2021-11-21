@@ -92,7 +92,7 @@
                                     <td class="" style="vertical-align: middle;">
                                         <div class="" >
                                             <!-- 상품선택 -->
-                                            <input type="checkbox" name="item" value="{{storelist.id}}" checked="" />
+                                            <input type="checkbox" name="item" value="{{storelist.id}}" onclick="selectOne()" checked="" />
                                         </div>
                                     </td>
                                     <td id="itemslist" class="text-left" style="width:312px;">
@@ -133,9 +133,10 @@
                                     </td>
                                     <td class="text-center" style="width:256px; vertical-align: middle;">
                                         <div class="">
-                                            <em class="" style="font-style: normal; font-weight:bold;">
+                                            <em name="" class="" style="font-style: normal; font-weight:bold;">
                                             {% for key, value in totalprice.items %}
                                                 {% if key|stringformat:"s" == storelist.id|stringformat:"s" %}
+                                                    <div id="value{{storelist.id}}" style="display: none">{{value}}</div>
                                                     {{value|intcomma}}
                                                 {% endif %}
                                             {% endfor %}
@@ -165,7 +166,7 @@
                     <div class="col-md-12 col-sm-12" style="text-align:center;">
                         <span id="" style="font-size:x-large; font-weight:bold;">총 주문금액</span>
                         {% if totalprice.total > 0 %}
-                            <span class="" style="font-size:x-large; font-weight:bold; color:#FF7878;"><span id="" name"" style="font-size:x-large; font-weight:bold;">{{totalprice.total|intcomma}}</span>원</span></div>
+                            <span class="" style="font-size:x-large; font-weight:bold; color:#FF7878;"><span id="total1" name"total1" style="font-size:x-large; font-weight:bold;">{{totalprice.total|intcomma}}</span>원</span></div>
                             <input type="text" id="total" name="total" value={{totalprice.total}} style="display: none">
                         {% else %}
                             <span class="" style="font-size:x-large; font-weight:bold;"><span class="" style="font-size:x-large; font-weight:bold;">0</span>원</span></div>
@@ -182,14 +183,62 @@
     <!-- Scripts -->			
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        //단일 선택, 해제
+        function selectOne()  {
+            const checkboxes 
+                = document.getElementsByName('item');
+            
+            var price = 0;
+            checkboxes.forEach((checkbox) => {
+                if(checkbox.checked)
+                    price = price + parseInt(document.getElementById('value'+String(checkbox.value)).innerHTML);
+            })
+            document.getElementById('total1').innerText = numberWithCommas(price);
+            document.getElementById('total').value = price;
+            url = "{% url 'mainpage:mypage' %}";
+            $.ajax({ 
+                type:'POST',
+                dataType: 'json',
+                traditional: true,
+                url: url,
+                data: {
+                  
+                },
+                success: function(){
+                    location.reload();
+                },
+            });
+        }
+
         //전체 선택, 해제
         function selectAll(selectAll)  {
             const checkboxes 
                 = document.getElementsByName('item');
-            
+            var price = 0;
             checkboxes.forEach((checkbox) => {
                 checkbox.checked = selectAll.checked;
+                if(checkbox.checked)
+                    price = price + parseInt(document.getElementById('value'+String(checkbox.value)).innerHTML);
             })
+            document.getElementById('total1').innerText = numberWithCommas(price);
+            document.getElementById('total').value = price;
+            url = "{% url 'mainpage:mypage' %}";
+            $.ajax({ 
+                type:'POST',
+                dataType: 'json',
+                traditional: true,
+                url: url,
+                data: {
+                  
+                },
+                success: function(){
+                    location.reload();
+                },
+            });
         }
 
         //선택삭제

@@ -11,13 +11,12 @@ from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 
-from accounts.models import Userinfo
+from accounts.models import Userinfo, OrderList
 from board.models import Stores, Boards, Items, Comments
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from allauth.account.models import EmailAddress
 from mainpage.models import traditional_market
-
 from mainpage.forms import BoardsForm
 
 from urllib.parse import unquote_plus
@@ -460,9 +459,6 @@ def mypage(request):
     }
     return render(request, 'mainpage/mypage.html', data)
 
-def orderstatus(request):
-    return render(request, 'mainpage/orderstatus.html')
-
 def userConfig(request, element_id):
     userid = request.POST['owner']
     if element_id == "name":
@@ -637,15 +633,31 @@ def kakaoPayLogic(request):
         stores = request.POST.getlist('item')
         item_quantitiy = 0;
         itemnum = {}
-
+        item_name = ""
         for store in stores:
             for item in jsonData[str(store)]:
                 itemnum[int(item['itemid'])] = int(item['count'])
                 item_quantitiy = item_quantitiy + 1
 
         for k in itemnum.keys():
-            item_name = Items.objects.get(id=k).name
-        item_name = item_name + '외 ' + str(item_quantitiy-1) +'건'
+            item = Items.objects.get(id=k)
+            orderlist = OrderList()
+            orderlist.item_name = item.name
+            orderlist.item_ea = itemnum[k]
+            orderlist.item_price = item.price
+            orderlist.shipping_address = user.address
+            orderlist.order_date = timezone.now()
+            orderlist.order_status = "결제중"
+
+            orderlist.board = item.board_id
+            orderlist.item = item
+            orderlist.store = item.store_id
+            orderlist.user = user
+            # 데이터베이스에 저장
+            orderlist.save()
+
+        if(item_quantitiy-1) != 0:
+            item_name = item.name + '외 ' + str(item_quantitiy-1) +'건'
 
         _admin_key = '99a86ed06378c324ee7887ea0e43ebc6' # 입력필요
         _url = 'https://kapi.kakao.com/v1/payment/ready'
@@ -654,22 +666,64 @@ def kakaoPayLogic(request):
         }
         _data = {
             "cid": "TC0ONETIME",    # 테스트용 코드
-            "partner_order_id": "1001",     # 주문번호
+            "partner_order_id": "1002",    # 주문번호
             "partner_user_id": user.id,    # 유저 아이디
-            "item_name": item_name,        # 구매 물품 이름
-            "quantity": item_quantitiy,                # 구매 물품 수량
-            "total_amount": total,        # 구매 물품 가격
-            "tax_free_amount": "0",         # 구매 물품 비과세
+            "item_name": item.name,        # 구매 물품 이름
+            "quantity": item_quantitiy,    # 구매 물품 수량
+            "total_amount": total,         # 구매 물품 가격
+            "tax_free_amount": "0",        # 구매 물품 비과세
             # 내 애플리케이션 -> 앱설정 / 플랫폼 - WEB 사이트 도메인에 등록된 정보만 가능합니다
             # * 등록 : http://IP:8000 
-            'approval_url':'http://114.70.93.90:38000/mainpage', 
-            'fail_url':'http://114.70.93.90:38000/mainpage/cart/',
-            'cancel_url':'http://114.70.93.90:38000/mainpage/cart/'
+            'approval_url':'http://114.70.93.84:8000/mainpage/approval/', 
+            'fail_url':'http://114.70.93.84:8000/mainpage/cart/',
+            'cancel_url':'http://114.70.93.84:8000/mainpage/cart/'
         }
         _res = requests.post(_url, params=_data, headers=_headers)
         request.session['tid'] = _res.json()['tid']
         next_url = _res.json()['next_redirect_pc_url']
         return redirect(next_url)
 
-#def orderdata(request):
+def approval(request):
+    authId = request.session.get('_auth_user_id')
+    user = Userinfo.objects.get(id=authId)
+    _admin_key = '99a86ed06378c324ee7887ea0e43ebc6' # 입력필요
+    URL = 'https://kapi.kakao.com/v1/payment/approve'
+    headers = {
+        'Authorization': "KakaoAK " + _admin_key ,
+    }
+    params = {
+        "cid": "TC0ONETIME",            # 테스트용 코드
+        "tid": request.session['tid'],  # 결제 요청시 세션에 저장한 tid
+        "partner_order_id": "1002",     # 주문번호
+        "partner_user_id": user.id,     # 유저 아이디
+        "pg_token": request.GET.get("pg_token"),  # 쿼리 스트링으로 받은 pg토큰
+    }
+
+    res = requests.post(URL, headers=headers, params=params)
+    amount = res.json()['amount']['total']
+    res = res.json()
+    context = {
+        'res': res,
+        'amount': amount,
+    }
+    print(res,amount)
+    return render(request, 'mainpage/orderstatus.html', context)
+
+def orderstatus(request):
+    authId = request.session.get('_auth_user_id')
+    user = Userinfo.objects.get(id=authId)
+    order = OrderList.objects.filter(user_id=authId).order_by('id')
     
+    # 주문상품 있을경우
+    if order:
+        context = {
+            'users':user,
+            'order':order,
+        }
+
+    # 주문상품이 없을경우
+    else:
+        context = {
+            'users':user,
+        }
+    return render(request, 'mainpage/orderstatus.html', context)
