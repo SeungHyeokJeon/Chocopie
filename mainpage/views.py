@@ -731,7 +731,10 @@ def orderstatus(request):
 def shipping_status(request, store_id):
     authId = request.session.get('_auth_user_id')
     user = Userinfo.objects.get(id=authId)
-    order = OrderList.objects.filter(store_id=store_id).order_by('id')
+
+    query = Q()
+    query.add(Q(store_id=store_id),query.OR)
+    order = OrderList.objects.filter(query).order_by('id')
     
     # 주문상품 있을경우
     context = {
@@ -755,3 +758,19 @@ def order_delete(request):
         return JsonResponse({'message': 'OK'}, status=200)
     else:
         return JsonResponse({'message': 'BAD REQUEST'}, status=400)
+
+def change_order_status(request):
+    id = request.POST.get('orderlist_id')
+    status = request.POST.get('order_status')
+
+    order = OrderList.objects.get(id=id)
+    order.order_status = status
+
+    if status=='배송완료':
+        order.shipping_date = timezone.now()
+    else:
+        order.shipping_date = None
+
+    order.save()
+
+    return JsonResponse({'message': 'OK'}, status=200)

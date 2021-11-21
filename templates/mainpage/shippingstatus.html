@@ -142,7 +142,7 @@
 
 											<td class="text-center" style="width:256px; vertical-align: middle;">
 												<div class="" >
-													<div id="orderaddress{{orderlist.store.id}}" >
+													<div id="orderaddress{{orderlist.id}}" >
 														{{orderlist.shipping_address}}
 													</div>
 												</div>
@@ -150,7 +150,7 @@
 
 											<td class="text-center" style="width:336px; vertical-align: middle;">
 												<div class="" >
-													<div id="orderdate{{orderlist.store.id}}" >
+													<div id="orderdate{{orderlist.id}}" >
 														{{orderlist.order_date}}
 													</div>
 												</div>
@@ -158,7 +158,7 @@
 
 											<td class="text-center" style="width:336px; vertical-align: middle;">
 												<div class="" >
-													<div id="ordershipping{{orderlist.store.id}}" >
+													<div id="ordershippingdate{{orderlist.id}}" >
 														{% if orderlist.shipping_date %}
 															{{orderlist.shipping_date}}
 														{% else %}
@@ -170,9 +170,8 @@
 											
 											<td class="text-center" style="width:128px; vertical-align: middle;">
 												<div class="" >
-													<div id="orderstatus{{orderlist.store.id}}" >
-														<!-- {{orderlist.order_status}} -->
-														<select name="demo-category" id="ordershipping{{orderlist.store.id}}" onchange="">
+													<div id="orderstatus{{orderlist.id}}" >
+														<select name="demo-category" id="ordershipping{{orderlist.id}}" onchange="changeStatus('{{orderlist.id}}')">
 															<option value="결제중" {% if orderlist.order_status == '결제중' %} selected {% endif %}>결제중</option>
 															<option value="결제완료" {% if orderlist.order_status == '결제완료' %} selected {% endif %}>결제완료</option>
 															<option value="배송중" {% if orderlist.order_status == '배송중' %} selected {% endif %}>배송중</option>
@@ -201,7 +200,6 @@
 							
 						<div class="col-md-12 col-sm-12" style="text-align: center;">
 							<button type="button" class="btn" onclick="selectDelete()" style="float: none; ">주문취소</button>
-							<!--<button type="submit" class="btn" style="float: none; background-color: #14AD03;">주문하기</button> -->     
 						</div> 
                     </form>			
 				</div>
@@ -220,6 +218,26 @@
  	function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+
+	// 날짜 형식 지정
+	function dateFormat(date) {
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+        let hour = date.getHours();
+        let minute = date.getMinutes();
+
+        month = month >= 10 ? month : '0' + month;
+        day = day >= 10 ? day : '0' + day;
+        hour = hour >= 10 ? hour : '0' + hour;
+        minute = minute >= 10 ? minute : '0' + minute;
+		var ampm = '오전';
+		if(hour-12>0) {
+			hour-=12;
+			ampm = '오후';
+		}
+
+        return date.getFullYear() + '년 ' + month + '월 ' + day + '일 ' + hour + ':' + minute + ' ' + ampm;
+	}
 		
 	function getprice()  {
 		for(var idx=0; idx<order_list.length; idx++){
@@ -262,11 +280,33 @@
 				'orderlist_ids':orderlist_id,
 			},
 			success: function(){
-				console.log(orderlist_id);
 				alert('삭제되었습니다');
 				for(var idx in orderlist_id) {
 					$('#order_row'+orderlist_id[idx]).remove();
 				}
+			},
+		});
+	}
+
+	// 상태 변경 이벤트
+	function changeStatus(id)  {
+		var status = $('#ordershipping'+id).val();
+		var shipping_date = new Date()
+		
+		url = "{% url 'mainpage:change_order_status' %}";
+		$.ajax({ 
+			type:'POST',
+			dataType: 'json',
+			traditional: true,
+			url: url,
+			data: {
+				'orderlist_id':id,
+				'order_status':status,
+				'shipping_date': shipping_date,
+			},
+			success: function(){
+				$('#ordershippingdate'+id).empty();
+				status==='배송완료' ? $('#ordershippingdate'+id).append(dateFormat(shipping_date)) : $('#ordershippingdate'+id).append('-');
 			},
 		});
 	}
