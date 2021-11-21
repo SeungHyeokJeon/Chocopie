@@ -4,6 +4,7 @@ import math
 import requests
 from collections import OrderedDict
 import re
+from datetime import datetime, timedelta
 from django.http  import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -732,13 +733,30 @@ def shipping_status(request, store_id):
     authId = request.session.get('_auth_user_id')
     user = Userinfo.objects.get(id=authId)
 
-    query = Q()
-    query.add(Q(store_id=store_id),query.OR)
-    order = OrderList.objects.filter(query).order_by('id')
+    date_now = timezone.now()
+    date_from = request.POST.get('date_from')
+    date_to = request.POST.get('date_to')
+    if date_to==None or date_from=='None':
+        date_to=date_now
+    else:
+        date_to = datetime.strptime(date_to, "%Y-%m-%d")
+    if date_from==None or date_from=='None':
+        date_from = date_to-timedelta(days=15)
+    else:
+        date_from = datetime.strptime(date_from, "%Y-%m-%d")
+
+    order = OrderList.objects.filter(store_id=store_id, order_date__range=(date_from,date_to)).order_by('id')
+
+    # 날짜 형식 지정
+    date_from = date_from.strftime('%Y-%m-%d')
+    date_to = date_to.strftime('%Y-%m-%d')
     
     # 주문상품 있을경우
     context = {
         'users': user,
+        'store_id': store_id,
+        'date_from': date_from,
+        'date_to': date_to,
     }
     if order:
         context['order']=order
