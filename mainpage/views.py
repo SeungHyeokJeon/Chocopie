@@ -674,9 +674,9 @@ def kakaoPayLogic(request):
             "tax_free_amount": "0",        # 구매 물품 비과세
             # 내 애플리케이션 -> 앱설정 / 플랫폼 - WEB 사이트 도메인에 등록된 정보만 가능합니다
             # * 등록 : http://IP:8000 
-            'approval_url':'http://114.70.93.84:8000/mainpage/approval/', 
-            'fail_url':'http://114.70.93.84:8000/mainpage/cart/',
-            'cancel_url':'http://114.70.93.84:8000/mainpage/cart/'
+            'approval_url':'http://114.70.93.90:38000/mainpage/approval/', 
+            'fail_url':'http://114.70.93.90:38000/mainpage/cart/',
+            'cancel_url':'http://114.70.93.90:38000/mainpage/cart/'
         }
         _res = requests.post(_url, params=_data, headers=_headers)
         request.session['tid'] = _res.json()['tid']
