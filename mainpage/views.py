@@ -713,20 +713,34 @@ def approval(request):
 def orderstatus(request):
     authId = request.session.get('_auth_user_id')
     user = Userinfo.objects.get(id=authId)
-    order = OrderList.objects.filter(user_id=authId).order_by('id')
-    
-    # 주문상품 있을경우
-    if order:
-        context = {
-            'users':user,
-            'order':order,
-        }
 
-    # 주문상품이 없을경우
+    date_now = timezone.now()
+    date_from = request.POST.get('date_from')
+    date_to = request.POST.get('date_to')
+    if date_to==None or date_from=='None':
+        date_to=date_now+timedelta(days=1)
     else:
-        context = {
-            'users':user,
-        }
+        date_to = datetime.strptime(date_to, "%Y-%m-%d") + timedelta(days=1)
+    if date_from==None or date_from=='None':
+        date_from = date_to-timedelta(days=15)
+    else:
+        date_from = datetime.strptime(date_from, "%Y-%m-%d")
+
+    order = OrderList.objects.filter(user_id=authId, order_date__range=(date_from,date_to)).order_by('id')
+    
+    # 날짜 형식 지정
+    date_to = date_to-timedelta(days=1)
+    date_from = date_from.strftime('%Y-%m-%d')
+    date_to = date_to.strftime('%Y-%m-%d')
+
+    context = {
+        'users':user,
+        'date_from': date_from,
+        'date_to': date_to,
+    }
+    if order:
+        context['order']=order
+
     return render(request, 'mainpage/orderstatus.html', context)
 
 def shipping_status(request, store_id):

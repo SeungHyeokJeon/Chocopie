@@ -67,6 +67,28 @@
 							<a href="{% url 'mainpage:mypage' %}"><h3 class="section-bar" >내 정보</h3></a>
 						</div>
 					</div>
+					
+
+					<div class="">
+						<!-- 날짜 기준 검색 -->
+						<form name="search_form" action="{% url 'mainpage:orderstatus' %}" method="post">
+							<input type="date" id="date_from" name="date_from" required>
+							~
+							<input type="date" id="date_to" name="date_to" required>
+							<input type="submit" 
+								style="
+									margin-left: 20px;
+									padding: 0px;
+									border-radius: 10px;
+									height: 45px;
+									width: 75px;
+									text-align: center;
+								"
+								value="조회"
+							>
+						</form>
+					</div>
+					{% if order %}
 					<form action="{% url 'mainpage:kakaoPayLogic' %}" method="post">
 						{% if user.is_authenticated %}
 							<input type="text" id="owner" name="owner" value={{user.id}} style="display: none">
@@ -88,9 +110,9 @@
 									<th style="text-align: center;" scope="col" class="">주문상황</th>
 								</tr>
 							</thead>
-								{% if order %}
+								
 									{% for orderlist in order %}
-										<tr class="">
+										<tr class="" id="order_row{{orderlist.id}}">
 
 											<td class="" style="vertical-align: middle;">
 												<div class="" >
@@ -148,7 +170,11 @@
 											<td class="text-center" style="width:256px; vertical-align: middle;">
 												<div class="" >
 													<div id="ordershippingdate{{orderlist.id}}" >
-														{{orderlist.shipping_date}}
+														{% if orderlist.shipping_date %}
+															{{orderlist.shipping_date}}
+														{% else %}
+															-
+														{% endif %}
 													</div>
 												</div>
 											</td>
@@ -170,18 +196,19 @@
                                 <input type="checkbox" id="ID" onclick="selectAll(this)" checked="" />
                                 <label for="ID" class="blind" ></label>
                             </div>
-                           
                         </div>
+
+						<div class="col-md-12 col-sm-12" style="text-align: center;">
+							<button type="button" class="btn" onclick="selectDelete()" style="float: none; ">주문취소</button>
+						</div> 
+
 						{% else %}
 							<div class="" style="text-align: center; margin-top:50px; margin-bottom:50px;">
 								<label style="font-size:20px; margin-top:15px;">주문하신 상품이 없습니다.</label>
 							</div>
 						{% endif %}
 							
-						<div class="col-md-12 col-sm-12" style="text-align: center;">
-							<button type="button" class="btn" onclick="location.href='{% url 'mainpage:mainpage' %}'" style="float: none; ">주문취소</button>
-							<!--<button type="submit" class="btn" style="float: none; background-color: #14AD03;">주문하기</button> -->     
-						</div> 
+						
                     </form>			
 				</div>
 			</div>
@@ -196,9 +223,35 @@
 <script>
 	var order_list = document.getElementById("orderlist_id").innerText.split('\,');
 
+	// 날짜
+	var date_from = '{{date_from}}';
+	var date_to = '{{date_to}}';
+	$('#date_from').val(date_from);
+	$('#date_to').val(date_to);
+
  	function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+
+	// 날짜 형식 지정
+	function dateFormat(date) {
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+        let hour = date.getHours();
+        let minute = date.getMinutes();
+
+        month = month >= 10 ? month : '0' + month;
+        day = day >= 10 ? day : '0' + day;
+        hour = hour >= 10 ? hour : '0' + hour;
+        minute = minute >= 10 ? minute : '0' + minute;
+		var ampm = '오전';
+		if(hour-12>0) {
+			hour-=12;
+			ampm = '오후';
+		}
+
+        return date.getFullYear() + '년 ' + month + '월 ' + day + '일 ' + hour + ':' + minute + ' ' + ampm;
+	}
 		
 	function getprice()  {
 		for(var idx=0; idx<order_list.length; idx++){
@@ -211,8 +264,7 @@
 	getprice();
 	//전체 선택, 해제
 	function selectAll(selectAll)  {
-		const checkboxes 
-			= document.getElementsByName('item');
+		const checkboxes = document.getElementsByName('item');
 		
 		checkboxes.forEach((checkbox) => {
 			checkbox.checked = selectAll.checked;
@@ -221,18 +273,25 @@
 
 	//선택삭제
 	function selectDelete()  {
-		const checkboxes 
-			= document.getElementsByName('item');
+		const checkboxes = document.getElementsByName('item');
 
-		var storelist_id = [];
+		var orderlist_id = [];
 		var count = 0;
 		checkboxes.forEach((checkbox) => {
 			if(checkbox.checked){
-				storelist_id[count]= String(checkbox.value);
+				orderlist_id[count]= String(checkbox.value);
 				count++;
 			}
 		})
-		url = "{% url 'mainpage:selectDelete' %}";
+		
+		for(var idx in orderlist_id) {
+			if($('#orderstatus'+orderlist_id[idx]).text().includes("배송")) {
+				alert('배송중이거나 배송완료된 주문은 취소할 수 없습니다.');
+				return;
+			}
+		}
+
+		url = "{% url 'mainpage:order_delete' %}";
 		$.ajax({ 
 			type:'POST',
 			dataType: 'json',
@@ -240,11 +299,13 @@
 			url: url,
 			data: {
 				'owner':$('#owner').val(),
-				'storelist':storelist_id,
+				'orderlist_ids':orderlist_id,
 			},
 			success: function(){
 				alert('삭제되었습니다');
-				location.reload();
+				for(var idx in orderlist_id) {
+					$('#order_row'+orderlist_id[idx]).remove();
+				}
 			},
 		});
 	}
