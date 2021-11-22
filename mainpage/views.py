@@ -737,9 +737,9 @@ def shipping_status(request, store_id):
     date_from = request.POST.get('date_from')
     date_to = request.POST.get('date_to')
     if date_to==None or date_from=='None':
-        date_to=date_now
+        date_to=date_now+timedelta(days=1)
     else:
-        date_to = datetime.strptime(date_to, "%Y-%m-%d")
+        date_to = datetime.strptime(date_to, "%Y-%m-%d") + timedelta(days=1)
     if date_from==None or date_from=='None':
         date_from = date_to-timedelta(days=15)
     else:
@@ -748,6 +748,7 @@ def shipping_status(request, store_id):
     order = OrderList.objects.filter(store_id=store_id, order_date__range=(date_from,date_to)).order_by('id')
 
     # 날짜 형식 지정
+    date_to = date_to-timedelta(days=1)
     date_from = date_from.strftime('%Y-%m-%d')
     date_to = date_to.strftime('%Y-%m-%d')
     
