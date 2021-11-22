@@ -753,7 +753,7 @@ def orderstatus(request):
     else:
         date_from = datetime.strptime(date_from, "%Y-%m-%d")
 
-    order = OrderList.objects.filter(user_id=authId, order_date__range=(date_from,date_to)).order_by('id')
+    order = OrderList.objects.filter(user_id=authId, order_date__range=(date_from,date_to)).order_by('-id')
     
     # 날짜 형식 지정
     date_to = date_to-timedelta(days=1)
