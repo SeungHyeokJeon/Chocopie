@@ -632,7 +632,7 @@ def kakaoPayLogic(request):
         jsonData = user.shopping_basket
         total = request.POST['total']
         stores = request.POST.getlist('item')
-        item_quantitiy = 0;
+        item_quantitiy = 0
         itemnum = {}
         item_name = ""
         for store in stores:
@@ -640,15 +640,19 @@ def kakaoPayLogic(request):
                 itemnum[int(item['itemid'])] = int(item['count'])
                 item_quantitiy = item_quantitiy + 1
 
+        u_address = request.POST['address']
+        detail_address = request.POST['detail_address']
+        if not detail_address=='':
+            u_address += ', '+detail_address
         for k in itemnum.keys():
             item = Items.objects.get(id=k)
             orderlist = OrderList()
             orderlist.item_name = item.name
             orderlist.item_ea = itemnum[k]
             orderlist.item_price = item.price
-            orderlist.shipping_address = user.address
+            orderlist.shipping_address = u_address
             orderlist.order_date = timezone.now()
-            orderlist.order_status = "결제중"
+            orderlist.order_status = "결제완료"
 
             orderlist.board = item.board_id
             orderlist.item = item
@@ -687,6 +691,30 @@ def kakaoPayLogic(request):
 def approval(request):
     authId = request.session.get('_auth_user_id')
     user = Userinfo.objects.get(id=authId)
+
+    # 장바구니 삭제
+    date_now = timezone.now()
+    orderlist = OrderList.objects.filter(user_id=authId, order_date__range=(date_now-timedelta(minutes=3),date_now))
+
+    jsonData = user.shopping_basket
+    for order in orderlist:
+        for data in jsonData:
+            if str(order.store_id) == data:
+                for i in range(len(jsonData[data])):
+                    if str(order.item_id)==jsonData[data][i]['itemid'] and str(order.item_ea)==jsonData[data][i]['count']:
+                        jsonData[data].pop(i)
+                        break
+            # 장바구니가 비어있으면 빠져나오기
+            if not jsonData[data]:
+                del jsonData[data]
+                break
+        # 장바구니가 비어있으면 빠져나오기
+        if not jsonData:
+            break
+    # 장바구니에서 구매한 목록 삭제
+    user.shopping_basket = jsonData
+    user.save()
+
     _admin_key = '99a86ed06378c324ee7887ea0e43ebc6' # 입력필요
     URL = 'https://kapi.kakao.com/v1/payment/approve'
     headers = {
@@ -707,8 +735,7 @@ def approval(request):
         'res': res,
         'amount': amount,
     }
-    print(res,amount)
-    return render(request, 'mainpage/orderstatus.html', context)
+    return redirect(reverse('mainpage:orderstatus'))
 
 def orderstatus(request):
     authId = request.session.get('_auth_user_id')
@@ -779,6 +806,7 @@ def shipping_status(request, store_id):
     return render(request, 'mainpage/shippingstatus.html', context)
 
 def order_delete(request):
+
     orderlist_ids = request.POST.getlist('orderlist_ids')
 
     query = Q()
@@ -807,3 +835,58 @@ def change_order_status(request):
     order.save()
 
     return JsonResponse({'message': 'OK'}, status=200)
+
+def order_page(request):
+    authId = request.session.get('_auth_user_id')
+
+    if(request.method == 'POST'):
+        user = Userinfo.objects.get(id=authId)
+        jsonData = user.shopping_basket
+        total = request.POST['total']
+        stores = request.POST.getlist('item')
+        item_quantitiy = 0;
+        itemnum = {}
+
+        # 상점 불러오기
+        query = Q()
+        for store_id in stores:
+            query.add(Q(id=store_id),query.OR)
+            for item in jsonData[str(store_id)]:
+                itemnum[int(item['itemid'])] = int(item['count'])
+                item_quantitiy = item_quantitiy + 1
+        store = Stores.objects.filter(query).order_by('id')
+
+        # 상품 불러오기
+        query = Q()
+        for idx in itemnum:
+            query.add(Q(id=idx), query.OR)
+        item = Items.objects.filter(query).order_by('id')
+
+        # 가게별 물건 총합 계산
+        price = {}
+        # 총합 초기화
+        for idx in store:
+            price[idx.id]=0
+
+        # 총합 계산
+        for item_idx in item:
+            for itemcount_idx in itemnum:
+                if str(itemcount_idx)==str(item_idx.id):
+                    for store_idx in store:
+                        if str(item_idx.store_id.id)==str(store_idx.id):
+                            # 모든 조건이 만족하면 해당 가게 총합 추가
+                            prices = int(itemnum[itemcount_idx])*item_idx.price
+                            price[store_idx.id]+=prices
+
+        # 장바구니 들어 있는 모든 물품 총합 계산
+        price['total'] = total
+
+        context = {
+            'users':user,
+            'store':store,
+            'item':item,
+            'itemcounts':itemnum,
+            'totalprice':price,
+        }
+
+        return render(request, 'mainpage/order_form.html', context)

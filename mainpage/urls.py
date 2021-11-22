@@ -33,6 +33,7 @@ urlpatterns = [
     #path('store/',views.store, name='store'),
     #path('dbupload/', views.dbupload, name='dbupload'),
 
+    path('order/', views.order_page, name='order_page'),
     path('kakaoPay/', views.kakaoPay, name='kakaoPay'),
     path('kakaoPayLogic/', views.kakaoPayLogic, name='kakaoPayLogic'),
     path('approval/', views.approval, name='approval'),
