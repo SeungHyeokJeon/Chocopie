@@ -286,6 +286,9 @@ def detailStore(request, store_id):
 def detailStore_ajax(request, id):
     search_param = request.POST.get('search_param') # 검색 값이 존재하면 가져오기
 
+    store = Stores.objects.get(id=int(id))
+    owner = Userinfo.objects.get(id=int(store.owner_id))
+
     if search_param!='None' and search_param!='':
         board = Boards.objects.filter(store=id, title__contains=search_param).order_by('-id')
     else:
@@ -296,6 +299,7 @@ def detailStore_ajax(request, id):
     for idx in board:
         query.add(Q(board_id=idx.id),query.OR)
     items = Items.objects.filter(query)
+    comments = Comments.objects.filter(query)
 
     listLength = 5  # 한번에 불러올 게시글 개수
     totalPage = math.ceil(len(board)/listLength) # 전체 페이지 계산
@@ -311,9 +315,12 @@ def detailStore_ajax(request, id):
         board_list=paginator.page(paginator.num_pages)
     
     context = {
+        'store' : store,
+        'owner' : owner,
         'board': board_list,
         'totalPage':totalPage,
         'item' : items,
+        'comment': comments,
         'search_param' : search_param,
     }
     return render(request, 'mainpage/board_ajax.html', context)
