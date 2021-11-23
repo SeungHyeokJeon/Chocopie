@@ -31,3 +31,21 @@
 {% endfor %}
 
 {% endif %}
+
+<script>
+    //찜한목록 가져오기
+    var likeList = '{{userInfo.like_store}}'.trim();
+
+    likeList = likeList.split('\,');
+    for(i=0; i<likeList.length-1; i++){
+        var url = "#0".replace('0', String(likeList[i]));
+
+        $(url).css({
+            'color': '#ce1212'
+        });
+        
+        if($(url).hasClass("fa-heart-o")) {
+            $(url).toggleClass('fa-heart-o fa-heart');
+        }
+    }
+</script>

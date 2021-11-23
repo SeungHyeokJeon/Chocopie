@@ -179,6 +179,7 @@
 
             //찜한목록 가져오기
             var likeList = '{{userInfo.like_store}}'.trim();
+            var already_likeList = [];
 
             likeList = likeList.split('\,');
             for(i=0; i<likeList.length-1; i++){
@@ -188,7 +189,9 @@
                     'color': '#ce1212'
                 });
                 
-                $(url).toggleClass('fa-heart-o fa-heart');
+                if($(url).hasClass("fa-heart-o")) {
+                    $(url).toggleClass('fa-heart-o fa-heart');
+                }
             }
 
             // 검색현황 유지
