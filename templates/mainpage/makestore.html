@@ -136,7 +136,7 @@
                               </div>
                               <div class="col-md-11">
                                    <button style="" class="btn" id="btn" onclick="location.href='{% url 'mainpage:deleteStore' store_id=store.id %}'" >삭제</button>
-                                   <button style="margin-left: auto;" class="btn" id="btn" onclick="" >취소</button>
+                                   <button style="margin-left: auto;" class="btn" id="btn" onclick="location.href='{% url 'mainpage:detailStore' store_id=store.id %}'" >취소</button>
                                    <button class="btn" id="btn" onclick="send2();" style="background-color: #14AD03;">수정</button>
                               </div>
                          </form>
@@ -186,7 +186,7 @@
                               <textarea class="form-control" name="introduce" id="introduce" style="resize: none;"></textarea>
                          </div>
                          <div class="col-md-11">
-                              <button style="margin-left: auto;" class="btn" id="btn" onclick="" >취소</button>
+                              <button style="margin-left: auto;" class="btn" id="btn" onclick="location.href='{% url 'mainpage:mainpage' %}'" >취소</button>
                               <button class="btn" id="btn" onclick="send();" style="background-color: #14AD03;">완료</button>
                          </div>
                     </div>
