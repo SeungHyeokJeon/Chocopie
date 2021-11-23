@@ -69,6 +69,9 @@ def storepage(request):
     return render(request, 'mainpage/store.html')
 
 def storepage(request, item):
+    authId = request.session.get('_auth_user_id')
+    userinfo = Userinfo.objects.get(id=authId)
+
     if not item in ['농산물','수산물','축산물','반찬','의류','건강식품']:
         item = unquote_plus(item)
 
@@ -76,8 +79,6 @@ def storepage(request, item):
 
     # 찜한가게와 일반 카테고리일때 데이터 불러오는 구문 변경
     if item=='찜한가게':
-        authId = request.session.get('_auth_user_id')
-        userinfo = Userinfo.objects.get(id=authId)
         likeStores = userinfo.like_store.split(',')
         likeStores = ' '.join(likeStores).split()
 
@@ -111,6 +112,7 @@ def storepage(request, item):
         store_list=paginator.page(paginator.num_pages)
 
     context = {
+        'userInfo': userinfo,
         'stores' : store_list,
         'totalPage':totalPage,
         'item' : item,
@@ -122,6 +124,9 @@ def storepage(request, item):
         return render(request, 'mainpage/likestore.html', context)
 
 def storepage_ajax(request):
+    authId = request.session.get('_auth_user_id')
+    userinfo = Userinfo.objects.get(id=authId)
+
     item = request.POST.get('item')
     search_param = request.POST.get('search_param') # 검색 값이 존재하면 가져오기
     # 페이지를 이동하면 무조건 최신순으로 정렬되고, radio 버튼 클릭시에만 동적으로 화면 변화시키기 위해 _ajax에만 작성
@@ -129,8 +134,6 @@ def storepage_ajax(request):
 
     # 찜한가게와 일반 카테고리일때 데이터 불러오는 구문 변경
     if item=='찜한가게':
-        authId = request.session.get('_auth_user_id')
-        userinfo = Userinfo.objects.get(id=authId)
         likeStores = userinfo.like_store.split(',')
         likeStores = ' '.join(likeStores).split()
 
@@ -164,6 +167,7 @@ def storepage_ajax(request):
         store_list = paginator.page(paginator.num_pages)
 
     context = {
+        'userInfo': userinfo,
         'stores' : store_list,
         'totalPage':totalPage,
         'item' : item,
