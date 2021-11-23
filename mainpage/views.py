@@ -318,6 +318,14 @@ def detailStore_ajax(request, id):
     }
     return render(request, 'mainpage/board_ajax.html', context)
 
+def deleteBoard(request, board_id, store_id):
+    board = Boards.objects.get(id=board_id).delete()
+    return redirect(reverse('mainpage:detailStore', kwargs={'store_id':store_id}))
+
+def deleteComment(request, comment_id):
+    comment = Comments.objects.get(id=comment_id).delete()
+    return JsonResponse({'message': 'OK'}, status=200)
+
 def configStore(request, store_id):
     store = Stores.objects.get(id=int(store_id))
     numbers = re.sub(r'[^0-9]', '', str(store.market))
@@ -576,7 +584,9 @@ def addComment(request, board_id):
     userinfo = Userinfo.objects.get(id=authId)
     board = Boards.objects.get(id=board_id)
 
-    context={}
+    context={
+        'authid': authId,
+    }
     if request.method == "POST":
         if request.POST['add'] == 'true':
             comment = Comments()
@@ -592,10 +602,8 @@ def addComment(request, board_id):
             
             commentData = Comments.objects.get(writer = userinfo, date_posted=nowDate)
 
-            context = {
-                'comment': commentData,
-                'board': board,
-            }
+            context['comment'] = commentData
+            context['board'] = board
 
         elif request.POST['add'] == 'first':
             commentData = Comments.objects.filter(board=board_id).order_by('id')
@@ -606,10 +614,8 @@ def addComment(request, board_id):
                 length=commentData.count()-2
 
             commentData = commentData[length:]
-            context = {
-                'comment': commentData,
-                'board': board,
-            }
+            context['comment'] = commentData
+            context['board'] = board
 
         else:
             commentData = Comments.objects.filter(board=board_id).order_by('id')
@@ -621,12 +627,9 @@ def addComment(request, board_id):
 
             commentData = commentData[:length]
 
-            context = {
-                'comment': commentData,
-                'board': board,
-            }
+            context['comment'] = commentData
+            context['board'] = board
 
-    
     return render(request, 'mainpage/comment_ajax.html', context)
 
 def kakaoPay(request):

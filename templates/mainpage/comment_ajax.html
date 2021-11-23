@@ -13,6 +13,11 @@
                         <div class="12u$" id="comment{{commentlist.id}}">
                               <label style="color:black; font-size:14px; height: 45px; line-height: 45px;">{{commentlist.writer_name}}</label> 
                               {{commentlist.date_posted}}
+                              {% if authid == commentlist.writer_id|stringformat:"s" %}
+                                    <a id="commentdelete" onclick="deleteComment('{{commentlist.id}}')">
+                                          <i style="color:red" class="fa fa-times"></i>
+                                    </a>
+                              {% endif %}
                               <br>
                               {{commentlist.content}}
                               <hr style="margin-top:10px">

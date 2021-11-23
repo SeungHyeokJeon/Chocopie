@@ -14,6 +14,13 @@
                         <a href="#" class="author"><span class="name">{{postlist.writer_name}}</span></a>
                   </div>
             </header>
+            
+            {% if store.owner_id == user.id %}
+                  <div class="uniform" style="width: 100%; display: flex; justify-content: right; align-items: right; flex-direction: row;">
+                        <input class="button big"  style="margin-right:5px;" type="button" value="수정" />
+                        <input class="button big" type="button" onclick="deleteBoard('{{postlist.id}}','{{store.id}}')" value="삭제" />
+                  </div>
+            {% endif %}
 
             <a href="#" class="image featured"><img src="{{postlist.thumbnail}}" alt="" /></a>
             {{postlist.content | safe}}

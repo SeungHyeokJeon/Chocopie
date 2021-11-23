@@ -159,6 +159,13 @@
 									</div>
 								</header>
 
+								{% if store.owner_id == user.id %}
+									<div class="uniform" style="width: 100%; display: flex; justify-content: right; align-items: right; flex-direction: row;">
+										<input class="button big"  style="margin-right:5px;" type="button" value="수정" />
+										<input class="button big" type="button" onclick="deleteBoard('{{postlist.id}}','{{store.id}}')" value="삭제" />
+									</div>
+								{% endif %}
+
 								<a href="#" class="image featured"><img src="{{postlist.thumbnail}}" alt="" /></a>
 								{{postlist.content | safe}}
 
@@ -567,6 +574,33 @@
 					toggle.toggleClass('fa fa-minus-square-o fa-2x fa fa-plus-square-o fa-2x');
 				}
             });
+
+		// 게시글 삭제
+		function deleteBoard(board_id, store_id) {
+			var msg = confirm("정말로 삭제하시겠습니까?");
+			if(msg) {
+				location.href="{% url 'mainpage:deleteBoard' store_id=0 board_id=1 %}".replace('0',store_id).replace('1',board_id);
+			}
+		}
+
+		// 댓글 삭제
+		function deleteComment(comment_id) {
+			var msg = confirm("정말로 삭제하시겠습니까?");
+			if(msg) {
+				$.ajax({
+					type:'POST',
+					url: "{% url 'mainpage:deleteComment' comment_id=0 %}".replace('0', comment_id),
+					contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+					dataType: 'json',
+					data: {
+						'csrfmiddlewaretoken': token
+					},
+					success: function(data, textStatus, jqXHR){
+						$('#comment'+comment_id).remove()
+					}
+				});
+			}
+		}
 	</script>
 
 	</body>
