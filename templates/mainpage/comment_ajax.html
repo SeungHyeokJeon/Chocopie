@@ -1,8 +1,13 @@
 {% if comment %}
       {% if comment|length == 0 %}
             <div class="12u$" id="comment{{comment.id}}">
-                  <label style="color:black; font-size:14px; height: 45px; line-height: 45px;">{{comment.writer_name}}</label> 
+                  <label style="color:black; font-size:14px; height: 45px; line-height: 45px;">{{comment.writer_name}}</label>
                   {{comment.date_posted}}
+                  {% if authid == comment.writer_id|stringformat:"s" %}
+                        <a id="commentdelete" onclick="deleteComment('{{comment.id}}')">
+                              <i style="color:red" class="fa fa-times"></i>
+                        </a>
+                  {% endif %}
                   <br>
                   {{comment.content}}
                   <hr style="margin-top:10px">              
