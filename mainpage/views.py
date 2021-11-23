@@ -384,6 +384,8 @@ def cart(request):
         # 항목 업데이트
         user.shopping_basket = jsonData
         user.save()
+
+        return JsonResponse({'message': 'OK'}, status=200)
                 
     # 장바구니에 들어있을경우
     if jsonData:

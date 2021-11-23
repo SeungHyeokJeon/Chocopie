@@ -546,9 +546,10 @@
 				},
 				success: function(data, textStatus, jqXHR){
 					alert('장바구니에 등록되었습니다.');
+					window.location.href='../../mainpage/cart';
 				}
 			});
-			$('#selectedItems'+postid).remove()
+			// $('#selectedItems'+postid).remove()
 		}
 
 		//댓글 추가
